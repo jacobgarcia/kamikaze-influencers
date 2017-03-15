@@ -1,0 +1,10 @@
+public/css/**
+public/js/**
+public/views/**
+public/uploads/**
+config/config.js
+config/keys/**
+
+**.DS_Store
+
+node_modules
