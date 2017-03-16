@@ -2,7 +2,7 @@
 
 > Influencers app for Instagram
 
-[![Build Status](https://travis-ci.org/cesargdm/influencers.svg)](https://travis-ci.org/cesargdm/influencers)
+[![Build Status](https://travis-ci.com/cesargdm/influencers.svg?token=LsXP7nMr91SKiiystJTt&branch=master)](https://travis-ci.com/cesargdm/influencers)
 [![Dependencies](https://david-dm.org/cesargdm/influencers.svg)](https://david-dm.org/cesargdm/influencers)
 [![Code Climate](https://codeclimate.com/repos/58caa635f63976025900181b/badges/0b14f6e27ed6c2068811/gpa.svg)](https://codeclimate.com/repos/58caa635f63976025900181b/feed)
 
