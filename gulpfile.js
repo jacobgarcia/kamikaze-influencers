@@ -8,10 +8,10 @@ const webpackConfig = require('./webpack.config.js')
 
 gulp.task('sass', () =>
   gulp.src('./src/styles/master.scss')
-  .pipe(sass({outputStyle: 'compressed'})
+  .pipe(sass({ outputStyle: 'compressed' })
   .on('error', sass.logError))
   .pipe(rename({ suffix: '.min' }))
-  .pipe(gulp.dest('./dist/styles'))
+  .pipe(gulp.dest('./dist'))
 )
 
 gulp.task('webpack', () =>
@@ -35,9 +35,7 @@ gulp.task('start', () => {
 })
 
 gulp.task('watch', () => {
-    gulp.watch([
-        'src/js/**/*.js', 'src/js/**/*.vue'
-    ], ['webpack'])
+    gulp.watch(['src/js/**/*.js', 'src/js/**/*.vue'], ['webpack'])
     gulp.watch('src/styles/**.scss', ['sass'])
 })
 

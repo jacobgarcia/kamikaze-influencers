@@ -1,27 +1,36 @@
-const express = require('express') //minimalist framwork for requests, responses, etc.
-const bodyParser = require('body-parser') //access information passed in url or body
-const helmet = require('helmet') //Helmet helps you secure your Express apps by setting various HTTP headers.
-const app = express() //initialize server
+const express = require('express')
+const bodyParser = require('body-parser')
+const helmet = require('helmet') // Basic protection
+const compression = require('compression')
+const path = require('path')
+const app = express()
 
-// const API = require(__dirname + "/routers/api.js") //assign api files to variable
-// const config = require(__dirname + "/config/config.js") //require config data
+// const API = require(path.resolve('/routers/v1/api.js'))
+// const config = require(path.resolve('/config/config.js'))
 
-var port = process.env.PORT || 8080 //use port passed or 8080
+function shouldCompress(req, res) {
+  if (req.headers['x-no-compression']) { return false }
+  return compression.filter(req, res)
+}
 
-app.use(helmet()) //Basic protection
-app.use('/static', express.static( __dirname + '/static'))
-app.use('/dist', express.static( __dirname + '/dist'))
-app.use(bodyParser.json()) //Get elements from body (JSON)
-app.use(bodyParser.urlencoded({ extended: true })) //Get elements from URL
+app.use(compression({ filter: shouldCompress }))
 
-// app.use('/api', API) //Add api routes
+var PORT = process.env.PORT || 8080
 
-//Send index file for every route
-app.use('/', (req, res) => {
-    res.sendFile(__dirname + '/src/index.html')
+app.use(helmet())
+
+app.use('/static', express.static(path.resolve('static')))
+app.use('/dist', express.static(path.resolve('dist')))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// app.use('/v1', API) //Add api routes
+
+app.use('*', (req, res) => {
+    res.sendFile(path.resolve('src/index.html'))
 })
 
-// Start listening for server
-app.listen(port, () => {
-  console.log('App listening on port ' + port + '!');
+app.listen(PORT, () => {
+  console.log(`Influencers server listening on port ${PORT}!`)
 })
