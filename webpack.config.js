@@ -19,6 +19,11 @@ module.exports = {
     // }),
     // new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|fr|hu/)
   ],
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.js'
+    }
+  },
   module: {
     loaders: [
        {
@@ -31,7 +36,7 @@ module.exports = {
        },
        {
          test: /\.vue$/,
-         loader: 'vue'
+         loader: 'vue-loader'
        }
      ]
   }

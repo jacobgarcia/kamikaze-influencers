@@ -10,6 +10,7 @@ var port = process.env.PORT || 8080 //use port passed or 8080
 
 app.use(helmet()) //Basic protection
 app.use('/static', express.static( __dirname + '/static'))
+app.use('/dist', express.static( __dirname + '/dist'))
 app.use(bodyParser.json()) //Get elements from body (JSON)
 app.use(bodyParser.urlencoded({ extended: true })) //Get elements from URL
 
