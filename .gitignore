@@ -1,7 +1,7 @@
-public/css/**
-public/js/**
-public/views/**
-public/uploads/**
+static/uploads/**
+
+dist/**
+
 config/config.js
 config/keys/**
 
