@@ -16,11 +16,6 @@ module.exports = {
     //   }
     // })
   ],
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.js'
-    }
-  },
   module: {
     loaders: [
        {
@@ -28,12 +23,12 @@ module.exports = {
          loader: 'babel-loader',
          exclude: /node_modules/,
          query: {
-           presets: ["es2015"]
+           presets: ['es2015', 'react']
          }
        },
        {
-         test: /\.vue$/,
-         loader: 'vue-loader'
+         test: /\.json$/,
+         loader: 'json-loader'
        }
      ]
   }

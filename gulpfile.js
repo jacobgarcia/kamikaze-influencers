@@ -4,7 +4,9 @@ const nodemon = require('gulp-nodemon')
 const rename = require('gulp-rename')
 const webpackStream = require('webpack-stream')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.js')
+const webpackConfig = require('./config/webpack.config.js')
+const path = require('path')
+const Server = require('karma').Server
 
 gulp.task('sass', () =>
   gulp.src('./src/styles/master.scss')
@@ -15,7 +17,7 @@ gulp.task('sass', () =>
 )
 
 gulp.task('webpack', () =>
-  gulp.src('./src/js/app.js')
+  gulp.src(path.resolve('src/js/index.js'))
   .pipe(webpackStream(webpackConfig, webpack))
   .on('error', function handleError() {
     this.emit('end')
@@ -32,6 +34,13 @@ gulp.task('start', () => {
             'NODE_ENV': 'development'
         }
     })
+})
+
+gulp.task('test', (done) => {
+  new Server({
+      configFile: `${__dirname}/karma.conf.js`,
+      singleRun: true
+  }, done).start()
 })
 
 gulp.task('watch', () => {
