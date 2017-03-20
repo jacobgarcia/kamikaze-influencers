@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // app.use('/v1', API) //Add api routes
 
 app.use('*', (req, res) => {
-    res.sendFile(path.resolve('dist/index.html'))
+    res.sendFile(path.resolve('src/index.html'))
 })
 
 app.listen(PORT, () => {
