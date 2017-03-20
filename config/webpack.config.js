@@ -1,20 +1,20 @@
 const webpack = require('webpack')
 
-module.exports = {
+const config = {
   output: {
     filename: "bundle.js"
   },
   plugins: [
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     'NODE_ENV': JSON.stringify('production')
-    //   }
-    // }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress:{
-    //     warnings: false //Remove warnings, production oriented
-    //   }
-    // })
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress:{
+        warnings: false //Remove warnings, production oriented
+      }
+    })
   ],
   module: {
     loaders: [
@@ -33,3 +33,5 @@ module.exports = {
      ]
   }
 }
+
+module.exports = config
