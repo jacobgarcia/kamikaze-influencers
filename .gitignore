@@ -5,6 +5,8 @@ public/uploads/**
 config/config.js
 config/keys/**
 
+yarn.lock
+
 **.DS_Store
 
 # Logs
