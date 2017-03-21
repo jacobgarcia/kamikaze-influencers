@@ -28,5 +28,12 @@ gulp dev
 gulp build
 ```
 
+**Test**
+> Runs Karma test with mocha in Chrome
+
+```
+gulp test
+```
+
 ## Licence
 &copy; Coma MX

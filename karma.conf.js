@@ -5,7 +5,7 @@ webpackConfig.devtool = 'inline-source-map'
 const config = (config) => {
   config.set({
     basePath: './config',
-    browsers: [ 'Firefox', 'Safari' ],
+    browsers: process.env.TRAVIS ? ['Chrome_travis_ci'] : [ 'Chrome' ],
     singleRun: true,
     frameworks: [ 'mocha' ],
     files: [ 'tests.webpack.js' ],
