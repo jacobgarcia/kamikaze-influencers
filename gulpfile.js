@@ -5,6 +5,7 @@ const rename = require('gulp-rename')
 const webpackStream = require('webpack-stream')
 const webpack = require('webpack')
 const webpackConfig = require('./config/webpack.config.js')
+const webpackDevConfig = require('./config/dev.webpack.config.js')
 const path = require('path')
 const Server = require('karma').Server
 
@@ -12,6 +13,16 @@ gulp.task('sass', () =>
   gulp.src('./src/styles/master.scss')
   .pipe(sass({ outputStyle: 'compressed' })
   .on('error', sass.logError))
+  .pipe(rename({ suffix: '.min' }))
+  .pipe(gulp.dest('./dist'))
+)
+
+gulp.task('devwebpack', () =>
+  gulp.src(path.resolve('src/js/index.js'))
+  .pipe(webpackStream(webpackDevConfig, webpack))
+  .on('error', function handleError() {
+    this.emit('end')
+  })
   .pipe(rename({ suffix: '.min' }))
   .pipe(gulp.dest('./dist'))
 )
@@ -25,6 +36,7 @@ gulp.task('webpack', () =>
   .pipe(rename({ suffix: '.min' }))
   .pipe(gulp.dest('./dist'))
 )
+
 
 gulp.task('start', () => {
     nodemon({
@@ -44,9 +56,9 @@ gulp.task('test', (done) => {
 })
 
 gulp.task('watch', () => {
-    gulp.watch(['src/js/**/*.js', 'src/js/**/*.vue'], ['webpack'])
+    gulp.watch(['src/js/**/*.js', 'src/js/**/*.vue'], ['devwebpack'])
     gulp.watch('src/styles/**.scss', ['sass'])
 })
 
-gulp.task('dev', ['sass', 'webpack', 'start', 'watch'])
+gulp.task('dev', ['sass', 'devwebpack', 'start', 'watch'])
 gulp.task('build', ['sass', 'webpack'])
