@@ -16,7 +16,7 @@ npm i
 ## Run
 
 **Develop**
-> Starts node server with nodemon on 8080 and listen for .scss and .js changes
+> Starts node server with nodemon on 8080, compiles into bundles and listen for .scss and .js changes 
 
 ```
 gulp dev
