@@ -16,24 +16,24 @@ npm i
 ## Run
 
 **Develop**
-> Starts node server with nodemon on 8080 and listen for .scss and .js changes, **don't forget to comment out uglify on webpack.config.js**
+> Starts node server with nodemon on 8080 and listen for .scss and .js changes
 
 ```
 gulp dev
 ```
 **Build**
-> Compiles .scss and .js into bundles in *dist/*
+> Compiles .scss and .js into bundles in *dist/* with optimization
 
 ```
 gulp build
 ```
 
 **Test**
-> Runs Karma test with mocha in Chrome
+> Install before [PhantomJS](http://phantomjs.org). Runs Karma test with mocha in PhantomJS
 
 ```
 gulp test
 ```
 
 ## Licence
-&copy; Coma MX
+&copy; Coma México
