@@ -1,15 +1,7 @@
 import axios from 'axios'
 
 const token = window.localStorage.getItem('token')
-//
-// axios.interceptors.request.use((config) => {
-//   console.log('config', config)
-//   config.cancelToken = (somehting) => console.log(somehting)
-//   config.dataType = 'jsonp'
-//   config['Access-Control-Allow-Origin'] = '*'
-// }, (err) => {
-//   console.log('error interceptor', err)
-// })
+const baseUrl = 'http://localhost:8080/v1'
 
 class NetworkRequest {
   constructor() {
@@ -17,12 +9,12 @@ class NetworkRequest {
   }
 
   static getProfile(callback, errCallback) {
-    axios.get('https://api.instagram.com/v1/users/self')
-    .then((response) => {
-      callback(response)
+    axios(`${baseUrl}/users/self?access_token=${token}`)
+    .then((res) => {
+      console.log(res)
     })
-    .catch((error) => {
-      console.log('ERROR', error)
+    .catch((err) => {
+      console.log(err)
     })
   }
 

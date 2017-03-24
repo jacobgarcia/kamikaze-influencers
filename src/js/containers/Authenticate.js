@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import NetworkRequest from '../NetworkRequest'
+import { browserHistory } from 'react-router';
 
 class Authenticate extends Component {
 
@@ -11,21 +11,18 @@ class Authenticate extends Component {
   }
 
   componentDidMount() {
-
-    NetworkRequest.getProfile((response) => {
-      console.log('response:', response)
-    }, (error) => {
-      console.log('error:', error)
-    })
-
+    browserHistory.push('/')
   }
 
   render() {
-    const { code } = this.props.location.query
+    const { hash } = this.props.location
+    const token = hash.split('=')[1]
+
+    window.localStorage.setItem('token', token)
+
     return (
       <div className=''>
-        { code }
-        {window.localStorage.setItem('token', code)}
+        <h1>Redirigiendo...</h1>
       </div>
     )
   }
