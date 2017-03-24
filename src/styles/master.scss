@@ -1,3 +1,5 @@
+$gray: rgb(77, 77, 77);
+
 *, html, body, div, ul, li {
   margin: 0;
   padding: 0;
@@ -19,4 +21,9 @@ body {
   background: blue;
   background: url('/static/img/hero.jpg') no-repeat center center;
   background-size: cover;
+}
+
+nav {
+  background: $gray;
+  color: #fff;
 }
