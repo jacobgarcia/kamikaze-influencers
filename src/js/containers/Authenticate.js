@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { browserHistory } from 'react-router';
+import { browserHistory } from 'react-router'
 
 class Authenticate extends Component {
 
@@ -11,15 +11,18 @@ class Authenticate extends Component {
   }
 
   componentDidMount() {
-    browserHistory.push('/')
-  }
-
-  render() {
+    // Get token
     const { hash } = this.props.location
     const token = hash.split('=')[1]
 
+    // Set to localStorage
     window.localStorage.setItem('token', token)
 
+    // Redirect to root
+    location.replace('/')
+  }
+
+  render() {
     return (
       <div className=''>
         <h1>Redirigiendo...</h1>

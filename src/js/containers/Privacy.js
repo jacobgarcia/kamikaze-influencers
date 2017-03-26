@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 
-
-
-class Landing extends Component {
+class Privacy extends Component {
 
   constructor(props) {
     super(props)
@@ -13,13 +11,11 @@ class Landing extends Component {
   }
 
   render() {
-    console.log('Rendering landing')
     return (
-      <div className='landing'>
-      </div>
+
     )
   }
 
 }
 
-export default Landing
+export default Privacy

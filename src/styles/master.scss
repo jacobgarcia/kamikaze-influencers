@@ -1,8 +1,13 @@
-$gray: rgb(77, 77, 77);
+$gray: #9A9A9A;
+$lightGray: #F2F2F2;
 
-*, html, body, div, ul, li {
+*, html, body, div, ul, li , input {
   margin: 0;
   padding: 0;
+}
+
+li {
+  list-style: none;
 }
 
 html, body, #root {
@@ -15,6 +20,76 @@ body {
   font-size: 1rem;
 }
 
+input {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+input[type="text"] {
+  border: 1px solid $gray;
+  padding: 5px 10px;
+}
+
+h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.hall-section {
+  padding: 20px 0;
+  padding-bottom: 10px;
+  h4 {
+    margin-left: 20px;
+  }
+}
+.section {
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  input[type="text"] {
+    display: block;
+  }
+  &.gender {
+    flex-direction: row;
+  }
+  &.center {
+    text-align: center;
+    p:first-child {
+      color: $gray;
+    }
+    .remaining {
+      font-size: 1.7rem;
+      font-weight: 600;
+      margin: 10px 0;
+    }
+  }
+  .gender-selection {
+    display: flex;
+    justify-content: space-between;
+    input[type="radio"] {
+      display: none;
+    }
+    input[type="radio"]:checked+label{
+      background: $gray;
+      color: #fff;
+    }
+    label {
+      transition: 0.5s;
+      cursor: pointer;
+      display: inline-block;
+      padding: 6px 16px;
+      border: 1px solid $gray;
+    }
+  }
+}
+
 .landing {
   height: 100%;
   width: 100%;
@@ -23,7 +98,153 @@ body {
   background-size: cover;
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 nav {
   background: $gray;
   color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  flex-shrink: 0;
+}
+.sign-in-nav {
+  input[type="button"] {
+    border: 2px solid #fff;
+    color: #fff;
+    font-weight: 500;
+    background: transparent;
+    padding: 5px 12px;
+  }
+}
+
+.hover {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &.hidden {
+    display: none;
+  }
+  .signin-body {
+    background: #fff;
+    color: $gray;
+    padding: 20px;
+    text-align: center;
+    h3 {
+      margin-bottom: 20px;
+    }
+  }
+  .instagram-login {
+    padding: 7px 20px;
+    display: inline-block;
+    background-color: #fff;
+    background-image: url('/static/img/icons/instagram-color.png');
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 20px;
+    padding-left: 40px;
+    color: $gray;
+    border: 1px solid $gray;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+
+.profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .profile-picture {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: $gray;
+    margin-right: 10px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.footer {
+  margin-top: 20px;
+  background: $lightGray;
+  padding: 20px;
+  color: $gray;
+  font-size: 1.1rem;
+  font-weight: 500;
+  .links {
+    display: flex;
+    justify-content: space-between;
+    ul {
+      display: flex;
+      li {
+        margin-right: 10px;
+      }
+    }
+  }
+  .social-links {
+    margin: 20px 0;
+    ul {
+      display: flex;
+      justify-content: center;
+    }
+    li {
+      width: 25px;
+      height: 25px;
+      margin: 0 10px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.body {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.hall-of-fame {
+  display: flex;
+  overflow-x: scroll;
+  flex-direction: row;
+  .fame-item {
+    padding: 0 20px 10px;
+    .fame-item-content {
+      background: $lightGray;
+      max-width: 300px;
+      display: flex;
+      padding: 15px 20px;
+      flex-shrink: 0;
+      box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      align-items: center;
+      input {
+        background: transparent;
+        font-size: 2rem;
+        margin-left: 30px;
+      }
+    }
+
+  }
 }
