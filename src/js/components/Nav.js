@@ -41,8 +41,8 @@ class Nav extends Component {
             <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
             <span>@{this.props.user.username}</span>
           </div>
-          <div className='other'><Link to='/'>OWA</Link></div>
-          <div className='time'><Link to='/time'>time</Link></div>
+          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+          <div className='time'><Link to='/time'>Time</Link></div>
         </nav>
       )
     } else {
@@ -53,7 +53,7 @@ class Nav extends Component {
           </div>
           <div className={`hover ${this.state.showLogin ? '' : 'hidden'}`} onClick={this.hideLogin}>
             <div className='signin-body'>
-              <span className='close' onClick={this.hideLogin}>X</span>
+              <span className='close' onClick={this.hideLogin}></span>
               <h3>Sign in</h3>
               <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=token`} className='instagram-login'>Sign in with instagram</a>
             </div>

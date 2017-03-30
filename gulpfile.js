@@ -60,5 +60,5 @@ gulp.task('watch', () => {
     gulp.watch('src/styles/**.scss', ['sass'])
 })
 
-gulp.task('dev', ['sass', 'devwebpack', 'start', 'watch'])
+gulp.task('develop', ['sass', 'devwebpack', 'start', 'watch'])
 gulp.task('build', ['sass', 'webpack'])

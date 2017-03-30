@@ -18,6 +18,10 @@ class Authenticate extends Component {
     // Set to localStorage
     window.localStorage.setItem('token', token)
 
+    // TODO: Get user and save to API
+    // TODO: Get our API's token
+    // TODO: return success authentication with our API
+
     // Redirect to root
     location.replace('/')
   }

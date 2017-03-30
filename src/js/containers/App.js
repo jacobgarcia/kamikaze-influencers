@@ -17,8 +17,7 @@ class App extends Component {
     const token = localStorage.getItem('token')
     if (token) {
       NetworkRequest.getProfile((response, err) => {
-        if (err) console.log(err)
-        //console.log(response.data)
+        if (err) return console.log(err)
         const { full_name, id, profile_picture, username } = response.data
         const user = {
           'full_name': full_name,
@@ -35,8 +34,6 @@ class App extends Component {
   }
 
   render() {
-
-
 
     return (
       <div className='app'>
