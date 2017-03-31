@@ -19,6 +19,7 @@ const PayPalService = require(path.resolve('routers/v1/PayPalService.js'))
 
 /* Python service to execute Python scripts on Node.js */
 const PythonShell = require('python-shell')
+const instaBot = new PythonShell('/src/python/bot.py',{pythonOptions: ['-u']})
 
 router.route('/users/self')
 .get((req, res) => {
@@ -35,6 +36,26 @@ router.route('/users/self')
 
 router.route('/automation/start')
 .get((req, res) => {
+    console.log("The bot is ready!");
+    instaBot.on('message', function (message) {
+        // received a message sent from the Python script (a simple "print" statement)
+        console.log(message);
+    });
+
+    // end the input stream and allow the process to exit
+    instaBot.end(function (err) {
+        if (err){
+            throw err;
+        };
+
+        console.log('finished');
+    });
+
+    // end the input stream and allow the process to exit
+  /*  instaBot.end(function (err) {
+      if (err) throw err;
+      console.log('finished');
+    });*/
    res.status(200).json({'message': 'The automation stub is here!'})
 })
 

@@ -38,7 +38,7 @@ bot = InstaBot(login="chololoy92", password="dragoncarl",
                unfollow_whitelist=['example_user_1','example_user_2'])
 while True:
 
-    #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
+    print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
     #print("## MODE 1 = MODIFIED MODE BY KEMONG")
     #print("### MODE 2 = ORIGINAL MODE + UNFOLLOW WHO DON'T FOLLOW BACK")
     #print("#### MODE 3 = MODIFIED MODE : UNFOLLOW PEOPLE WHO DON'T FOLLOW BACK BASED ON RECENT FEED ONLY")
