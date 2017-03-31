@@ -5,6 +5,7 @@ import Intro from '../components/Intro'
 import NetworkRequest from '../NetworkRequest'
 import FameItem from '../Components/FameItem'
 import Footer from '../components/Footer'
+import PayPalButton from '../components/PayPalButton'
 
 class Dashboard extends Component {
 
@@ -42,6 +43,7 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
+              <PayPalButton></PayPalButton>
               <p>Remaining time</p>
               <p className='remaining'>{this.state.remainingTime}</p>
               <p><Link>Add time</Link></p>
