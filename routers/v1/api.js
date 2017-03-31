@@ -50,21 +50,23 @@ const information = {
   ]
 }
 
-PayPalService.getPaypalPaymentToken()
-.then((response) => {
-  return response.body.access_token
-})
-.then((token) => {
-  return PayPalService.getPayment(token, information)
-})
-.then((response) => {
-  console.log('SUCCESFULL RESPONSE, waiting confirmation\n', response)
-})
-.catch((error) => {
-  console.log('Error at Promise', error)
-})
 
-// TODO: Paypal integration
+// TEST:
+
+// PayPalService.getPaypalPaymentToken()
+// .then((response) => {
+//   return response.body.access_token
+// })
+// .then((token) => {
+//   return PayPalService.getPayment(token, information)
+// })
+// .then((response) => {
+//   console.log('SUCCESFULL RESPONSE, waiting confirmation\n', response)
+// })
+// .catch((error) => {
+//   console.log('Error at Promise', error)
+// })
+
 router.route('/payment')
 .post((req, res) => {
 
