@@ -17,6 +17,9 @@ const baseUrl = 'https://api.instagram.com/v1'
 
 const PayPalService = require(path.resolve('routers/v1/PayPalService.js'))
 
+/* Python service to execute Python scripts on Node.js */
+const PythonShell = require('python-shell')
+
 router.route('/users/self')
 .get((req, res) => {
   const access_token = req.query.access_token
