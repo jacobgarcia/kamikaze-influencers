@@ -30,6 +30,11 @@ router.route('/users/self')
   })
 })
 
+router.route('/automation/start')
+.get((req, res) => {
+   res.status(200).json({'message': 'The automation stub is here!'})
+})
+
 
 const information = {
   "intent":"sale",

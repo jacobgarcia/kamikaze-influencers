@@ -34,4 +34,5 @@ const config = {
   }
 }
 
+process.noDeprecation = true
 module.exports = config
