@@ -19,7 +19,6 @@ const PayPalService = require(path.resolve('routers/v1/PayPalService.js'))
 
 /* Python service to execute Python scripts on Node.js */
 const PythonShell = require('python-shell')
-const instaBot = new PythonShell('/src/python/bot.py',{pythonOptions: ['-u'], args: ['chololoy92', 'dragoncarl']})
 
 router.route('/users/self')
 .get((req, res) => {
@@ -34,8 +33,10 @@ router.route('/users/self')
   })
 })
 
-router.route('/automation/start/')
+router.route('/automation/:user/start/')
 .post((req, res) => {
+    //TODO: Update password logic
+    const instaBot = new PythonShell('/src/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password]})
     console.log("The bot is ready!");
     instaBot.on('message', function (message) {
         // received a message sent from the Python script (a simple "print" statement)
