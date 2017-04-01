@@ -13,7 +13,7 @@ import time
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
 
-bot = InstaBot(login="chololoy92", password="dragoncarl",
+bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                like_per_day=1000,
                comments_per_day=0,
                tag_list=['follow4follow', 'f4f', 'cute'],
@@ -38,7 +38,7 @@ bot = InstaBot(login="chololoy92", password="dragoncarl",
                unfollow_whitelist=['example_user_1','example_user_2'])
 while True:
 
-    print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
+    #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
     #print("## MODE 1 = MODIFIED MODE BY KEMONG")
     #print("### MODE 2 = ORIGINAL MODE + UNFOLLOW WHO DON'T FOLLOW BACK")
     #print("#### MODE 3 = MODIFIED MODE : UNFOLLOW PEOPLE WHO DON'T FOLLOW BACK BASED ON RECENT FEED ONLY")
