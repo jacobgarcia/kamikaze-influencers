@@ -32,9 +32,9 @@ class PayPalService {
               return resolve({ status: 200, body })
             break;
           case 401:
-            return reject({ status: 401, body: body })
+            return reject({ status: 401, body: body || undefined })
           default:
-            return reject({ status: statusCode || 500, error: { message: 'Uknown error'} })
+            return reject({ status: statusCode || 500, error: error || { message: 'Uknown error'} })
         }
 
       })
@@ -69,9 +69,10 @@ class PayPalService {
 
         switch (statusCode) {
           case 200:
+              // TODO: resolve unsafe JSON Parse
               return resolve({status: 200, body: JSON.parse(body)})
-            break;
           case 401:
+              // TODO: resolve unsafe JSON Parse
             return reject({status: 401, body: JSON.parse(body)})
           default:
             return reject({status: 500, error: undefined})
