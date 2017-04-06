@@ -1,6 +1,15 @@
 $gray: #9A9A9A;
 $lightGray: #F2F2F2;
 $dark-gray: #828282;
+$red: #D90754;
+$purple: #972874;
+$purplish-red: #5D1145;
+
+@mixin owa_boxshadow {
+  box-shadow: 0px 3px 3px rgba($red, 0.2), 0px 6px 9px rgba($red, 0.1), 0px 6px 14px rgba($red, 0.05);
+}
+
+@import "./switch.scss";
 
 *, html, body, div, ul, li , input {
   margin: 0;
@@ -29,8 +38,12 @@ input {
 }
 
 input[type="text"] {
-  border: 1px solid $gray;
+  border-bottom: 2px solid $gray;
   padding: 5px 10px;
+  transition: 0.4s;
+  &:focus {
+    border-color: $red;
+  }
 }
 
 input[type="button"] {
@@ -38,9 +51,11 @@ input[type="button"] {
 }
 
 h4 {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: $red;
 }
 
 a {
@@ -55,6 +70,11 @@ a {
     margin-left: 20px;
   }
 }
+.time-card {
+  @include owa_boxshadow;
+  margin: 10px 30px;
+  padding: 10px;
+}
 .section {
   padding: 10px 20px;
   display: flex;
@@ -65,13 +85,64 @@ a {
   &.gender {
     flex-direction: row;
   }
+  &.switching {
+    .switch-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 35px;
+    }
+    .commenting-field {
+      max-height: 100px;
+      transition: ease 0.4s;
+      margin: -10px 0 20px;
+      overflow-y: hidden;
+      input[type="text"] {
+        width: 100%;
+      }
+      &.hidden {
+        max-height: 0px;
+      }
+    }
+    span {
+      padding-left: 35px;
+      color: $purplish-red;
+      font-weight: 500;
+      font-size: 1.1rem;
+      opacity: 0.3;
+      &.active {
+        opacity: 1;
+      }
+      &.liking {
+        background: url('/static/img/icons/like.png') no-repeat left center;
+        background-size: contain;
+      }
+      &.commenting {
+        background: url('/static/img/icons/comment.png') no-repeat left center;
+        background-size: contain;
+      }
+      &.following {
+        background: url('/static/img/icons/follow.png') no-repeat left center;
+        background-size: contain;
+      }
+    }
+  }
   &.center {
     text-align: center;
-    p:first-child {
+    label:first-child {
       color: $gray;
+      text-align: left;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: block;
+    }
+    a {
+      color: $red;
+      display: block;
+      font-weight: 500;
+      text-align: right;
     }
     .remaining {
-      color: $dark-gray;
+      color: $purplish-red;
       font-size: 2rem;
       font-weight: 600;
       margin: 10px 0;
@@ -84,15 +155,16 @@ a {
       display: none;
     }
     input[type="radio"]:checked+label{
-      background: $gray;
+      background: $purplish-red;
+      @include owa_boxshadow;
       color: #fff;
     }
     label {
       transition: 0.5s;
       cursor: pointer;
+      color: $gray;
       display: inline-block;
       padding: 6px 16px;
-      border: 1px solid $gray;
     }
   }
 }
@@ -100,9 +172,29 @@ a {
 .landing {
   height: 100%;
   width: 100%;
-  background: blue;
-  background: url('/static/img/hero.jpg') no-repeat center center;
-  background-size: cover;
+  .hero {
+    color: #fff;
+    text-align: center;
+    height: 100%;
+    display: block;
+    background: linear-gradient(180deg, rgba($red,0.75), rgba($purple, 0.75)), url('/static/img/hero.jpg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    p {
+      max-width: 700px;
+      margin: 40px 0 30px;
+    }
+    input {
+      padding: 7px 15px;
+      font-weight: 500;
+      color: $purplish-red;
+    }
+  }
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }
 
 .app {
@@ -112,20 +204,21 @@ a {
 }
 
 nav {
-  background: $gray;
-  color: #fff;
+  background: #fff;
+  color: #000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
   flex-shrink: 0;
+  font-weight: 500;
   > div {
     width: 33.3%;
   }
   .time {
     cursor: pointer;
     text-align: right;
-    font-weight: 500;
+    color: $red;
     a {
       padding-right: 30px;
       background: url('/static/img/icons/time.png') no-repeat right center;
@@ -145,11 +238,11 @@ nav {
     }
   }
 }
-.sign-in-nav {
+.signin-nav {
   text-align: left;
-  input[type="button"] {
+  .signin-button {
     border: 2px solid #fff;
-    color: #fff;
+    color: $purplish-red;
     font-weight: 500;
     background: transparent;
     padding: 5px 12px;
@@ -297,11 +390,15 @@ nav {
 
 .footer {
   margin-top: 20px;
-  background: $lightGray;
+  background: linear-gradient(90deg, rgba($red,0.75), rgba($purple, 0.75)), url('/static/img/footer-hero.jpg');
+  background-size: cover;
   padding: 20px;
-  color: $gray;
+  color: #fff;
   font-size: 1.1rem;
   font-weight: 500;
+  .content-section {
+    flex-direction: column;
+  }
   .links {
     display: flex;
     justify-content: space-between;
@@ -333,6 +430,7 @@ nav {
 .body {
   flex-grow: 1;
   overflow-y: scroll;
+  height: 100%;
 }
 
 .hall-of-fame {
@@ -342,12 +440,12 @@ nav {
   .fame-item {
     padding: 0 20px 10px;
     .fame-item-content {
-      background: $lightGray;
+      background: #fff;
       max-width: 300px;
       display: flex;
       padding: 15px 20px;
       flex-shrink: 0;
-      box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+      @include owa_boxshadow;
       border-radius: 3px;
       align-items: center;
       input {
