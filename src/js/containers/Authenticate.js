@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 
+import NetworkRequest from '../NetworkRequest'
+
 class Authenticate extends Component {
 
   constructor(props) {
@@ -12,18 +14,19 @@ class Authenticate extends Component {
 
   componentDidMount() {
     // Get token
-    const { hash } = this.props.location
-    const token = hash.split('=')[1]
+    const query = this.props.location.query
+    const code = query.code
+    // TODO: check if user authrized or not
 
-    // Set to localStorage
-    window.localStorage.setItem('token', token)
+    NetworkRequest.getToken(code, (response) => {
+      localStorage.setItem('token', response.data.token)
+      location.replace('/')
+    }, (error) => {
+      // TODO: display error message and return landing
+      console.log('Got error:', error)
+      //location.replace('/')
+    })
 
-    // TODO: Get user and save to API
-    // TODO: Get our API's token
-    // TODO: return success authentication with our API
-
-    // Redirect to root
-    location.replace('/')
   }
 
   render() {
