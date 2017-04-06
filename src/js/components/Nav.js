@@ -8,7 +8,7 @@ class Nav extends Component {
     super(props)
 
     this.state = {
-      showLogin: true
+      showLogin: false
     }
 
     this.redirect_uri = `http://localhost:8080/authenticate`
@@ -39,7 +39,7 @@ class Nav extends Component {
         <nav>
           <div className='profile'>
             <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
-            <span>@{this.props.user.username}</span>
+            <span>{this.props.user.username}</span>
           </div>
           <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
           <div className='time'><Link to='/time'>Time</Link></div>
@@ -47,15 +47,14 @@ class Nav extends Component {
       )
     } else {
       return (
-        <nav>
-          <div className='sign-in-nav'>
-              <input type="button" value='Sign in' onClick={this.showLogin}></input>
-          </div>
+        <nav className='signin-nav'>
+          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+          <input type="button" value='Entrar' className='signin-button' onClick={this.showLogin}></input>
           <div className={`hover ${this.state.showLogin ? '' : 'hidden'}`} onClick={this.hideLogin}>
             <div className='signin-body'>
               <span className='close' onClick={this.hideLogin}></span>
-              <h3>Sign in</h3>
-              <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=token`} className='instagram-login'>Sign in with instagram</a>
+              <h3>Registrarse/Iniciar sesión</h3>
+              <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=code`} className='instagram-login'>Entrar con Instagram</a>
             </div>
           </div>
         </nav>
