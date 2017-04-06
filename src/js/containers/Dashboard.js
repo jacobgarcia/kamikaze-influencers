@@ -6,6 +6,7 @@ import NetworkRequest from '../NetworkRequest'
 import FameItem from '../Components/FameItem'
 import Footer from '../components/Footer'
 import PayPalButton from '../components/PayPalButton'
+import Switch from '../components/Switch'
 
 class Dashboard extends Component {
 
@@ -24,8 +25,33 @@ class Dashboard extends Component {
         }
       ],
       remainingTime: 613123,
-      introVisible: false
+      introVisible: false,
+      likingActive: true,
+      commentingActive: true,
+      followingActive: false
     }
+
+    this.onLikingChange = this.onLikingChange.bind(this)
+    this.onCommentingChange = this.onCommentingChange.bind(this)
+    this.onFollowingChange = this.onFollowingChange.bind(this)
+  }
+
+  onLikingChange() {
+    this.setState({
+      likingActive: !this.state.likingActive
+    })
+  }
+
+  onCommentingChange() {
+    this.setState({
+      commentingActive: !this.state.commentingActive
+    })
+  }
+
+  onFollowingChange() {
+    this.setState({
+      followingActive: !this.state.followingActive
+    })
   }
 
   render() {
@@ -43,10 +69,28 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
-              <PayPalButton></PayPalButton>
-              <p>Remaining time</p>
-              <p className='remaining'>{this.state.remainingTime}</p>
-              <p><Link>Add time</Link></p>
+              <div className='time-card'>
+                <label>Remaining time</label>
+                <p className='remaining'>{this.state.remainingTime}</p>
+                <p><Link to='/time'>Add time</Link></p>
+              </div>
+            </div>
+            <div className='section switching'>
+              <div className='switch-section'>
+                <span className={`liking ${this.state.likingActive ? 'active' : '' }`}>Liking</span>
+                <Switch id="0" onChange={this.onLikingChange} active={this.state.likingActive}/>
+              </div>
+              <div className='switch-section'>
+                <span className={`following ${this.state.followingActive ? 'active' : '' }`}>Following</span>
+                <Switch id="1" onChange={this.onFollowingChange} active={this.state.followingActive}/>
+              </div>
+              <div className='switch-section'>
+                <span className={`commenting ${this.state.commentingActive ? 'active' : '' }`}>Commenting</span>
+                <Switch id="2" onChange={this.onCommentingChange} active={this.state.commentingActive}/>
+              </div>
+              <div className={`commenting-field ${this.state.commentingActive ? '' : 'hidden' }`}>
+                <input type="text" placeholder="Add your comment here"></input>
+              </div>
             </div>
             <div className='section'>
               <h4>Hashtag</h4>
