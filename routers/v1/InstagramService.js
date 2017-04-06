@@ -34,10 +34,10 @@ class InstagramService {
           .save((error, createdUser) => {
             if (error)
               return reject({ error, status: 500 })
-            resolve(createdUser)
+            resolve({status: 201, user: createdUser})
           })
         }
-        resolve(foundUser)
+        resolve({status: 200, user: foundUser})
       })
 
     })

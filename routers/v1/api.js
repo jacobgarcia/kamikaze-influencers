@@ -46,9 +46,10 @@ router.route('/users/authenticate')
       return res.status(500).json({ error: { message: 'Could not get user' } })
 
     InstagramService.signinUser(user)
-    .then((signedUser) => {
-      const token = jwt.sign({ un: signedUser.username, tn: access_token }, config.jwt_secret)
-      return res.status(200).json({ token, message: 'Authenticated!'})
+    .then((data) => {
+      const token = jwt.sign({ un: data.user.username, tn: access_token }, config.jwt_secret)
+      // TODO: Handle in FE the new user
+      return res.status(data.status).json({ token, message: 'Authenticated!'})
     })
     .catch((error) => {
       return res.status(500).json({ error })
@@ -88,6 +89,7 @@ router.route('/users/self')
   User.findOne({ username: username })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
+    if (!user) return res.status(404).json({ error: { message: 'User not found' } })
     res.status(200).json({ user })
   })
 })

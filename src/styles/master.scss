@@ -4,6 +4,7 @@ $dark-gray: #828282;
 $red: #D90754;
 $purple: #972874;
 $purplish-red: #5D1145;
+$text-color: rgb(47, 47, 47);
 
 @mixin owa_boxshadow {
   box-shadow: 0px 3px 3px rgba($red, 0.2), 0px 6px 9px rgba($red, 0.1), 0px 6px 14px rgba($red, 0.05);
@@ -29,6 +30,17 @@ html, body, #root {
 body {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 1rem;
+  line-height: 1.52947;font-weight: 400;letter-spacing: -.021em;
+  font-style: normal;
+}
+
+body, input, textarea, select, button {
+    font-synthesis: none;
+    -moz-font-feature-settings: 'kern';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    direction: ltr;
+    text-align: left;
 }
 
 input {
@@ -172,8 +184,93 @@ a {
 .landing {
   height: 100%;
   width: 100%;
+  h1 {
+    color: $purplish-red;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  h2 {
+    color: $red;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  p {
+    color: $text-color;
+    span {
+      font-weight: 500;
+      color: $purple;
+    }
+  }
+  .targets-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+  .target {
+    width: 50%;
+    text-align: center;
+    padding: 0px 10px 40px;
+    p {
+      max-width: 350px;
+      margin: 0 auto;
+    }
+    .image img {
+      width: 150px;
+      height: 150px;
+      background-color: $gray;
+    }
+  }
+  .hall-of-fame {
+    flex-direction: column;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba($red,0.55), rgba($purple, 0.55)), url('/static/img/celebrate.jpg') no-repeat center center;
+    background-size: cover;
+    text-align: center;
+    .hall-of-fame-content {
+      @include owa_boxshadow;
+      padding: 40px;
+      background: #fff;
+      margin: 20px auto;
+      max-width: 800px;
+    }
+    > h1, > h3 {
+      color: #fff;
+    }
+  }
+  .element {
+    display: flex;
+    flex-direction: row;
+    margin: 60px 0;
+
+    &.center {
+      display: block;
+      text-align: center;
+      .element-content {
+        width: auto;
+      }
+      p {
+        max-width: 700px;
+        margin: 0 auto;
+      }
+    }
+    .element-content, .image {
+      width: 50%;
+    }
+    .image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 280px;
+        height: 175px;
+        background-color: $gray;
+      }
+    }
+
+  }
   .hero {
-    color: #fff;
     text-align: center;
     height: 100%;
     display: block;
@@ -181,6 +278,9 @@ a {
     background-size: cover;
     display: flex;
     align-items: center;
+    h1, p {
+      color: #fff;
+    }
     p {
       max-width: 700px;
       margin: 40px 0 30px;
@@ -194,6 +294,7 @@ a {
   .content {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
   }
 }
 
@@ -204,6 +305,7 @@ a {
 }
 
 nav {
+  @include owa_boxshadow;
   background: #fff;
   color: #000;
   display: flex;
@@ -262,6 +364,7 @@ nav {
   justify-content: center;
   align-items: center;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   &.hidden {
     display: none;
   }
@@ -396,6 +499,17 @@ nav {
   color: #fff;
   font-size: 1.1rem;
   font-weight: 500;
+  a:hover {
+    text-decoration: underline;
+  }
+  h1, p {
+    color: #fff;
+    text-align: center;
+  }
+  h1 {
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
   .content-section {
     flex-direction: column;
   }
@@ -430,12 +544,14 @@ nav {
 .body {
   flex-grow: 1;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   height: 100%;
 }
 
 .hall-of-fame {
   display: flex;
   overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   flex-direction: row;
   .fame-item {
     padding: 0 20px 10px;
@@ -483,6 +599,14 @@ nav {
         width: 60px;
         height: 36px;
       }
+    }
+  }
+  .landing {
+    .hall-of-fame {
+      max-height: 250px;
+      overflow: visible;
+      overflow-y: visible;
+      margin-bottom: 200px;
     }
   }
   .content-section {

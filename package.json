@@ -9,7 +9,6 @@
     "compression": "^1.6.2",
     "express": "^4.15.2",
     "fetch-intercept": "^2.2.3",
-    "form-data": "^2.1.2",
     "helmet": "^3.5.0",
     "jsonwebtoken": "^7.3.0",
     "mongoose": "^4.9.3",

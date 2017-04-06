@@ -19,6 +19,7 @@ class Authenticate extends Component {
     // TODO: check if user authrized or not
 
     NetworkRequest.getToken(code, (response) => {
+      console.log(response)
       localStorage.setItem('token', response.data.token)
       location.replace('/')
     }, (error) => {

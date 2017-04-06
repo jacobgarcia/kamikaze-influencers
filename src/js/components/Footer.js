@@ -4,13 +4,14 @@ import { Link } from  'react-router'
 const Footer = (props) => {
   return (
     <div className='footer'>
+      {props.children}
       <div className='content-section'>
         <div className='links'>
           <ul>
             <li>About</li>
             <li>Contact</li>
           </ul>
-          <a href='/logout'>Log out</a>
+          {props.loggedin ? <a href='/logout'>Log out</a> : ''}
         </div>
         <div className='social-links'>
           <ul>

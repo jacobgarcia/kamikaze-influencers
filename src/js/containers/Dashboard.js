@@ -117,7 +117,7 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        <Footer></Footer>
+        <Footer loggedin={true}></Footer>
       </div>
     )
   }
