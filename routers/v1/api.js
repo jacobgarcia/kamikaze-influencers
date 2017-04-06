@@ -1,66 +1,98 @@
 const express = require('express')
-// const mongoose = require('mongoose')
 const path = require('path')
-const router = express.Router()
 const request = require('request')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
+const PythonShell = require('python-shell')
+const router = express.Router()
 
-const config = require(path.resolve('config/config.js'))
+const User = require(path.resolve('models/User'))
 
-// const ExpressBrute = require('express-brute')
-// const MongoStore = require('express-brute-mongo')
-// const MongoClient = require('mongodb').MongoClient
-// const ObjectId = require('mongodb').ObjectId
+const config = require(path.resolve('config/config'))
+const PayPalService = require(path.resolve('routers/v1/PayPalService'))
+const InstagramService = require(path.resolve('routers/v1/InstagramService.js'))
 
-// mongoose.connect(config.database)
+mongoose.connect(config.database)
 
 const baseUrl = 'https://api.instagram.com/v1'
 
-const PayPalService = require(path.resolve('routers/v1/PayPalService.js'))
+router.route('/users/authenticate')
+.post((req, res) => {
 
-/* Python service to execute Python scripts on Node.js */
-const PythonShell = require('python-shell')
+  const formData = {
+    'client_id': config.instagram.client_id,
+    'client_secret': config.instagram.client_secret,
+    'grant_type': 'authorization_code',
+    'redirect_uri': 'http://localhost:8080/authenticate',
+    'code': req.body.code
+  }
 
-router.route('/users/self')
-.get((req, res) => {
-  const access_token = req.query.access_token
+  request.post({url:'https://api.instagram.com/oauth/access_token', formData: formData}, (error, response) => {
+    if (error)
+      return res.status(500).json({ error })
 
-  request(`${baseUrl}/users/self?access_token=${access_token}`, (error, response) => {
-    if (error) return res.status(500).json(error)
-    //Get data and meta attributes from response.body object
-    const { data, meta } = JSON.parse(response.body)
-    //Send the meta.code and data from the request
-    res.status(meta.code).json(data)
+    let body = undefined
+
+    try { // Set a safe json parse
+      body = JSON.parse(response.body)
+    } catch (error) { res.status(500).json({ error }) }
+
+    if (body.code === 400)
+      res.status(400).json({ error: { message: 'Matching code was not found or was already used.' } })
+
+    const { user, access_token } = body
+
+    if (!user || user == undefined)
+      return res.status(500).json({ error: { message: 'Could not get user' } })
+
+    InstagramService.signinUser(user)
+    .then((signedUser) => {
+      const token = jwt.sign({ un: signedUser.username, tn: access_token }, config.jwt_secret)
+      return res.status(200).json({ token, message: 'Authenticated!'})
+    })
+    .catch((error) => {
+      return res.status(500).json({ error })
+    })
+
+  })
+
+})
+
+/*
+   MIDDLEWARE FOR JWT AUTENTICATION
+*/
+
+//We may want to protect agains brute force attaks to get our jwt secret
+router.use((req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1]
+
+  if (!token)
+    return res.status(403).json({error: { message: 'Token not provided' } })
+  // We can ensure every request is made by authenticated users in our server.
+  jwt.verify(token, config.jwt_secret, (error, decoded) => {
+    if (error) //End next requests and send a 401 (unauthorized)}
+      return res.status(401).json({error,  message: 'Failed to authenticate token'})
+    // TIP: After here in every request we can access the IG username in req._username
+    req._username = decoded.un
+    req._token = decoded.tn
+
+    next()
+
   })
 })
 
-router.route('/automation/:user/start/')
-.post((req, res) => {
-    //TODO: Update password logic
-    const instaBot = new PythonShell('/src/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password]})
-    console.log("The bot is ready!");
-    instaBot.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        console.log(message);
-    });
+router.route('/users/self')
+.get((req, res) => {
+  const username = req._username
 
-    // end the input stream and allow the process to exit
-    instaBot.end(function (err) {
-        if (err){
-            throw err;
-        };
-
-        console.log('finished');
-    });
-
-    // end the input stream and allow the process to exit
-  /*  instaBot.end(function (err) {
-      if (err) throw err;
-      console.log('finished');
-    });*/
-   res.status(200).json({'message': 'The automation stub is here!'})
+  User.findOne({ username: username })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
 })
 
-
+// TODO: save this in PayPalService and return an object
 const information = {
   "intent":"sale",
   "redirect_urls":{
@@ -79,7 +111,6 @@ const information = {
     }
   ]
 }
-
 
 // TEST:
 
@@ -100,10 +131,10 @@ const information = {
 router.route('/payment')
 .post((req, res) => {
 
+  // Get the package ID from DB and get the cost and time, dont't get it from the user
   const information = {
 
   }
-
 
   getPaypalPaymentToken.then((response) => {
     return response.body.access_token
@@ -114,11 +145,12 @@ router.route('/payment')
   .then((response) => {
     const { confirmation_url } = response.body
 
+    // TODO: send confimration url to client
     return res.status(200).json({ confirmation_url: '' })
 
   })
   .catch((error) => {
-    console.log(error)
+    return res.status(500).json({ error })
   })
 
 
@@ -143,6 +175,59 @@ router.route('/payment')
 request(options, callback);
 
   */
+})
+
+// TODO: after success buy update user and change the endDate to now+secondsPurchased,
+// validate the Date.now + purchased seconds if Date,Now > endDate
+
+
+/*
+   MIDDLEWARE FOR TIME AVAILABLE CHECK
+
+   Here we will check if our user endTime is greater than
+   current time, so we weill know if his time has passed
+   or not
+*/
+
+
+router.use((req, res, next) => {
+  User.find({ username: req._username })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+
+    // Check if the user has remaining time
+    if (user.timeEnd < Date.now)
+      return res.status(403).json({ error: { message: 'No time available' }})
+    next()
+  })
+})
+
+
+router.route('/automation/:user/start')
+.post((req, res) => {
+    //TODO: Update password logic
+    const instaBot = new PythonShell('/src/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password]})
+    console.log("The bot is ready!")
+    instaBot.on('message', (message) => {
+        // received a message sent from the Python script (a simple "print" statement)
+        console.log(message)
+    })
+
+    // end the input stream and allow the process to exit
+    instaBot.end((err) => {
+        if (err){
+            throw err;
+        }
+
+        console.log('Finished')
+    })
+
+    // end the input stream and allow the process to exit
+  /*  instaBot.end(function (err) {
+      if (err) throw err;
+      console.log('finished');
+    });*/
+   res.status(200).json({'message': 'The automation stub is here!'})
 })
 
 module.exports = router
