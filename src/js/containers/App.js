@@ -16,19 +16,20 @@ class App extends Component {
   componentWillMount() {
     const token = localStorage.getItem('token')
     if (token) {
-      NetworkRequest.getProfile((response, err) => {
-        if (err) return console.log(err)
-        const { full_name, id, profile_picture, username } = response.data
+      NetworkRequest.getProfile((response) => {
+        const { full_name, _id, profile_picture, username } = response.data.user
         const user = {
-          'full_name': full_name,
-          'id': id,
-          'profile_picture': profile_picture,
-          'username': username
+          full_name,
+          _id,
+          profile_picture,
+          username
         }
         localStorage.setItem('user', JSON.stringify(user))
         this.setState({
           user
         })
+      }, (error) => {
+        console.log(error)
       })
     }
   }
