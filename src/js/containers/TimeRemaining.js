@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router'
 
 import Footer from '../components/Footer'
 
@@ -15,7 +16,13 @@ class TimeRemaining extends Component {
   render() {
     return (
       <div className=''>
-        <p>Remaining time</p>
+        <div className='section'>
+          <div className='time-card'>
+            <label>Remaining time</label>
+            <p className='remaining'>{this.state.remainingTime}</p>
+            <p><Link to='/time'>Add time</Link></p>
+          </div>
+        </div>
         <Footer></Footer>
       </div>
     )
