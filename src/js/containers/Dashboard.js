@@ -7,6 +7,8 @@ import FameItem from '../Components/FameItem'
 import Footer from '../components/Footer'
 import PayPalButton from '../components/PayPalButton'
 import Switch from '../components/Switch'
+import TimeJS from '../time'
+import Tags from '../components/Tags'
 
 class Dashboard extends Component {
 
@@ -19,24 +21,18 @@ class Dashboard extends Component {
 
     this.state = {
       hallOfFame: [
-        {
-          username: 'cesargdm',
-          profile_picture: ''
-        },
-        {
-          username: 'thavatta17',
-          profile_picture: ''
-        }
+        { username: 'cesargdm', profile_picture: '' },
+        { username: 'thavatta17', profile_picture: '' }
       ],
       remainingTime: 0,
       introVisible: newUser,
       // Set state
-      likingActive: false,
-      commentingActive: false,
-      followingActive: false,
+      liking: false,
+      commenting: false,
+      following: false,
       // Targeting
       tags: [],
-      localizations: [],
+      locations: [],
       gender: 0,
       usernames: []
     }
@@ -45,6 +41,8 @@ class Dashboard extends Component {
     this.onCommentingChange = this.onCommentingChange.bind(this)
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
+    this.tagsChange = this.tagsChange.bind(this)
+    this.locationsChange = this.locationsChange.bind(this)
   }
 
   tick() {
@@ -53,20 +51,75 @@ class Dashboard extends Component {
     }))
   }
 
-  componentDidMount() {
+  tagsChange(tags) {
+    document.getElementById('tags-loader').classList.remove('hidden')
+    NetworkRequest.setTags(tags)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('tags-loader').classList.add('hidden')
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+      document.getElementById('tags-loader').classList.add('hidden')
+    })
+  }
+
+  usernamesChange(usernames) {
+    document.getElementById('usernames-loader').classList.remove('hidden')
+    NetworkRequest.setUsernames(usernames)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('usernames-loader').classList.add('hidden')
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+      document.getElementById('usernames-loader').classList.add('hidden')
+    })
+  }
+
+  locationsChange(localizations) {
+    document.getElementById('locations-loader').classList.remove('hidden')
+    NetworkRequest.setLocations(localizations)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('locations-loader').classList.add('hidden')
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+      document.getElementById('locations-loader').classList.add('hidden')
+    })
+  }
+
+  componentWillMount() {
     let user = undefined
 
-    try {
-      user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) {
+    try { user = JSON.parse(localStorage.getItem('user')) }
+    catch (error) {
       // TODO: handle error
       console.log(error)
     }
 
+    // Setup user preferences
+    this.setState({
+      tags: user.preferences.tags,
+      locations: user.preferences.locations,
+      usernames: user.preferences.usernames,
+      liking: user.preferences.liking,
+      following: user.preferences.following,
+      commenting: user.preferences.commenting
+    })
+
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const timeEnd = Math.floor(Date.parse(user.timeEnd)/1000)
-    const timeNow = Math.floor(Date.now()/1000)
-    const remainingTime = timeEnd - timeNow
+    const remainingTime = Math.floor(user.timeEnd/1000) - Math.floor(Date.now()/1000)
 
     // Check if we have time, so we dont't tick negative dates
     if (remainingTime > 0) {
@@ -86,10 +139,11 @@ class Dashboard extends Component {
 
   onLikingChange() {
 
-    NetworkRequest.updateLiking(this.state.likingActive)
+    NetworkRequest.updateLiking(!this.state.liking)
     .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
-        likingActive: response.data.liking
+        liking: response.data.user.preferences.liking
       })
     })
     .catch((error) => {
@@ -101,24 +155,27 @@ class Dashboard extends Component {
 
   onCommentingChange() {
 
-    NetworkRequest.updateCommenting(this.state.commentingActive)
+    NetworkRequest.updateCommenting(!this.state.commenting)
     .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
-        likingActive: response.data.commenting
+        commenting: response.data.user.preferences.commenting
       })
     })
     .catch((error) => {
       // TODO: catch error
       console.log(error)
     })
+
   }
 
   onFollowingChange() {
 
-    NetworkRequest.updateFollowing(this.state.followingActive)
+    NetworkRequest.updateFollowing(!this.state.following)
     .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
-        likingActive: response.data.following
+        following: response.data.user.preferences.following
       })
     })
     .catch((error) => {
@@ -129,14 +186,12 @@ class Dashboard extends Component {
   }
 
   render() {
-    let remainingTime = Date.now()
-    let days = Math.floor((this.state.remainingTime/86400))
-    let hours = Math.floor((this.state.remainingTime/3600)%24)
-    let minutes = Math.floor((this.state.remainingTime%3600)/60)
-    let seconds = Math.floor((this.state.remainingTime%3600)%60)
+
+    let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
 
     return (
-      <div className=''>
+      <div className='dashboard'>
+        <div className='hero-dashboard'></div>
         <Intro visible={this.state.introVisible} onEnd={this.removeNotification}/>
         <div className='content-section'>
           <div className='hall-section'>
@@ -149,7 +204,7 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
-              <div className='time-card'>
+              <div className='time-card main'>
                 <label>Remaining time</label>
                 <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
@@ -158,28 +213,34 @@ class Dashboard extends Component {
             </div>
             <div className='section switching'>
               <div className='switch-section'>
-                <span className={`liking ${this.state.likingActive ? 'active' : '' }`}>Liking</span>
-                <Switch id="0" onChange={this.onLikingChange} active={this.state.likingActive}/>
+                <span className={`liking ${this.state.liking ? 'active' : '' }`}>Liking</span>
+                <Switch id="0" onChange={this.onLikingChange} active={this.state.liking}/>
               </div>
               <div className='switch-section'>
-                <span className={`following ${this.state.followingActive ? 'active' : '' }`}>Following</span>
-                <Switch id="1" onChange={this.onFollowingChange} active={this.state.followingActive}/>
+                <span className={`following ${this.state.following ? 'active' : '' }`}>Following</span>
+                <Switch id="1" onChange={this.onFollowingChange} active={this.state.following}/>
               </div>
               <div className='switch-section'>
-                <span className={`commenting ${this.state.commentingActive ? 'active' : '' }`}>Commenting</span>
-                <Switch id="2" onChange={this.onCommentingChange} active={this.state.commentingActive}/>
+                <span className={`commenting ${this.state.commenting ? 'active' : '' }`}>Commenting</span>
+                <Switch id="2" onChange={this.onCommentingChange} active={this.state.commenting}/>
               </div>
-              <div className={`commenting-field ${this.state.commentingActive ? '' : 'hidden' }`}>
+              <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
                 <input type="text" placeholder="Add your comment here"></input>
               </div>
             </div>
             <div className='section'>
-              <h4>Hashtags</h4>
-              <input type="text"></input>
+              <div className='section-title'>
+                <h4>Hashtags</h4>
+                <div className='loader small hidden' id='tags-loader'></div>
+              </div>
+              <Tags onChange={this.tagsChange} tags={this.state.tags}/>
             </div>
             <div className='section'>
-              <h4>Localizations</h4>
-              <input type="text"></input>
+              <div className='section-title'>
+                <h4>Locations</h4>
+                <div className='loader small hidden' id='locations-loader'></div>
+              </div>
+              <Tags onChange={this.locationsChange} tags={this.state.locations}/>
             </div>
             <div className='section'>
               <h4>Gender</h4>
@@ -193,8 +254,11 @@ class Dashboard extends Component {
               </div>
             </div>
             <div className='section'>
-              <h4>Usernames</h4>
-              <input type="text"></input>
+              <div className='section-title'>
+                <h4>Usernames</h4>
+                <div className='loader small hidden' id='usernames-loader'></div>
+              </div>
+              <Tags onChange={this.usernamesChange} tags={this.state.usernames}/>
             </div>
           </div>
         </div>
