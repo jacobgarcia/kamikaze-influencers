@@ -85,7 +85,42 @@ a {
 .time-card {
   @include owa_boxshadow;
   margin: 10px 30px;
-  padding: 10px;
+  padding: 50px;
+  max-width: 400px;
+  text-align: center;
+  .days {
+    color: $red;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  .price {
+    color: $red;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  p {
+    color: $text-color;
+    text-align: left;
+  }
+  h1 {
+    color: $red;
+  }
+  h2 {
+    color: $purplish-red;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+  }
+  img {
+    width: 100%;
+    height: 250px;
+    background-image: $gray;
+  }
+}
+.time {
+  a {
+    color: $red;
+    display: block;
+  }
 }
 .section {
   padding: 10px 20px;
@@ -167,7 +202,7 @@ a {
       display: none;
     }
     input[type="radio"]:checked+label{
-      background: $purplish-red;
+      background: $red;
       @include owa_boxshadow;
       color: #fff;
     }
@@ -216,10 +251,13 @@ a {
       max-width: 350px;
       margin: 0 auto;
     }
-    .image img {
+    .image-container .image {
       width: 150px;
       height: 150px;
-      background-color: $gray;
+      &.content { background: url('/static/img/icons/content.svg') center center no-repeat; background-size: 150px; }
+      &.location { background: url('/static/img/icons/location.svg') center center no-repeat; background-size: 150px; }
+      &.gender { background: url('/static/img/icons/gender.svg') center center no-repeat; background-size: 150px; }
+      &.users { background: url('/static/img/icons/users.svg') center center no-repeat; background-size: 150px; }
     }
   }
   .hall-of-fame {
@@ -243,7 +281,6 @@ a {
     display: flex;
     flex-direction: row;
     margin: 60px 0;
-
     &.center {
       display: block;
       text-align: center;
@@ -255,20 +292,19 @@ a {
         margin: 0 auto;
       }
     }
-    .element-content, .image {
+    .element-content, .image-container {
       width: 50%;
     }
+  }
+  .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .image {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      img {
-        width: 280px;
-        height: 175px;
-        background-color: $gray;
-      }
+      width: 280px;
+      height: 175px;
+      background-color: $gray;
     }
-
   }
   .hero {
     text-align: center;
@@ -306,6 +342,7 @@ a {
 
 nav {
   @include owa_boxshadow;
+  z-index: 1;
   background: #fff;
   color: #000;
   display: flex;
@@ -351,7 +388,17 @@ nav {
   }
 }
 
+input[type="button"].red {
+  @include owa_boxshadow;
+  color: #fff;
+  background: $red;
+  padding: 6px 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
 .hover {
+  z-index: 10;
   display: block;
   position: absolute;
   width: 100%;
@@ -368,7 +415,7 @@ nav {
   &.hidden {
     display: none;
   }
-  .signin-body {
+  .signin-body, .payment-details {
     background: #fff;
     color: $gray;
     padding: 10px 20px;

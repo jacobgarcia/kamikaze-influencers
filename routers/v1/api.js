@@ -48,8 +48,11 @@ router.route('/users/authenticate')
     InstagramService.signinUser(user)
     .then((data) => {
       const token = jwt.sign({ un: data.user.username, tn: access_token }, config.jwt_secret)
-      // TODO: Handle in FE the new user
-      return res.status(data.status).json({ token, message: 'Authenticated!'})
+      // Return notifications
+      let notifications = []
+      if (data.status === 201) notifications.push('0') // If the user is new add '0' notification menaning new user
+
+      return res.status(data.status).json({ token, message: 'Authenticated!', notifications })
     })
     .catch((error) => {
       return res.status(500).json({ error })
@@ -94,25 +97,6 @@ router.route('/users/self')
   })
 })
 
-// TODO: save this in PayPalService and return an object
-const information = {
-  "intent":"sale",
-  "redirect_urls":{
-    "return_url":"http://example.com/your_redirect_url.html",
-    "cancel_url":"http://example.com/your_cancel_url.html"
-  },
-  "payer":{
-    "payment_method":"paypal"
-  },
-  "transactions":[
-    {
-      "amount":{
-        "total":"7.47",
-        "currency":"USD"
-      }
-    }
-  ]
-}
 
 // TEST:
 
@@ -130,28 +114,55 @@ const information = {
 //   console.log('Error at Promise', error)
 // })
 
-router.route('/payment')
+router.route('/payments')
 .post((req, res) => {
 
   // Get the package ID from DB and get the cost and time, dont't get it from the user
   const information = {
-
+    "intent":"sale",
+    "redirect_urls":{
+      "return_url":"http://example.com/your_redirect_url.html",
+      "cancel_url":"http://example.com/your_cancel_url.html"
+    },
+    "payer":{
+      "payment_method":"paypal"
+    },
+    "transactions":[
+      {
+        "amount":{
+          "total":"7.47",
+          "currency":"USD"
+        }
+      }
+    ]
   }
 
-  getPaypalPaymentToken.then((response) => {
+  PayPalService.getPaymentToken()
+  .then((response) => {
+    console.log('paypal access token', response.body.access_token)
     return response.body.access_token
   })
   .then((access_token) => {
-    return getPaymentConfirmation(access_token, information)
+    return PayPalService.getPayment(access_token, information)
   })
   .then((response) => {
-    const { confirmation_url } = response.body
-
+    // console.log(response)
+    // const paymentId = response.body.id
+    // console.log(response.body.links)
+    // console.log(confirmation_url);
+    // console.log('Payment confirmation')
+    // console.dir(response.body)
     // TODO: send confimration url to client
-    return res.status(200).json({ confirmation_url: '' })
+    console.log('response', response.body)
+    return res.status(200).json({
+      links: response.body.links,
+      paymentId: response.body.id,
+      transactions: response.body.transactions
+    })
 
   })
   .catch((error) => {
+    console.log(error)
     return res.status(500).json({ error })
   })
 

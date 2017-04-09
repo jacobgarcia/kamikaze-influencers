@@ -14,8 +14,9 @@ class Intro extends Component {
   }
 
   changePage(page) {
-    console.log(page)
+
     if (page === 3) {
+      this.props.onEnd()
       this.setState({
         visible: false
       })
@@ -70,7 +71,7 @@ class Intro extends Component {
               <li onClick={() => this.changePage(number)} key={number}></li>
             )}
           </ul>
-          <div className='control'onClick={() => this.changePage(this.state.page+1)}>Next</div>
+          <div className='control'onClick={() => this.changePage(this.state.page+1)}>{this.state.page === 2 ? 'End' : 'Next'}</div>
         </div>
 
         </div>

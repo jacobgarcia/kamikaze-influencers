@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class TimePack extends Component {
+class TimeCard extends Component {
 
   constructor(props) {
     super(props)
@@ -18,4 +18,4 @@ class TimePack extends Component {
 
 }
 
-export default TimePack
+export default TimeCard

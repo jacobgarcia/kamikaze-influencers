@@ -19,7 +19,6 @@ class InstagramService {
       User.findOne({ username: user.username })
       .exec((error, foundUser) => {
         if (error) return reject({ error, status: 500 })
-        console.log('USER: ', user)
         if (!foundUser) {
           new User({
             fullName: user.full_name,
@@ -34,10 +33,11 @@ class InstagramService {
           .save((error, createdUser) => {
             if (error)
               return reject({ error, status: 500 })
-            resolve({status: 201, user: createdUser})
+            resolve({ status: 201, user: createdUser })
           })
+        } else { // Else is important, otherwise iw will run before saving user
+          resolve({status: 200, user: foundUser})
         }
-        resolve({status: 200, user: foundUser})
       })
 
     })

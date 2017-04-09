@@ -41,7 +41,7 @@ class PayPalService {
     })
   }
 
-  static getPaypalPaymentToken() {
+  static getPaymentToken() {
     return new Promise((resolve, reject) => {
       const options = {
         url: `${paypalUrl}/oauth2/token`,

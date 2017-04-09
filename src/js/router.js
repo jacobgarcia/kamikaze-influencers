@@ -7,7 +7,7 @@ import Dashboard from './containers/Dashboard'
 import Profile from './containers/Profile'
 import Authenticate from './containers/Authenticate'
 import Logout from './containers/Logout'
-import TimeRemaining from './containers/TimeRemaining'
+import Time from './containers/Time'
 
 const isAuthenticated = () => {
   const token = window.localStorage.getItem('token')
@@ -25,7 +25,7 @@ const Routes = (
       <Route path='profile' component={Profile}/>
       <Route path='authenticate' component={Authenticate}/>
       <Route path='logout' component={Logout}/>
-      <Route path='time' component={TimeRemaining}/>
+      <Route path='time' component={Time}/>
     </Route>
 
   </Router>

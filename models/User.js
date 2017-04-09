@@ -9,21 +9,21 @@ const schema = new Schema({
     unique: true,
     index: true
   },
+  notifications: [ Number ],
   website: String,
   profile_picture: String,
   instagram: {
     id: String,
     bio: String
   },
-  timeEnd: { type: Date, required: true, default: Date.now() },
-  payments: [ String ],
+  timeEnd: { type: Number, required: true, default: Date.now() },
   preferences: {
-    liking: Boolean,
-    following: Boolean,
-    commenting: Boolean,
+    liking: { type: Boolean, default: false },
+    following: { type: Boolean, default: false },
+    commenting: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ String ],
-    gender: Number,
+    gender: { type: Number, default: 0 },
     usernames: [ String ]
   }
 })

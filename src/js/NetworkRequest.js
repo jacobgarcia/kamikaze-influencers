@@ -14,9 +14,6 @@ axios.interceptors.request.use((config) => {
 })
 
 class NetworkRequest {
-  constructor() {
-
-  }
 
   static setUser(callback, errCallback) {
     axios.post(`${window.baseUrl}/users`)
@@ -28,32 +25,36 @@ class NetworkRequest {
     })
   }
 
-  static setLiking() {
-
+  static updateLiking(likingActive) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/actions`, { linking: likingActive })
+      .then((response) => resolve(response))
+      .catch((error) => reject(errir))
+    })
   }
 
-  static disableLiking() {
-
+  static updateCommenting(comment) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/actions`, { commenting: true })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
   }
 
-  static setCommenting(comment) {
-
-  }
-
-  static disableCommenting() {
-
-  }
-
-  static setFollowing() {
-
-  }
-
-  static disableFollowing() {
-
+  static updateFollowing() {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/actions`, { following: true })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
   }
 
   static getHallOfFame() {
-
+    return new Promise ((resolve, reject) => {
+      axios(`${window.baseUrl}/halloffame`)
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
   }
 
   static setPayment() {
@@ -64,24 +65,28 @@ class NetworkRequest {
 
   }
 
-  static getToken(code, callback, errCallback) {
-    axios.post(`${window.baseUrl}/users/authenticate`, { code })
-    .then((res) => {
-      callback(res)
+  static setPayment(id) {
+    return new Promise(function(resolve, reject) {
+      axios.post(`${window.baseUrl}/payments`)
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
     })
-    .catch((error) => {
-      errCallback(error)
-    })
+
   }
 
-  static getProfile(callback, errCallback) {
-    axios(`${window.baseUrl}/users/self`)
-    .then((res) => {
-      callback(res)
+  static getToken(code, callback, errCallback) {
+    axios.post(`${window.baseUrl}/users/authenticate`, { code })
+    .then((response) => callback(response))
+    .catch((error) => errCallback(error))
+  }
+
+  static getProfile() {
+    return new Promise((resolve, reject) => {
+      axios(`${window.baseUrl}/users/self`)
+      .then((res) => resolve(res))
+      .catch((error) => reject(error))
     })
-    .catch((error) => {
-      errCallback(error)
-    })
+
   }
 
 }

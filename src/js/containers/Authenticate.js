@@ -19,8 +19,9 @@ class Authenticate extends Component {
     // TODO: check if user authrized or not
 
     NetworkRequest.getToken(code, (response) => {
-      console.log(response)
       localStorage.setItem('token', response.data.token)
+      // Set notifications in localStorage
+      localStorage.setItem('notifications', JSON.stringify(response.data.notifications))
       location.replace('/')
     }, (error) => {
       // TODO: display error message and return landing
@@ -33,7 +34,7 @@ class Authenticate extends Component {
   render() {
     return (
       <div className=''>
-        <h1>Redirigiendo...</h1>
+        <h1>Autenticando...</h1>
       </div>
     )
   }

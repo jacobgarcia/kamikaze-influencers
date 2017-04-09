@@ -29,8 +29,8 @@ class Landing extends Component {
             </div>
           </div>
           <div className='element'>
-            <div className='image'>
-              <img src=''></img>
+            <div className='image-container'>
+              <div className='image'></div>
             </div>
             <div className='element-content'>
               <h2>Incrementa tu alcance</h2>
@@ -44,8 +44,8 @@ class Landing extends Component {
           </div>
           <div className='targets-wrapper'>
             <div className='target'>
-              <div className='image'>
-                <img src=''></img>
+              <div className='image-container'>
+                <div className='image content'></div>
               </div>
               <div className='element-content'>
                 <h2>Contenido</h2>
@@ -53,8 +53,8 @@ class Landing extends Component {
               </div>
             </div>
             <div className='target'>
-              <div className='image'>
-                <img src=''></img>
+              <div className='image-container'>
+                <div className='image location'></div>
               </div>
               <div className='element-content'>
                 <h2>Ubicación</h2>
@@ -62,8 +62,8 @@ class Landing extends Component {
               </div>
             </div>
             <div className='target'>
-              <div className='image'>
-                <img src=''></img>
+              <div className='image-container'>
+                <div className='image gender'></div>
               </div>
               <div className='element-content'>
                 <h2>Género</h2>
@@ -71,8 +71,8 @@ class Landing extends Component {
               </div>
             </div>
             <div className='target'>
-              <div className='image'>
-                <img src=''></img>
+              <div className='image-container'>
+                <div className='image users'></div>
               </div>
               <div className='element-content'>
                 <h2>Usuarios</h2>
@@ -85,7 +85,7 @@ class Landing extends Component {
           <h1>Tú eres el centro de atención</h1>
           <h3>Deja que las personas te vean y sigan</h3>
           <div className='hall-of-fame-content'>
-            <div className='image'>
+            <div className='image-container'>
 
             </div>
             <div className='element-content'>
