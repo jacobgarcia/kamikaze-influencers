@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import moment from 'moment'
 
 import NetworkRequest from '../NetworkRequest'
 import Footer from '../components/Footer'
+import TimeJS from '../time.js'
 
 const TimeLink = (props) => {
   const { href, rel, method } = props.link
@@ -21,7 +21,7 @@ class Time extends Component {
 
     this.state = {
       remainingTime: 0,
-      timeFormatted: moment(props.remainingTime).format('hh:mm:ss'),
+      items: [],
       links: [],
       showPayment: false,
       paymentId: undefined,
@@ -31,12 +31,12 @@ class Time extends Component {
     this.purchaseTime = this.purchaseTime.bind(this)
   }
 
-  purchaseTime() {
+  purchaseTime(time_id) {
     this.setState({
       showPayment: true
     })
 
-    NetworkRequest.setPayment()
+    NetworkRequest.setPayment(time_id)
     .then((response) => {
       const { links, paymentId, transactions } = response.data
 
@@ -58,6 +58,41 @@ class Time extends Component {
     }))
   }
 
+  componentWillMount() {
+    const query = this.props.location.query
+    const payment = {
+      payerId: query.PayerID,
+      paymentId: query.paymentId,
+      token: query.token
+    }
+
+    if (payment.payerId && payment.paymentId && payment.token) {
+      console.log('Checking if payment is OK...')
+
+      NetworkRequest.setPaymentConfimation(payment)
+      .then((response) => {
+        
+        //Reload user and time
+        this.setState({
+          remainingTime: remainingTime(response.data.user.timeEnd)
+        })
+
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+      })
+      .catch((error) => {
+        // TODO: handle error
+        console.log(error)
+      })
+    }
+
+  }
+
+  remainingTime(timeEnd) {
+    const timeEnd = user.timeEnd/1000
+    const timeNow = Math.floor(Date.now()/1000)
+    return (timeEnd - timeNow)
+  }
+
   componentDidMount() {
 
     let user = undefined
@@ -70,9 +105,7 @@ class Time extends Component {
     }
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const timeEnd = Math.floor(Date.parse(user.timeEnd)/1000)
-    const timeNow = Math.floor(Date.now()/1000)
-    const remainingTime = timeEnd - timeNow
+    const remainingTime = remainingTime(user.timeEnd)
 
     // Check if we have time, so we dont't tick negative dates
     if (remainingTime > 0) {
@@ -82,16 +115,22 @@ class Time extends Component {
       this.interval = setInterval(() => this.tick(), 1000)
     }
 
+    NetworkRequest.getTimeItems()
+    .then((response) => {
+      this.setState({
+        items: response.data.items
+      })
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
+
   }
 
   render() {
 
-    // Maybe we can optimize this?
-    let remainingTime = Date.now()
-    let days = Math.floor((this.state.remainingTime/86400))
-    let hours = Math.floor((this.state.remainingTime/3600)%24)
-    let minutes = Math.floor((this.state.remainingTime%3600)/60)
-    let seconds = Math.floor((this.state.remainingTime%3600)%60)
+    let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
 
     return (
       <div className='time'>
@@ -114,19 +153,28 @@ class Time extends Component {
           </div>
         </div>
         <div className='section'>
+
           <div className='time-card'>
             <label>Remaining time</label>
             <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
             <h2>{`${hours}:${minutes}:${seconds}`}</h2>
           </div>
-          <div className='time-card'>
-            <img src='/'></img>
-            <h2>Fame</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-            <span className='days'>1 Day</span>
-            <span className='price'>$99.99</span>
-            <input type='button' onClick={this.purchaseTime} className='red' value='Buy time'></input>
-          </div>
+          {JSON.stringify(this.state.items)}
+          {this.state.items.map((item, index) => {
+
+            return (
+              <div className='time-card' key={index}>
+                <img src='/'></img>
+                <h2>{item.name}</h2>
+                <p>{item.description}</p>
+                <span className='days'>{item.days} Day</span>
+                <span className='price'>${item.price}</span>
+                <input type='button' onClick={() => this.purchaseTime(item._id)} className='red' value='Buy now'></input>
+              </div>
+            )
+
+          })}
+
         </div>
         <Footer></Footer>
       </div>
