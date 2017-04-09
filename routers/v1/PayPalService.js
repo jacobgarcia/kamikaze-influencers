@@ -4,10 +4,28 @@ const config = require(path.resolve('config/config.js'))
 const paypalUrl = 'https://api.sandbox.paypal.com/v1'
 
 class PayPalService {
-  constructor() {
+
+  static getPaymentDetails(token, paymentId) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        url: `${paypalUrl}/payments/payment/${paymentId}`,
+        method: 'GET',
+        json: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+
+      request(options, (error, response) => {
+        if (error) return reject({ status: 500, error })
+        const { statusCode, statusMessage, body } = response
+        resolve({ status: statusCode, body })
+      })
+    })
   }
 
-  static getPayment(token, information) {
+  static setPayment(token, information) {
     return new Promise((resolve, reject) => {
       const options = {
         url: `${paypalUrl}/payments/payment`,
