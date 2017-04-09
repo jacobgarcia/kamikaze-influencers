@@ -7,6 +7,8 @@ const PythonShell = require('python-shell')
 const router = express.Router()
 
 const User = require(path.resolve('models/User'))
+const Item = require(path.resolve('models/Item'))
+const Payment = require(path.resolve('models/Payment'))
 
 const config = require(path.resolve('config/config'))
 const PayPalService = require(path.resolve('routers/v1/PayPalService'))
@@ -85,6 +87,15 @@ router.use((req, res, next) => {
   })
 })
 
+router.route('/items')
+.get((req, res) => {
+  Item.find()
+  .exec((error, items) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ items })
+  })
+})
+
 router.route('/users/self')
 .get((req, res) => {
   const username = req._username
@@ -97,101 +108,218 @@ router.route('/users/self')
   })
 })
 
+router.route('/users/self/following')
+.put((req, res) => {
+  const username = req._username
+  const following = req.body.following
 
-// TEST:
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.following': following } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
 
-// PayPalService.getPaypalPaymentToken()
-// .then((response) => {
-//   return response.body.access_token
-// })
-// .then((token) => {
-//   return PayPalService.getPayment(token, information)
-// })
-// .then((response) => {
-//   console.log('SUCCESFULL RESPONSE, waiting confirmation\n', response)
-// })
-// .catch((error) => {
-//   console.log('Error at Promise', error)
-// })
+router.route('/users/self/commenting')
+.put((req, res) => {
+  const username = req._username
+  const commenting = req.body.commenting
 
-router.route('/payments')
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.commenting': commenting } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/liking')
+.put((req, res) => {
+  const username = req._username
+  const liking = req.body.liking
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.liking': liking } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/locations')
+.put((req, res) => {
+  const username = req._username
+  const locations = req.body.locations
+
+  // https://docs.mongodb.com/manual/reference/operator/update/set/#set-fields-in-embedded-documents
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.locations': locations } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/usernames')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.usernames
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.usernames': usernames } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/tags')
+.put((req, res) => {
+  const username = req._username
+  const tags = req.body.tags
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/payments')
 .post((req, res) => {
+  const username = req._username
+  const payment = req.body.payment
 
-  // Get the package ID from DB and get the cost and time, dont't get it from the user
-  const information = {
-    "intent":"sale",
-    "redirect_urls":{
-      "return_url":"http://example.com/your_redirect_url.html",
-      "cancel_url":"http://example.com/your_cancel_url.html"
-    },
-    "payer":{
-      "payment_method":"paypal"
-    },
-    "transactions":[
-      {
-        "amount":{
-          "total":"7.47",
-          "currency":"USD"
-        }
-      }
-    ]
-  }
-
+  // TODO: validate payment
   PayPalService.getPaymentToken()
   .then((response) => {
-    console.log('paypal access token', response.body.access_token)
     return response.body.access_token
   })
-  .then((access_token) => {
-    return PayPalService.getPayment(access_token, information)
+  .then((token) => {
+    return PayPalService.getPaymentDetails(token, payment.paymentId)
   })
   .then((response) => {
-    // console.log(response)
-    // const paymentId = response.body.id
-    // console.log(response.body.links)
-    // console.log(confirmation_url);
-    // console.log('Payment confirmation')
-    // console.dir(response.body)
-    // TODO: send confimration url to client
-    console.log('response', response.body)
-    return res.status(200).json({
-      links: response.body.links,
-      paymentId: response.body.id,
-      transactions: response.body.transactions
+    const { status, body } = response
+    const { custom, amount } = body.transactions[0]
+    const item_id = custom
+
+    new Payment({
+      paypal_id: body.id, // The schema will look if the id has been allready added
+      item_id,
+      amount: amount.total,
+      payer: {
+        payment_method: body.payer.payment_method,
+        payer_info: {
+          email: body.payer.payer_info.email,
+          first_name: body.payer.payer_info.first_name,
+          last_name: body.payer.payer_info.last_name,
+          payer_id: body.payer.payer_info.payer_id,
+          country_code: body.payer.payer_info.country_code
+        }
+      },
+      username: req._username
+    })
+    .save((error, payment) => {
+
+      if (error) {
+        console.log(error)
+        // TODO: handle correctly error that paypal_id purchase marks as duplicated
+        return res.status(500).json({ error })
+      }
+
+      // Get the item properties from DB, rather to
+      // getting them from user
+      Item.findById(item_id)
+      .exec((error, item) => {
+        if (error) {
+          console.log(error)
+          return res.status(500).json({ error })
+        }
+
+        // Add the number of days converted to miliseconds
+        const timeToAdd = item.days*86400*1000
+
+        User.findOne({ username: req._username })
+        .exec((error, user) => {
+          if (error) {
+            console.log(error)
+            return res.status(500).json({ error })
+          }
+
+          // TODO: check if timeEnd has allready passed
+          if (user.timeEnd < Date.now)
+            console.log('time end is less than now')
+
+          user.timeEnd =+ timeToAdd
+          // TODO:
+          //user.save()
+
+          res.status(200).json({ user })
+        })
+
+      })
+
     })
 
   })
   .catch((error) => {
-    console.log(error)
-    return res.status(500).json({ error })
+    if (error) return res.status(500).json({ error })
   })
 
-
-  // request.get('http://some.server.com/').auth(null, null, true, 'bearerToken');
-
-  /*
-  var options = {
-  url: 'https://api.github.com/repos/request/request',
-    headers: {
-      'User-Agent': 'request'
-    }
-  };
-
-  function callback(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    var info = JSON.parse(body);
-    console.log(info.stargazers_count + " Stars");
-    console.log(info.forks_count + " Forks");
-  }
-}
-
-request(options, callback);
-
-  */
 })
 
-// TODO: after success buy update user and change the endDate to now+secondsPurchased,
-// validate the Date.now + purchased seconds if Date,Now > endDate
+router.route('/payments')
+.post((req, res) => {
+
+  const item_id = req.body.item_id
+
+  // Get the package ID from DB and get the cost and time, dont't get it from the user
+  Item.findById(item_id)
+  .exec((error, item) => {
+    if (error) return res.status(500).json({ error })
+
+    const information = {
+      "intent":"sale",
+      "redirect_urls":{
+        "return_url":"http://localhost:8080/time",
+        "cancel_url":"http://localhost:8080/time"
+      },
+      "payer":{
+        "payment_method":"paypal"
+      },
+      "transactions": [
+        {
+          "amount":{
+            "total": item.price,
+            "currency": "USD"
+          },
+          'custom': item._id,
+          'description': item.description
+        }
+      ]
+    }
+
+    // Sent total and currency
+    PayPalService.getPaymentToken()
+    .then((response) => {
+      console.log('paypal access token', response.body.access_token)
+      return response.body.access_token
+    })
+    .then((access_token) => {
+      return PayPalService.setPayment(access_token, information)
+    })
+    .then((response) => {
+      return res.status(200).json({
+        links: response.body.links,
+        paymentId: response.body.id,
+        transactions: response.body.transactions
+      })
+    })
+    .catch((error) => {
+      console.log('Error:', error)
+      return res.status(500).json({ error })
+    })
+
+
+  })
+
+})
 
 
 /*
