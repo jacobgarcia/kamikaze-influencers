@@ -9,8 +9,9 @@ class App extends Component {
     super(props)
 
     this.state = {
-      user: JSON.parse(localStorage.getItem('user'))
+      user: JSON.parse(localStorage.getItem('user')) || {}
     }
+
   }
 
   componentWillMount() {
@@ -20,22 +21,28 @@ class App extends Component {
       // TODO: handle no token
       return
 
+    // Remove cached user
+
     NetworkRequest.getProfile()
     .then((response) => {
-      const { full_name, _id, profile_picture, username, timeEnd } = response.data.user
+      const { full_name, _id, profile_picture, username, timeEnd, preferences } = response.data.user
       const user = {
         full_name,
         _id,
         profile_picture,
         username,
-        timeEnd
+        timeEnd,
+        preferences
       }
       localStorage.setItem('user', JSON.stringify(user))
+
       this.setState({
         user
       })
+
     })
     .catch((error) => {
+      // TODO: handle error
       console.log(error)
     })
 
