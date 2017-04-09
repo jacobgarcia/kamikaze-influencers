@@ -15,6 +15,14 @@ axios.interceptors.request.use((config) => {
 
 class NetworkRequest {
 
+  static getTimeItems() {
+    return new Promise((resolve, reject) => {
+      axios.get((`${window.baseUrl}/items`))
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
   static setUser(callback, errCallback) {
     axios.post(`${window.baseUrl}/users`)
     .then((res) => {
@@ -25,25 +33,26 @@ class NetworkRequest {
     })
   }
 
-  static updateLiking(likingActive) {
+  static updateLiking(liking) {
     return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/actions`, { linking: likingActive })
+      axios.put(`${window.baseUrl}/users/self/liking`, { liking })
       .then((response) => resolve(response))
       .catch((error) => reject(errir))
     })
   }
 
-  static updateCommenting(comment) {
+  static updateCommenting(commenting) {
     return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/actions`, { commenting: true })
+      axios.put(`${window.baseUrl}/users/self/commenting`, { commenting })
       .then((response) => resolve(response))
       .catch((error) => reject(error))
     })
   }
 
-  static updateFollowing() {
+  static updateFollowing(following) {
+    console.log('updating ', following)
     return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/actions`, { following: true })
+      axios.put(`${window.baseUrl}/users/self/following`, { following })
       .then((response) => resolve(response))
       .catch((error) => reject(error))
     })
@@ -57,21 +66,50 @@ class NetworkRequest {
     })
   }
 
-  static setPayment() {
-
-  }
 
   static setTime() {
 
   }
 
-  static setPayment(id) {
-    return new Promise(function(resolve, reject) {
-      axios.post(`${window.baseUrl}/payments`)
+  static setPayment(item_id) {
+    return new Promise((resolve, reject) => {
+      axios.post(`${window.baseUrl}/payments`, { item_id })
       .then((response) => resolve(response))
       .catch((error) => reject(error))
     })
+  }
 
+  static setPaymentConfimation(payment) {
+    console.log('setPaymentConfimation')
+    return new Promise((resolve, reject) => {
+      axios.post(`${window.baseUrl}/users/self/payments`, { payment })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setUsernames(usernames) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/usernames`, { usernames })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setLocations(locations) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/locations`, { locations })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setTags(tags) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/tags`, { tags })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
   }
 
   static getToken(code, callback, errCallback) {
