@@ -100,15 +100,17 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
+
     let user = undefined
 
+    // We don't want a horrible error
     try { user = JSON.parse(localStorage.getItem('user')) }
     catch (error) {
       // TODO: handle error
       console.log(error)
     }
 
-    // Setup user preferences
+    // Reload user preferences from localStorage
     this.setState({
       tags: user.preferences.tags,
       locations: user.preferences.locations,
@@ -163,7 +165,7 @@ class Dashboard extends Component {
       })
     })
     .catch((error) => {
-      // TODO: catch error
+      // TODO: handle error
       console.log(error)
     })
 
@@ -179,7 +181,7 @@ class Dashboard extends Component {
       })
     })
     .catch((error) => {
-      // TODO: catch error
+      // TODO: handle error
       console.log(error)
     })
 

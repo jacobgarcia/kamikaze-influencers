@@ -199,6 +199,7 @@ router.route('/users/self/payments')
     const { custom, amount } = body.transactions[0]
     const item_id = custom
 
+    // TODO: convert this to Promises
     new Payment({
       paypal_id: body.id, // The schema will look if the id has been allready added
       item_id,
@@ -298,7 +299,6 @@ router.route('/payments')
     // Sent total and currency
     PayPalService.getPaymentToken()
     .then((response) => {
-      console.log('paypal access token', response.body.access_token)
       return response.body.access_token
     })
     .then((access_token) => {
@@ -312,7 +312,7 @@ router.route('/payments')
       })
     })
     .catch((error) => {
-      console.log('Error:', error)
+      console.log(error)
       return res.status(500).json({ error })
     })
 
