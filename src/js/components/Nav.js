@@ -42,7 +42,7 @@ class Nav extends Component {
             <span>{this.props.user.username}</span>
           </div>
           <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <div className='time'><Link to='/time'>Time</Link></div>
+          <div className='time'><Link to='/time'>Add time</Link></div>
         </nav>
       )
     } else {
