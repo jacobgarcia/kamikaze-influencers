@@ -9,6 +9,12 @@ class TimeJS {
     })
   }
 
+  static secondsTo(userTime) {
+    const timeEnd = userTime/1000
+    const timeNow = Math.floor(Date.now()/1000)
+    return (timeEnd - timeNow)
+  }
+
 }
 
 module.exports = TimeJS
