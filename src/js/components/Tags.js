@@ -10,8 +10,6 @@ class Tags extends Component {
       tagsString: ''
     }
 
-    console.log('props', this.props)
-
     this.handleChange = this.handleChange.bind(this)
     this.keyDown = this.keyDown.bind(this)
     this.addTag = this.addTag.bind(this)
@@ -78,6 +76,7 @@ class Tags extends Component {
         <input type="text"
           onChange={this.handleChange}
           onKeyDown={this.keyDown}
+          placeholder='tags,coma,separated'
           value={this.state.tagsString}></input>
       </div>
     )
