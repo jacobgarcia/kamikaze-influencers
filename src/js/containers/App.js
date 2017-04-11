@@ -22,7 +22,6 @@ class App extends Component {
       return
 
     // Remove cached user
-
     NetworkRequest.getProfile()
     .then((response) => {
       const { full_name, _id, profile_picture, username, timeEnd, preferences } = response.data.user
@@ -34,7 +33,9 @@ class App extends Component {
         timeEnd,
         preferences
       }
+
       localStorage.setItem('user', JSON.stringify(user))
+      this.forceUpdate()
 
       this.setState({
         user
