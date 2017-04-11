@@ -9,7 +9,7 @@ const Landing = () => {
       <div className='hero'>
         <div className='content'>
           <h1>Seguidores reales en poco tiempo</h1>
-          <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interacturar contigo</p>
+          <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interactuar contigo</p>
           <input type="button" value="Comenzar"/>
         </div>
       </div>
@@ -21,7 +21,7 @@ const Landing = () => {
         </div>
         <div className='element'>
           <div className='image-container'>
-            <div className='image'></div>
+            <div className='image connectivity'></div>
           </div>
           <div className='element-content'>
             <h2>Incrementa tu alcance</h2>
@@ -77,7 +77,7 @@ const Landing = () => {
         <h3>Deja que las personas te vean y sigan</h3>
         <div className='hall-of-fame-content'>
           <div className='image-container'>
-
+            <div className='hall-of-fame-image'></div>
           </div>
           <div className='element-content'>
             <h1>Salón de la Fama</h1>
