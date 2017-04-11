@@ -540,6 +540,13 @@ input[type="button"].red {
     text-align: center;
     display: flex;
     flex-direction: column;
+    .paypal-button {
+      display: inline-block;
+      height: 30px;
+      width: 153px;
+      background: url('/static/img/icons/paypal-button.png') no-repeat center center;
+      background-size: cover;
+    }
     .close {
       cursor: pointer;
       width: 26px;
