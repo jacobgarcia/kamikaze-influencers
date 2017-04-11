@@ -11,7 +11,11 @@ import Time from './containers/Time'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token')
-  return (token !== undefined)
+
+  if (token) {
+    return true
+  }
+  return false
 }
 
 const Routes = (
