@@ -243,15 +243,27 @@ router.route('/users/self/payments')
             return res.status(500).json({ error })
           }
 
-          // TODO: check if timeEnd has allready passed
-          if (user.timeEnd < Date.now)
-            console.log('time end is less than now')
+          const now = Date.now()
 
-          user.timeEnd =+ timeToAdd
-          // TODO:
-          //user.save()
+          // Check if timeEnd has allready passed
+          // 1491790971264
+          if (user.timeEnd < now) {
+            user.timeEnd = now + timeToAdd
+          } else {
+            user.timeEnd = user.timeEnd + timeToAdd
+          }
 
-          res.status(200).json({ user })
+          console.log(user.timeEnd)
+          console.log(Date.now(user.timeEnd))
+
+          user.save((error, savedUser) => {
+            if (error) {
+              console.log(error)
+              return res.status(500).json({ error })
+            }
+              res.status(200).json({ user })
+          })
+
         })
 
       })
