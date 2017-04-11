@@ -99,17 +99,19 @@ class Dashboard extends Component {
     })
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
 
-    let user = undefined
+  componentDidMount() {
 
+    let user = {}
     // We don't want a horrible error
     try { user = JSON.parse(localStorage.getItem('user')) }
     catch (error) {
       // TODO: handle error
       console.log(error)
     }
-
     // Reload user preferences from localStorage
     this.setState({
       tags: user.preferences.tags,
