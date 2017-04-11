@@ -383,6 +383,9 @@ a {
     background: linear-gradient(135deg, rgba($red,0.55), rgba($purple, 0.55)), url('/static/img/celebrate.jpg') no-repeat center center;
     background-size: cover;
     text-align: center;
+    h1 {
+      margin: 20px 0 10px;
+    }
     .hall-of-fame-content {
       @include owa_boxshadow;
       padding: 50px;
@@ -802,7 +805,7 @@ input[type="button"].red {
       max-height: 350px;
       overflow: visible;
       overflow-y: visible;
-      margin-bottom: 300px;
+      margin-bottom: 350px;
     }
   }
   .content-section {
