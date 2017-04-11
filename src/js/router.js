@@ -10,12 +10,8 @@ import Logout from './containers/Logout'
 import Time from './containers/Time'
 
 const isAuthenticated = () => {
-  const token = window.localStorage.getItem('token')
-  console.log('isAuthenticated? token', token)
-  if (token) {
-    return true
-  }
-  return false
+  const token = localStorage.getItem('token')
+  return (token !== undefined)
 }
 
 const Routes = (
