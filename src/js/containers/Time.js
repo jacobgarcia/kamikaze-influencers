@@ -31,6 +31,10 @@ class Time extends Component {
     this.purchaseTime = this.purchaseTime.bind(this)
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval)
+  }
+
   purchaseTime(time_id) {
     this.setState({
       showPayment: true
@@ -53,68 +57,14 @@ class Time extends Component {
   }
 
   tick() {
+    console.log('Setting state from time.js at tick')
     this.setState((prevState) => ({
       remainingTime: prevState.remainingTime - 1,
     }))
   }
 
   componentWillMount() {
-    const query = this.props.location.query
-    const payment = {
-      payerId: query.PayerID,
-      paymentId: query.paymentId,
-      token: query.token
-    }
-
-    if (payment.payerId && payment.paymentId && payment.token) {
-      console.log('Checking if payment is OK...')
-
-      NetworkRequest.setPaymentConfimation(payment)
-      .then((response) => {
-        
-        //Reload user and time
-        this.setState({
-          remainingTime: remainingTime(response.data.user.timeEnd)
-        })
-
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-      })
-      .catch((error) => {
-        // TODO: handle error
-        console.log(error)
-      })
-    }
-
-  }
-
-  remainingTime(timeEnd) {
-    const timeEnd = user.timeEnd/1000
-    const timeNow = Math.floor(Date.now()/1000)
-    return (timeEnd - timeNow)
-  }
-
-  componentDidMount() {
-
-    let user = undefined
-
-    try {
-      user = JSON.parse(localStorage.getItem('user'))
-    } catch (error) {
-      // TODO: handle error
-      console.log(error)
-    }
-
-    // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const remainingTime = remainingTime(user.timeEnd)
-
-    // Check if we have time, so we dont't tick negative dates
-    if (remainingTime > 0) {
-      this.setState({
-        remainingTime
-      })
-      this.interval = setInterval(() => this.tick(), 1000)
-    }
-
+    // Get time packages
     NetworkRequest.getTimeItems()
     .then((response) => {
       this.setState({
@@ -125,6 +75,56 @@ class Time extends Component {
       // TODO: handle error
       console.log(error)
     })
+
+    const query = this.props.location.query
+
+    const payment = {
+      payerId: query.PayerID,
+      paymentId: query.paymentId,
+      token: query.token
+    }
+
+    // Check if we have a payment confirmation
+    if (payment.payerId && payment.paymentId && payment.token) {
+      // Send payment confirmation
+      NetworkRequest.setPaymentConfimation(payment)
+      .then((response) => {
+        //Reload user and time
+        this.setState({
+          remainingTime: TimeJS.secondsTo(response.data.user.timeEnd)
+        })
+        clearInterval(this.interval)
+        this.interval = setInterval(() => this.tick(), 1000)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+      })
+      .catch((error) => {
+        // TODO: handle error
+        console.log(error)
+      })
+    }
+
+  }
+
+  componentDidMount() {
+
+    let user = undefined
+
+    try { user = JSON.parse(localStorage.getItem('user')) }
+    catch (error) {
+      // TODO: handle error
+      console.log(error)
+    }
+
+    // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
+    const remainingTime = TimeJS.secondsTo(user.timeEnd)
+
+    // Check if we have time, so we dont't tick negative dates
+    if (remainingTime > 0) {
+      this.setState({
+        remainingTime
+      })
+      this.interval = setInterval(() => this.tick(), 1000)
+    }
 
   }
 
@@ -159,9 +159,7 @@ class Time extends Component {
             <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
             <h2>{`${hours}:${minutes}:${seconds}`}</h2>
           </div>
-          {JSON.stringify(this.state.items)}
           {this.state.items.map((item, index) => {
-
             return (
               <div className='time-card' key={index}>
                 <img src='/'></img>
@@ -169,14 +167,15 @@ class Time extends Component {
                 <p>{item.description}</p>
                 <span className='days'>{item.days} Day</span>
                 <span className='price'>${item.price}</span>
-                <input type='button' onClick={() => this.purchaseTime(item._id)} className='red' value='Buy now'></input>
+                <div className='buy-now'>
+                  <input type='button' onClick={() => this.purchaseTime(item._id)} className='red' value='Buy now'></input>
+                </div>
               </div>
             )
-
           })}
 
         </div>
-        <Footer></Footer>
+        <Footer loggedin={true}></Footer>
       </div>
     )
   }
