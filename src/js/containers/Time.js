@@ -9,7 +9,7 @@ const TimeLink = (props) => {
   const { href, rel, method } = props.link
   return (
     <div>
-      <a href={href}>Pagar con Paypal...</a>
+      <a href={href} className='paypal-button'/>
     </div>
   )
 }
@@ -29,10 +29,17 @@ class Time extends Component {
     }
 
     this.purchaseTime = this.purchaseTime.bind(this)
+    this.hidePayment = this.hidePayment.bind(this)
   }
 
   componentWillUnmount() {
     clearInterval(this.interval)
+  }
+
+  hidePayment() {
+    this.setState({
+      showPayment: false
+    })
   }
 
   purchaseTime(time_id) {
@@ -57,7 +64,6 @@ class Time extends Component {
   }
 
   tick() {
-    console.log('Setting state from time.js at tick')
     this.setState((prevState) => ({
       remainingTime: prevState.remainingTime - 1,
     }))
@@ -134,7 +140,7 @@ class Time extends Component {
 
     return (
       <div className='time'>
-        <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`}>
+        <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
             {
               this.state.transactions ?
