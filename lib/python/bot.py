@@ -12,11 +12,12 @@ import time
 
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
-
+print 'Tag List:', (sys.argv[3]).split(",")
+# The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
 bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                like_per_day=1000,
-               comments_per_day=0,
-               tag_list=['follow4follow', 'f4f', 'cute'],
+               comments_per_day=50,
+               tag_list=(sys.argv[3]).split(","),
                tag_blacklist=['rain', 'thunderstorm'],
                user_blacklist={},
                max_like_for_one_tag=50,
