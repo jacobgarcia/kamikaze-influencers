@@ -359,7 +359,7 @@ router.use((req, res, next) => {
 router.route('/automation/:user/start')
 .post((req, res) => {
     //TODO: Update password logic
-    const instaBot = new PythonShell('/lib/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password, req.body.tags]})
+    const instaBot = new PythonShell('/lib/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password, req.body.tags, req.body.like, req.body.follow, req.body.comment]})
     console.log("The bot is ready!")
     instaBot.on('message', (message) => {
         // received a message sent from the Python script (a simple "print" statement)

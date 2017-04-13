@@ -13,15 +13,19 @@ import time
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
 print 'Tag List:', (sys.argv[3]).split(",")
+
+
 # The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
+## The tags must be splitted since all of them come in a single String
+### Uses ternary operator to enable or disable feature based on boolean labels
 bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
-               like_per_day=1000,
-               comments_per_day=50,
+               like_per_day= (1000 if sys.argv[4] == "true" else 0),
+               comments_per_day= (50 if sys.argv[6] == "true" else 0),
                tag_list=(sys.argv[3]).split(","),
                tag_blacklist=['rain', 'thunderstorm'],
                user_blacklist={},
                max_like_for_one_tag=50,
-               follow_per_day=300,
+               follow_per_day=(300 if sys.argv[5] == "true" else 0),
                follow_time=1*60,
                unfollow_per_day=300,
                unfollow_break_min=15,
