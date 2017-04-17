@@ -14,6 +14,12 @@ class Switch extends Component {
 
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.active !== this.state.active) {
+      this.setState({ active: nextProps.active })
+    }
+  }
+
   onActiveChange(event) {
     event.stopPropagation()
     const active = event.target.checked

@@ -34,19 +34,32 @@ class Nav extends Component {
     // If we have an authenticated user with user
     const token = window.localStorage.getItem('token')
 
-    return (
-      <nav className='signin-nav'>
-        <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-        <input type="button" value='Muy pronto' className='signin-button'/>
-        <div className={`hover ${this.state.showLogin ? '' : 'hidden'}`} onClick={this.hideLogin}>
-          <div className='signin-body'>
-            <span className='close' onClick={this.hideLogin}></span>
-            <h3>Registrarse/Iniciar sesión</h3>
-            <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=code`} className='instagram-login'>Entrar con Instagram</a>
+    if (this.props.user && token) {
+      return (
+        <nav>
+          <div className='profile'>
+            <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
+            <span>{this.props.user.username}</span>
           </div>
-        </div>
-      </nav>
-    )
+          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+          <div className='time'><Link to='/time'>Add time</Link></div>
+        </nav>
+      )
+    } else {
+      return (
+        <nav className='signin-nav'>
+          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+          <input type="button" value='Entrar' className='signin-button' onClick={this.showLogin}></input>
+          <div className={`hover ${this.state.showLogin ? '' : 'hidden'}`} onClick={this.hideLogin}>
+            <div className='signin-body'>
+              <span className='close' onClick={this.hideLogin}></span>
+              <h3>Registrarse/Iniciar sesión</h3>
+              <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=code`} className='instagram-login'>Entrar con Instagram</a>
+            </div>
+          </div>
+        </nav>
+      )
+    }
   }
 }
 

@@ -15,6 +15,12 @@ class Tags extends Component {
     this.addTag = this.addTag.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.tags !== this.state.tags) {
+      this.setState({ tags: nextProps.tags })
+    }
+  }
+
   addTag(tag) {
 
     if (this.state.tags.includes(tag)) {
