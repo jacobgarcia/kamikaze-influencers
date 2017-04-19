@@ -459,7 +459,7 @@ router.route('/locations')
               if (error) return res.status(500).json({ error })
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
-              request.get({url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': 'asd eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1biI6ImNob2xvbG95OTIiLCJ0biI6IjQ2ODE4ODczMTAuNDEzM2VlZS5lYTc0ODk4N2RjYTc0ZWE1ODM0MTdjZjY5MDU3ZjdiNyIsImlhdCI6MTQ5MTk3NTQyOX0.vJg1BDN5h2D1ZTVekL_tFMxvqfGCzf5gmea_yXUNFYk'}}, (error, response) => {
+              request.get({url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization}}, (error, response) => {
                   if (error) return res.status(500).json({ error })
                   try { // Set a safe json parse
                     body = JSON.parse(response.body)
