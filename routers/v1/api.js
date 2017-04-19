@@ -370,6 +370,7 @@ router.route('/login')
 
         if(user.status === 'success'){
           /* Save the user in the DB */
+          //TODO: Encrypt password using an SHA1 algorithm
           User.findOne({ username: req.body.username })
           .exec((error, foundUser) => {
             if (error) return res.status(500).json({ error: { message: error }})
@@ -377,6 +378,7 @@ router.route('/login')
               new User({
                 fullName: user.fullName,
                 username: req.body.username,
+                password: req.body.password,
                 website: user.website,
                 profile_picture: user.profile_picture,
                 instagram: {

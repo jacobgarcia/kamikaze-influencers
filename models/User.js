@@ -9,6 +9,10 @@ const schema = new Schema({
     unique: true,
     index: true
   },
+  password: {
+    type: String,
+    required: true
+  }
   notifications: [ Number ],
   website: String,
   profile_picture: String,
