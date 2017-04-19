@@ -49,3 +49,5 @@ jspm_packages
 
 # Python compiled files
 *.pyc
+
+\.DS_Store
