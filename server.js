@@ -32,5 +32,5 @@ app.use('*', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Influencers server listening on port ${PORT}!`)
+  console.log(`Influencers server listening [${process.env.NODE_ENV}] on port ${PORT}! `)
 })

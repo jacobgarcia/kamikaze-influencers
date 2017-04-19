@@ -4,6 +4,7 @@ const request = require('request')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const PythonShell = require('python-shell')
+const winston = require('winston')
 const router = express.Router()
 
 const User = require(path.resolve('models/User'))
@@ -13,57 +14,87 @@ const Token = require(path.resolve('models/Token'))
 
 const config = require(path.resolve('config/config'))
 const PayPalService = require(path.resolve('routers/v1/PayPalService'))
-const InstagramService = require(path.resolve('routers/v1/InstagramService.js'))
 
 mongoose.connect(config.database)
 
 const baseUrl = 'https://api.instagram.com/v1'
 
+/* LOGIN INTO OWA AND VALIDATE IF THE USER IS VALID ON IG */
+// TODO: Protect vs brute force attack
 router.route('/users/authenticate')
 .post((req, res) => {
 
-  const formData = {
-    'client_id': config.instagram.client_id,
-    'client_secret': config.instagram.client_secret,
-    'grant_type': 'authorization_code',
-    'redirect_uri': 'http://localhost:8080/authenticate',
-    'code': req.body.code
-  }
+  const { username, password } = req.body.user
+  const instaLogin = new PythonShell('lib/python/login.py', { pythonOptions: ['-u'], args: [ username, password ] })
 
-  request.post({url:'https://api.instagram.com/oauth/access_token', formData: formData}, (error, response) => {
-    if (error)
-      return res.status(500).json({ error })
+  /* Wait for the response in the login */
+  instaLogin.on('message', (message) => {
+    // end the input stream and allow the process to exit
+    instaLogin.end((error) => {
+      if (error) {
+        winston.log(error)
+        return res.status(500).json({ error })
+      }
 
-    let body = undefined
+      const user = JSON.parse(message)
 
-    try { // Set a safe json parse
-      body = JSON.parse(response.body)
-    } catch (error) { res.status(500).json({ error }) }
+      if (user.status === 'error') {
+        return res.status(403).json({ error: {'message': 'Invalid Instagram username and password.'}})
+      }
 
-    if (body.code === 400)
-      res.status(400).json({ error: { message: 'Matching code was not found or was already used.' } })
+      if (user.status === 'error_connection') {
+        winston.log('Connection attempt to Instagram failed.')
+        return res.status(500).json({ error: {'message': 'Connection attempt to Instagram has failed.'}})
+      }
 
-    const { user, access_token } = body
+      if (user.status === 'success') {
+        /* Save the user in the DB */
+        //TODO: Encrypt password using an SHA1 algorithm
+        User.findOne({ username }, { password: 0 })
+        .exec((error, foundUser) => {
+          if (error) {
+            winston.log(error)
+            return res.status(500).json({ error })
+          }
+          if (!foundUser) {
+            new User({
+              username,
+              password,
+              fullName: user.fullName,
+              website: user.website,
+              profile_picture: user.profile_picture,
+              instagram: {
+                id: user.id,
+                bio: user.bio
+              }
+            })
+            .save((error, newUser) => {
+              if (error) {
+                winston.log(error)
+                return res.status(500).json({ error })
+              }
 
-    if (!user || user == undefined)
-      return res.status(500).json({ error: { message: 'Could not get user' } })
+              // Create and send token
+              const token = jwt.sign({ username: newUser.username }, config.jwt_secret)
+              newUser.notifications.push('0')
 
-    InstagramService.signinUser(user)
-    .then((data) => {
-      console.log(access_token)
-      const token = jwt.sign({ un: data.user.username, tn: access_token }, config.jwt_secret)
-      // Return notifications
-      let notifications = []
-      if (data.status === 201) notifications.push('0') // If the user is new add '0' notification menaning new user
+              res.status(201).json({ 'message': 'New user on board. Welcome aboard!', token, user: newUser })
 
-      return res.status(data.status).json({ token, message: 'Authenticated!', notifications })
+            })
+          } else { // Else is important, otherwise iw will run before saving user
+
+            // Create and send token
+            const token = jwt.sign({ username: foundUser.username }, config.jwt_secret)
+            res.status(200).json({'message': 'User already registered. Welcome again!', token, user: foundUser })
+          }
+        })
+      } else {
+        winston.log('Unknown error ocurred on login route', user)
+        res.status(500).json({ error: { message: 'Unknown error ocurred.' }})
+      }
+
     })
-    .catch((error) => {
-      return res.status(500).json({ error })
-    })
-
   })
-
 })
 
 /*
@@ -81,8 +112,8 @@ router.use((req, res, next) => {
     if (error) //End next requests and send a 401 (unauthorized)}
       return res.status(401).json({error,  message: 'Failed to authenticate token'})
     // TIP: After here in every request we can access the IG username in req._username
-    req._username = decoded.un
-    req._token = decoded.tn
+    console.log(decoded)
+    req._username = decoded.username
 
     next()
 
@@ -101,8 +132,8 @@ router.route('/items')
 router.route('/users/self')
 .get((req, res) => {
   const username = req._username
-
-  User.findOne({ username: username })
+  console.log('Finding ', username)
+  User.findOne({ username })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     if (!user) return res.status(404).json({ error: { message: 'User not found' } })
@@ -335,7 +366,6 @@ router.route('/payments')
 
 })
 
-
 /*
    MIDDLEWARE FOR TIME AVAILABLE CHECK
 
@@ -343,7 +373,6 @@ router.route('/payments')
    current time, so we weill know if his time has passed
    or not
 */
-
 
 router.use((req, res, next) => {
   User.find({ username: req._username })
@@ -357,86 +386,48 @@ router.use((req, res, next) => {
   })
 })
 
-/* LOGIN INTO OWA AND VALIDATE IF THE USER IS VALID ON IG */
-router.route('/login')
-.post((req, res) => {
-  const instaLogin = new PythonShell('lib/python/login.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password]})
-
-  /* Wait for the response in the login */
-  instaLogin.on('message', (message) => {
-    // end the input stream and allow the process to exit
-    instaLogin.end((err) => {
-        if (err)
-          res.status(500).json({ error: { message: err }})
-        const user = JSON.parse(message)
-
-        if(user.status === 'success'){
-          /* Save the user in the DB */
-          //TODO: Encrypt password using an SHA1 algorithm
-          User.findOne({ username: req.body.username })
-          .exec((error, foundUser) => {
-            if (error) return res.status(500).json({ error: { message: error }})
-            if (!foundUser) {
-              new User({
-                fullName: user.fullName,
-                username: req.body.username,
-                password: req.body.password,
-                website: user.website,
-                profile_picture: user.profile_picture,
-                instagram: {
-                  id: user.id,
-                  bio: user.bio
-                }
-              })
-              .save((error, createdUser) => {
-                if (error)
-                  return res.status(500).json({ error: { message: error }})
-                res.status(201).json({'message': 'New user on board. Welcome aboard!', user: createdUser })
-              })
-            } else { // Else is important, otherwise iw will run before saving user
-              res.status(200).json({'message': 'User already registered. Welcome again!', user: foundUser })
-            }
-          })
-        }
-
-        else if(user.status === 'error')
-          res.status(403).json({error: {'message': 'Enter a valid Instagram username and password.'}})
-
-        else if(user.status === 'error_connection')
-          res.status(500).json({error: {'message': 'Connection attempt to Instagram has failed.'}})
-
-        else
-          res.status(500).json({ error: { message: 'Unknown error ocurred.' }})
-    })
-  })
-})
-
 /* AUTOMATION INSTAGRAM PROCESS */
+
 router.route('/automation/:user/start')
 .post((req, res) => {
     //TODO: Update password logic
-    const instaBot = new PythonShell('/lib/python/bot.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password, req.body.tags, req.body.like, req.body.follow, req.body.comment]})
-    console.log("The bot is ready!")
-    instaBot.on('message', (message) => {
-        // received a message sent from the Python script (a simple "print" statement)
-        console.log(message)
-    })
+    const username = req._username
+    User.findOne({ username })
+    .exec((error, user) => {
+      // Get user username, password and preferences
+      const { username, password, preferences } = user
 
-    // end the input stream and allow the process to exit
-    instaBot.end((err) => {
-        if (err){
-            throw err;
+      // Get tags, locations and usernames array
+      const { tags, locations, usernames } = preferences
+
+      // Get if user set to active each activity
+      const { liking, commenting, following } = preferences
+
+      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following ]})
+      console.log('The bot is ready!')
+      instaBot.on('message', (message) => {
+          // received a message sent from the Python script (a simple "print" statement)
+          process.env.NODE_ENV === 'development' ? console.log(message) : null
+      })
+
+      // end the input stream and allow the process to exit
+      instaBot.end((err) => {
+        if (err) {
+          winston.log(error, username)
+          throw err
         }
 
         console.log('Finished')
+      })
+
+      // end the input stream and allow the process to exit
+    /*  instaBot.end(function (err) {
+        if (err) throw err;
+        console.log('finished');
+      });*/
+     res.status(200).json({'message': 'The automation stub is here!'})
     })
 
-    // end the input stream and allow the process to exit
-  /*  instaBot.end(function (err) {
-      if (err) throw err;
-      console.log('finished');
-    });*/
-   res.status(200).json({'message': 'The automation stub is here!'})
 })
 
 /* GET ID's FOR LOCATIONS ON IG */

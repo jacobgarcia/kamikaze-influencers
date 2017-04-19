@@ -3,19 +3,16 @@ const Schema = mongoose.Schema
 
 const schema = new Schema({
   fullName: String,
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
+  username: { type: String, required: true, unique: true, index: true },
+  password: { type: String, required: true },
   notifications: [ Number ],
   website: String,
   profile_picture: String,
+  // Accout info for metrics
+  likes: { type: Number, default: 0 },
+  comments: { type: Number, default: 0 },
+  follows: { type: Number, default: 0 },
+  // End accout info for metrics
   instagram: {
     id: String,
     bio: String
