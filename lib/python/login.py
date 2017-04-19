@@ -7,6 +7,7 @@ from userinfo import UserInfo
 import requests
 import time
 import random
+import json
 
 # Login routine without definition
 ## Username and password as argument
@@ -51,15 +52,17 @@ if login.status_code == 200:
     finder = r.text.find(username)
     if finder != -1:
         ui = UserInfo()
-        user_id = ui.get_user_id_by_login(username)
-        print user_id
         user_info = ui.get_user_info_by_login(username)
-        print user_info
-        login_status = True
-        log_string = '%s login success!' % (username)
-        print 'success'
+        user_info['status'] = 'success'
+        user_json = json.dumps(user_info)
+        print user_json
     else:
-        login_status = False
-        print 'error'
+        user_info = {}
+        user_info['status'] = 'error'
+        user_json = json.dumps(user_info)
+        print user_json
 else:
-    print 'error_connection'
+    user_info = {}
+    user_info['status'] = 'error_connection'
+    user_json = json.dumps(user_info)
+    print user_json

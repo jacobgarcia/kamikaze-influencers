@@ -366,16 +366,39 @@ router.route('/login')
     instaLogin.end((err) => {
         if (err)
           res.status(500).json({ error: { message: err }})
+        const user = JSON.parse(message)
 
-        if(message === 'success'){
-          res.status(200).json({'message': 'Welcome user!'})
+        if(user.status === 'success'){
+          /* Save the user in the DB */
+          User.findOne({ username: req.body.username })
+          .exec((error, foundUser) => {
+            if (error) return res.status(500).json({ error: { message: error }})
+            if (!foundUser) {
+              new User({
+                fullName: user.fullName,
+                username: req.body.username,
+                website: user.website,
+                profile_picture: user.profile_picture,
+                instagram: {
+                  id: user.id,
+                  bio: user.bio
+                }
+              })
+              .save((error, createdUser) => {
+                if (error)
+                  return res.status(500).json({ error: { message: error }})
+                res.status(201).json({'message': 'New user on board. Welcome aboard!', user: createdUser })
+              })
+            } else { // Else is important, otherwise iw will run before saving user
+              res.status(200).json({'message': 'User already registered. Welcome again!', user: foundUser })
+            }
+          })
         }
 
-
-        else if(message === 'error')
+        else if(user.status === 'error')
           res.status(403).json({error: {'message': 'Enter a valid Instagram username and password.'}})
 
-        else if(message === 'error_connection')
+        else if(user.status === 'error_connection')
           res.status(500).json({error: {'message': 'Connection attempt to Instagram has failed.'}})
 
         else
