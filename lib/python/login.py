@@ -5,6 +5,11 @@ import requests
 import time
 import random
 
+# Login routine without definition
+## Username and password as argument
+username = sys.argv[1].lower()
+password = sys.argv[2]
+
 # Consts definitions
 accept_language = 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'
 url = 'https://www.instagram.com/'
@@ -13,12 +18,7 @@ user_agent = ("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36")
 s = requests.Session()
 
-# Login routine without definition
-username = sys.argv[1].lower()
-password = sys.argv[2]
-
-log_string = 'Trying to login as %s...\n' % (username)
-print log_string
+# Routine implementation
 s.cookies.update({'sessionid': '', 'mid': '', 'ig_pr': '1',
                        'ig_vw': '1920', 'csrftoken': '',
                        's_network': '', 'ds_user_id': ''})
@@ -49,9 +49,9 @@ if login.status_code == 200:
     if finder != -1:
         login_status = True
         log_string = '%s login success!' % (username)
-        print log_string
+        print 'success'
     else:
         login_status = False
-        print 'Login error! Check your login data!'
+        print 'error'
 else:
-    print 'Login error! Connection error!'
+    print 'error_connection'

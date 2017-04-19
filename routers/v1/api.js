@@ -362,19 +362,24 @@ router.route('/login')
 
   /* Wait for the response in the login */
   instaLogin.on('message', (message) => {
-    console.log(message)
+    // end the input stream and allow the process to exit
+    instaLogin.end((err) => {
+        if (err)
+          res.status(500).json({ error: { message: err }})
+
+        if(message === 'success')
+          res.status(200).json({'message': 'Welcome user!'})
+
+        else if(message === 'error')
+          res.status(403).json({error: {'message': 'Enter a valid Instagram username and password.'}})
+
+        else if(message === 'error_connection')
+          res.status(500).json({error: {'message': 'Connection attempt to Instagram has failed.'}})
+
+        else
+          res.status(500).json({ error: { message: 'Unknown error ocurred.' }})
+    })
   })
-
-  // end the input stream and allow the process to exit
-  instaLogin.end((err) => {
-      if (err){
-          throw err;
-      }
-
-      console.log('Finished')
-      res.status(200).json({'message': 'The login stub is here!'})
-  })
-
 })
 
 /* AUTOMATION INSTAGRAM PROCESS */
