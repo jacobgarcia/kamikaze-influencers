@@ -49,7 +49,7 @@ input {
   font-size: 1rem;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
   border-bottom: 2px solid $gray;
   padding: 5px 10px;
   transition: 0.4s;
@@ -113,7 +113,7 @@ a {
   border-radius: 50%;
   width: 25px;
   height: 25px;
-  animation: spin 1.5s linear infinite;
+  animation: spin 1s linear infinite;
   &.small {
     border-width: 2px;
     width: 15px;
@@ -318,12 +318,13 @@ a {
       display: none;
     }
     input[type="radio"]:checked+label{
-      background: $red;
       @include owa_boxshadow;
+      background: $red;
       color: #fff;
     }
     label {
-      transition: 0.5s;
+      z-index: 101;
+      transition: 0.2s;
       cursor: pointer;
       color: $gray;
       display: inline-block;
@@ -516,6 +517,7 @@ input[type="button"].red {
   padding: 6px 15px;
   font-weight: 600;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .hover {
@@ -539,10 +541,62 @@ input[type="button"].red {
   .signin-body, .payment-details {
     background: #fff;
     color: $gray;
-    padding: 10px 20px;
+    padding: 15px 20px 30px;
     text-align: center;
     display: flex;
     flex-direction: column;
+    .title {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      height: 29px;
+      .loader {
+        height: 29px;
+        width: 29px;
+        margin-bottom: 10px;
+        position: relative;
+      }
+    }
+    .red {
+      margin-top: 20px;
+    }
+    .element {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-top: 25px;
+      &:first-child {
+        padding-top: 5px;
+      }
+      input {
+        order: 1;
+      }
+      label {
+        left: 0;
+        order: -1;
+        position: absolute;
+        bottom: 2px;
+        transition: 0.3s ease;
+        opacity: 0.5;
+        font-weight: 300;
+        transform: scale(1) translateX(10px);
+      }
+      label {
+        display: block;
+        font-weight: 500;
+        text-align: left;
+        font-size: 1rem;
+        width: 100%;
+      }
+      input:focus + label, input.dirty + label {
+        left: 0;
+        bottom: 22px;
+        opacity: 1;
+        font-weight: 500;
+        transform: scale(0.8) translateX(-15px);
+      }
+    }
     .paypal-button {
       display: inline-block;
       height: 30px;
@@ -560,7 +614,7 @@ input[type="button"].red {
       align-self: flex-end;
     }
     h3 {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
   }
   &.intro {
