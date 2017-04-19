@@ -54,7 +54,7 @@ class Nav extends Component {
             <div className='signin-body'>
               <span className='close' onClick={this.hideLogin}></span>
               <h3>Registrarse/Iniciar sesión</h3>
-              <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&response_type=code`} className='instagram-login'>Entrar con Instagram</a>
+              <a href={`https://api.instagram.com/oauth/authorize/?client_id=${this.client_id}&redirect_uri=${this.redirect_uri}&scope=public_content&response_type=code`} className='instagram-login'>Entrar con Instagram</a>
             </div>
           </div>
         </nav>

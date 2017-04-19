@@ -49,6 +49,7 @@ router.route('/users/authenticate')
 
     InstagramService.signinUser(user)
     .then((data) => {
+      console.log(access_token)
       const token = jwt.sign({ un: data.user.username, tn: access_token }, config.jwt_secret)
       // Return notifications
       let notifications = []
@@ -435,6 +436,22 @@ router.route('/automation/:user/start')
       console.log('finished');
     });*/
    res.status(200).json({'message': 'The automation stub is here!'})
+})
+
+/* GET ID's FOR LOCATIONS ON IG */
+router.route('/locations')
+.get((req, res) => {
+  request.get({url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=4681887310.4133eee.ea748987dca74ea583417cf69057f7b7'}, (error, response) => {
+    if (error)
+      return res.status(500).json({ error })
+      let body = undefined
+
+      try { // Set a safe json parse
+        body = JSON.parse(response.body)
+      } catch (error) { res.status(500).json({ error }) }
+
+      res.status(200).json(body)
+  })
 })
 
 module.exports = router

@@ -12,7 +12,7 @@ const schema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
   notifications: [ Number ],
   website: String,
   profile_picture: String,
