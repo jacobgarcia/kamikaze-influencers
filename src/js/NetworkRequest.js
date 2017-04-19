@@ -16,54 +16,33 @@ axios.interceptors.request.use((config) => {
 class NetworkRequest {
 
   static getTimeItems() {
-    return new Promise((resolve, reject) => {
-      axios.get((`${window.baseUrl}/items`))
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.get((`${window.baseUrl}/items`))
+  }
+
+  static signinUser(user) {
+    return axios.post(`${window.baseUrl}/users/authenticate`, { user })
   }
 
   static setUser(callback, errCallback) {
-    axios.post(`${window.baseUrl}/users`)
-    .then((res) => {
-      callback(res)
-    })
-    .catch((error) => {
-      errCallback(error)
-    })
+    return axios.post(`${window.baseUrl}/users`)
+    .then(callback)
+    .catch(errCallback)
   }
 
   static updateLiking(liking) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/liking`, { liking })
-      .then((response) => resolve(response))
-      .catch((error) => reject(errir))
-    })
+    return axios.put(`${window.baseUrl}/users/self/liking`, { liking })
   }
 
   static updateCommenting(commenting) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/commenting`, { commenting })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/commenting`, { commenting })
   }
 
   static updateFollowing(following) {
-    console.log('updating ', following)
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/following`, { following })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/following`, { following })
   }
 
   static getHallOfFame() {
-    return new Promise ((resolve, reject) => {
-      axios(`${window.baseUrl}/halloffame`)
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.get(`${window.baseUrl}/halloffame`)
   }
 
 
@@ -72,15 +51,10 @@ class NetworkRequest {
   }
 
   static setPayment(item_id) {
-    return new Promise((resolve, reject) => {
-      axios.post(`${window.baseUrl}/payments`, { item_id })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.post(`${window.baseUrl}/payments`, { item_id })
   }
 
   static setPaymentConfimation(payment) {
-    console.log('setPaymentConfimation')
     return new Promise((resolve, reject) => {
       axios.post(`${window.baseUrl}/users/self/payments`, { payment })
       .then((response) => resolve(response))
