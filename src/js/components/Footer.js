@@ -8,8 +8,8 @@ const Footer = (props) => {
       <div className='content-section'>
         <div className='links'>
           <ul>
-            <li>About</li>
-            <li>Contact</li>
+            <li><a href='/about'>About</a></li>
+            <li><a href='/contact'>Contact</a></li>
           </ul>
           {props.loggedin ? <a href='/logout'>Log out</a> : ''}
         </div>

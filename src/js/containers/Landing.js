@@ -9,7 +9,7 @@ const Landing = () => {
       <div className='hero'>
         <div className='content'>
           <h1>Seguidores reales en poco tiempo</h1>
-          <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interacturar contigo</p>
+          <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interactuar contigo</p>
           <input type="button" value="Comenzar"/>
         </div>
       </div>
@@ -21,17 +21,17 @@ const Landing = () => {
         </div>
         <div className='element'>
           <div className='image-container'>
-            <div className='image'></div>
+            <div className='image connectivity'></div>
           </div>
           <div className='element-content'>
             <h2>Incrementa tu alcance</h2>
-            <p>Nosotros te ayudamos a generar una gran actividad en tu cuenta de Instagram para que tu posicionamiento crezca y comiences a obtener cientos de <span>seguidores 100% reales</span> que están interesados en tu conenido e interactuan contigo.</p>
-            <p>Todo de una manera muy sencilla y a un par de clicks. Sólo necesitas adquirir alguno de nuestros paquete des tiempo e invertilos en tu cuenta de Instagam</p>
+            <p>Nosotros te ayudamos a generar una gran actividad en tu cuenta de Instagram para que tu posicionamiento crezca y comiences a obtener cientos de <span>seguidores 100% reales</span> que están interesados en tu contenido e interactúan contigo.</p>
+            <p>Todo de una manera muy sencilla y a un par de clicks. Sólo necesitas adquirir alguno de nuestros paquete des tiempo e invertirlos en tu cuenta de Instagram</p>
           </div>
         </div>
         <div className='element center'>
           <h2>Tu audiencia específica</h2>
-          <p>Sabemos que necesitas llegar a audiencias concretas por lo que te ofrecemos la mejor segmentación para atraer a las personas crrerctas en el momento correcto.</p>
+          <p>Sabemos que necesitas llegar a audiencias concretas por lo que te ofrecemos la mejor segmentación para atraer a las personas correctas en el momento correcto.</p>
         </div>
         <div className='targets-wrapper'>
           <div className='target'>
@@ -49,7 +49,7 @@ const Landing = () => {
             </div>
             <div className='element-content'>
               <h2>Ubicación</h2>
-              <p>Negocios locales, areas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+              <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
             </div>
           </div>
           <div className='target'>
@@ -58,7 +58,7 @@ const Landing = () => {
             </div>
             <div className='element-content'>
               <h2>Género</h2>
-              <p>Negocios locales, areas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+              <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
             </div>
           </div>
           <div className='target'>
@@ -67,7 +67,7 @@ const Landing = () => {
             </div>
             <div className='element-content'>
               <h2>Usuarios</h2>
-              <p>Negocios locales, areas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+              <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@ const Landing = () => {
         <h3>Deja que las personas te vean y sigan</h3>
         <div className='hall-of-fame-content'>
           <div className='image-container'>
-
+            <div className='hall-of-fame-image'></div>
           </div>
           <div className='element-content'>
             <h1>Salón de la Fama</h1>
@@ -100,7 +100,7 @@ const Landing = () => {
       <Footer loggedin={false}>
         <h1>¿Estás listo para recibir una oleada de seguidores?</h1>
         <p>Entra ahora y empieza a crecer tu cuenta de Instagram.</p>
-        <input type='button' value='Iniciar'/>
+        <input type='button' value='Comenzar'/>
       </Footer>
     </div>
   )
