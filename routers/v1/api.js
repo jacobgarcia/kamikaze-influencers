@@ -367,8 +367,10 @@ router.route('/login')
         if (err)
           res.status(500).json({ error: { message: err }})
 
-        if(message === 'success')
+        if(message === 'success'){
           res.status(200).json({'message': 'Welcome user!'})
+        }
+
 
         else if(message === 'error')
           res.status(403).json({error: {'message': 'Enter a valid Instagram username and password.'}})

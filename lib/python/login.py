@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
+import sys, os
+sys.path.append(os.path.join(sys.path[0],'py'))
+
+from userinfo import UserInfo
 import requests
 import time
 import random
@@ -47,6 +50,11 @@ if login.status_code == 200:
     r = s.get('https://www.instagram.com/')
     finder = r.text.find(username)
     if finder != -1:
+        ui = UserInfo()
+        user_id = ui.get_user_id_by_login(username)
+        print user_id
+        user_info = ui.get_user_info_by_login(username)
+        print user_info
         login_status = True
         log_string = '%s login success!' % (username)
         print 'success'

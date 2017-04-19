@@ -44,6 +44,18 @@ class UserInfo:
         id_user = all_data['user']['id']
         return id_user
 
+    def get_user_info_by_login(self, user_name):
+        url_info= self.url_user_info % (user_name)
+        info = self.s.get(url_info)
+        all_data = json.loads(info.text)
+        data = {}
+        data['id'] = all_data['user']['id']
+        data['bio'] = all_data['user']['biography']
+        data['fullName'] = all_data['user']['full_name']
+        data['website'] = all_data['user']['external_url']
+        data['profile_picture'] = all_data['user']['profile_pic_url']
+        return data
+
     def search_user(self, user_id=None, user_name=None):
         '''
         Search user_id or user_name, if you don't have it.
