@@ -355,7 +355,29 @@ router.use((req, res, next) => {
   })
 })
 
+/* LOGIN INTO OWA AND VALIDATE IF THE USER IS VALID ON IG */
+router.route('/login')
+.post((req, res) => {
+  const instaLogin = new PythonShell('lib/python/login.py', {pythonOptions: ['-u'], args: [req.body.username, req.body.password]})
 
+  /* Wait for the response in the login */
+  instaLogin.on('message', (message) => {
+    console.log(message)
+  })
+
+  // end the input stream and allow the process to exit
+  instaLogin.end((err) => {
+      if (err){
+          throw err;
+      }
+
+      console.log('Finished')
+      res.status(200).json({'message': 'The login stub is here!'})
+  })
+
+})
+
+/* AUTOMATION INSTAGRAM PROCESS */
 router.route('/automation/:user/start')
 .post((req, res) => {
     //TODO: Update password logic
