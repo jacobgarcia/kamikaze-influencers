@@ -38,6 +38,7 @@ class InstaBot:
 
     url = 'https://www.instagram.com/'
     url_tag = 'https://www.instagram.com/explore/tags/'
+    url_location = 'https://www.instagram.com/explore/locations/'
     url_likes = 'https://www.instagram.com/web/likes/%s/like/'
     url_unlike = 'https://www.instagram.com/web/likes/%s/unlike/'
     url_comment = 'https://www.instagram.com/web/comments/%s/add/'
@@ -291,7 +292,15 @@ class InstaBot:
             log_string = "Get media id by tag: %s" % (tag)
             self.write_log(log_string)
             if self.login_status == 1:
-                url_tag = '%s%s%s' % (self.url_tag, tag, '/')
+                if tag.startswith('l:'):
+                    tag = tag.replace('l:','')
+                    url_tag = '%s%s%s' % (self.url_location, tag, '/')
+                    current_page = 'LocationsPage'
+                    media_type = 'location'
+                else:
+                    url_tag = '%s%s%s' % (self.url_tag, tag, '/')
+                    current_page = 'TagPage'
+                    media_type = 'tag'
                 try:
                     r = self.s.get(url_tag)
                     text = r.text
@@ -307,8 +316,8 @@ class InstaBot:
                         : all_data_end]
                     all_data = json.loads(json_str)
 
-                    self.media_by_tag = list(all_data['entry_data']['TagPage'][0] \
-                                                 ['tag']['media']['nodes'])
+                    self.media_by_tag = list(all_data['entry_data'][current_page][0] \
+                                                 [media_type]['media']['nodes'])
                 except:
                     self.media_by_tag = []
                     self.write_log("Except on get_media!")
