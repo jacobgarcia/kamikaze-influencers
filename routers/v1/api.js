@@ -366,6 +366,50 @@ router.route('/payments')
 
 })
 
+/* GET ID's FOR LOCATIONS ON IG */
+router.route('/locations')
+.get((req, res) => {
+  Token.findOne({ 'dirty': false })
+  .exec((error, admin) => {
+    if (error)
+      res.status(500).json({ error })
+
+    if (!admin)
+      return res.status(503).json({ error: { message: 'No more valid access tokens in the server!' }})
+
+      /* Retrieve access_token from local database */
+      request.get({url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=' + admin.access_token}, (error, response) => {
+        if (error) return res.status(500).json({ error })
+
+          let body = undefined
+
+          try { // Set a safe json parse
+            body = JSON.parse(response.body)
+          } catch (error) { res.status(500).json({ error }) }
+
+          /* Token has expired, mark access_token as dirty and trigger endpoint again */
+          if (body.meta.error_type === "OAuthAccessTokenException"){
+            // Mark as dirty
+            Token.findOneAndUpdate({ 'access_token':admin.access_token }, { $set: { 'dirty': true } })
+            .exec((error, user) => {
+              if (error) return res.status(500).json({ error })
+              //TODO: Update get route to global OWA domain
+              //Trigger endpoint again 'till finding a valid access_token
+              request.get({url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization}}, (error, response) => {
+                  if (error) return res.status(500).json({ error })
+                  try { // Set a safe json parse
+                    body = JSON.parse(response.body)
+                  } catch (error) { res.status(500).json({ error }) }
+                  /* Return new response */
+                  return res.status(body.meta.code).json(body)
+              })
+            })
+          }
+          else return res.status(body.meta.code).json(body)
+      })
+  })
+})
+
 /*
    MIDDLEWARE FOR TIME AVAILABLE CHECK
 
@@ -428,50 +472,6 @@ router.route('/users/self/automation/start')
      res.status(200).json({'message': 'The automation stub is here!'})
     })
 
-})
-
-/* GET ID's FOR LOCATIONS ON IG */
-router.route('/locations')
-.get((req, res) => {
-  Token.findOne({'dirty': false})
-  .exec((error, admin) => {
-    if (error)
-      res.status(500).json({ error })
-
-    if (!admin)
-      return res.status(503).json({ error: { message: 'No more valid access tokens in the server!' }})
-
-      /* Retrieve access_token from local database */
-      request.get({url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=' + admin.access_token}, (error, response) => {
-        if (error) return res.status(500).json({ error })
-
-          let body = undefined
-
-          try { // Set a safe json parse
-            body = JSON.parse(response.body)
-          } catch (error) { res.status(500).json({ error }) }
-
-          /* Token has expired, mark access_token as dirty and trigger endpoint again */
-          if (body.meta.error_type === "OAuthAccessTokenException"){
-            // Mark as dirty
-            Token.findOneAndUpdate({ 'access_token':admin.access_token }, { $set: { 'dirty': true } })
-            .exec((error, user) => {
-              if (error) return res.status(500).json({ error })
-              //TODO: Update get route to global OWA domain
-              //Trigger endpoint again 'till finding a valid access_token
-              request.get({url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization}}, (error, response) => {
-                  if (error) return res.status(500).json({ error })
-                  try { // Set a safe json parse
-                    body = JSON.parse(response.body)
-                  } catch (error) { res.status(500).json({ error }) }
-                  /* Return new response */
-                  return res.status(body.meta.code).json(body)
-              })
-            })
-          }
-          else return res.status(body.meta.code).json(body)
-      })
-  })
 })
 
 module.exports = router
