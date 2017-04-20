@@ -58,7 +58,7 @@ router.route('/users/authenticate')
           }
           if (!foundUser) {
             new User({
-              username,
+              username: username.toLowerCase(),
               password,
               fullName: user.fullName,
               website: user.website,
@@ -415,7 +415,7 @@ router.use((req, res, next) => {
 
 router.route('/automation/self/start')
 .post((req, res) => {
-    //TODO: Update password encryption
+    //TODO: Update password encryption logic
     const username = req._username
     User.findOne({ username })
     .exec((error, user) => {
@@ -444,15 +444,9 @@ router.route('/automation/self/start')
           winston.log(error, username)
           throw err
         }
-
         console.log('Finished')
       })
 
-      // end the input stream and allow the process to exit
-    /*  instaBot.end(function (err) {
-        if (err) throw err;
-        console.log('finished');
-      });*/
      res.status(200).json({'message': 'The automation stub is here!'})
     })
 
