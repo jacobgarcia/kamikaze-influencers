@@ -3,6 +3,8 @@
 import sys, os
 sys.path.append(os.path.join(sys.path[0],'py'))
 
+import pymongo
+from pymongo import MongoClient
 from instabot import InstaBot
 from check_status import check_status
 from feed_scanner import feed_scanner
@@ -14,7 +16,10 @@ print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
 print 'Tag List:', (sys.argv[3]).split(",")
 
-
+# Connect to mongo database
+client = MongoClient()
+db = client.influencers
+users = db.users
 # The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
 ## The tags must be splitted since all of them come in a single String
 ### Uses ternary operator to enable or disable feature based on boolean labels
@@ -41,7 +46,7 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
                                         '.id','_id','bags'],
                unfollow_whitelist=['example_user_1','example_user_2'])
-while True:
+while (users.find_one({"username":sys.argv[1]}, {"timeEnd":1}) > 0):
 
     #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
     #print("## MODE 1 = MODIFIED MODE BY KEMONG")
