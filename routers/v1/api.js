@@ -388,7 +388,7 @@ router.use((req, res, next) => {
 
 /* AUTOMATION INSTAGRAM PROCESS */
 
-router.route('/automation/:user/start')
+router.route('/users/self/automation/start')
 .post((req, res) => {
     //TODO: Update password logic
     const username = req._username
