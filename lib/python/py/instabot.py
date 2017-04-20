@@ -12,6 +12,8 @@ import atexit
 import signal
 import itertools
 import sys
+import pymongo
+from pymongo import MongoClient
 
 from unfollow_protocol import unfollow_protocol
 
@@ -103,6 +105,11 @@ class InstaBot:
 
     # For new_auto_mod
     next_iteration = {"Like": 0, "Follow": 0, "Unfollow": 0, "Comments": 0}
+
+    # Connect to mongo database
+    client = MongoClient()
+    db = client.influencers
+    users = db.users
 
     def __init__(self, login, password,
                  like_per_day=1000,
@@ -380,6 +387,7 @@ class InstaBot:
                                                  (self.media_by_tag[i]['id'],
                                                   self.like_counter)
                                     self.write_log(log_string)
+                                    self.post_db("likes", self.media_by_tag[i]['id'])
                                 elif like.status_code == 400:
                                     log_string = "Not liked: %i" \
                                                  % (like.status_code)
@@ -445,6 +453,7 @@ class InstaBot:
                     self.comments_counter += 1
                     log_string = 'Write: "%s". #%i.' % (comment_text, self.comments_counter)
                     self.write_log(log_string)
+                    self.post_db("comments", media_id)
                 return comment
             except:
                 self.write_log("Except on comment!")
@@ -460,6 +469,7 @@ class InstaBot:
                     self.follow_counter += 1
                     log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
                     self.write_log(log_string)
+                    self.post_db("follows", user_id)
                 return follow
             except:
                 self.write_log("Except on follow!")
@@ -817,3 +827,7 @@ class InstaBot:
                 self.logger.info(log_text)
             except UnicodeEncodeError:
                 print("Your text has unicode problem!")
+
+    def post_db(self, key, media_id):
+        """ Post new information to the database showing new likes, follows or comments """
+        self.users.update({"username":self.user_login}, {'$push': {key:media_id}})
