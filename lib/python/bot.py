@@ -5,12 +5,14 @@ sys.path.append(os.path.join(sys.path[0],'py'))
 
 import pymongo
 from pymongo import MongoClient
+import datetime
 from instabot import InstaBot
 from check_status import check_status
 from feed_scanner import feed_scanner
 from unfollow_protocol import unfollow_protocol
 from follow_protocol import follow_protocol
 import time
+import json
 
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
@@ -46,8 +48,12 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                                         'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
                                         '.id','_id','bags'],
                unfollow_whitelist=['example_user_1','example_user_2'])
-while (users.find_one({"username":sys.argv[1]}, {"timeEnd":1}) > 0):
-
+end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
+current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+print "End Time: ", current_time < int(end_time['timeEnd'])
+while (current_time < int(end_time['timeEnd'])):
+    end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
+    current_time = int(datetime.datetime.now().strftime("%s")) * 1000
     #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
     #print("## MODE 1 = MODIFIED MODE BY KEMONG")
     #print("### MODE 2 = ORIGINAL MODE + UNFOLLOW WHO DON'T FOLLOW BACK")
