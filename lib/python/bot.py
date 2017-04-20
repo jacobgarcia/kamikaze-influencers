@@ -53,7 +53,7 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                unfollow_whitelist=['example_user_1','example_user_2'])
 end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
 current_time = int(datetime.datetime.now().strftime("%s")) * 1000
-print "End Time: ", current_time < int(end_time['timeEnd'])
+
 while (current_time < int(end_time['timeEnd'])):
     end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
     current_time = int(datetime.datetime.now().strftime("%s")) * 1000

@@ -202,7 +202,6 @@ class InstaBot:
             user_id_url= self.url_user_detail % (user)
             info = self.s.get(user_id_url)
             all_data = json.loads(info.text)
-            print all_data
             id_user = all_data['user']['id']
             #Update the user_name with the user_id
             self.user_blacklist[user]=id_user

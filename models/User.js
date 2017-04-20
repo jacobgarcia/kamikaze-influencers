@@ -24,8 +24,9 @@ const schema = new Schema({
     commenting: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ String ],
-    gender: { type: Number, default: 0 },
-    usernames: [ String ]
+    tag_filter: [ String ],
+    username_filter: [ String ],
+    keyword_filter: [ String ]
   }
 })
 

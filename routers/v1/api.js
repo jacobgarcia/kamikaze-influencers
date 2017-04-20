@@ -190,24 +190,49 @@ router.route('/users/self/locations')
   })
 })
 
-router.route('/users/self/usernames')
-.put((req, res) => {
-  const username = req._username
-  const usernames = req.body.usernames
-
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.usernames': usernames } }, { new: true })
-  .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
-    res.status(200).json({ user })
-  })
-})
-
 router.route('/users/self/tags')
 .put((req, res) => {
   const username = req._username
   const tags = req.body.tags
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+
+router.route('/users/self/blacktags')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.blacktags
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_filter': usernames } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/blackusers')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.blackusers
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.username_filter': blackusers } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/blackkeys')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.blackkeys
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_filter': blackkeys } }, { new: true })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     res.status(200).json({ user })
@@ -388,26 +413,31 @@ router.use((req, res, next) => {
 
 /* AUTOMATION INSTAGRAM PROCESS */
 
-router.route('/automation/:user/start')
+router.route('/automation/self/start')
 .post((req, res) => {
-    //TODO: Update password logic
-    const username = req._username
+    //TODO: Update password encryption
+    //const username = req._username
+    const username = req.body.username
     User.findOne({ username })
     .exec((error, user) => {
       // Get user username, password and preferences
       const { username, password, preferences } = user
 
       // Get tags, locations and usernames array
-      const { tags, locations, usernames } = preferences
+      const { tags, locations } = preferences
 
       // Get if user set to active each activity
       const { liking, commenting, following } = preferences
 
-      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following ]})
+      // Get if user has blacklisted something
+      const { tag_filter, username_filter, keyword_filter } = preferences
+
+      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following, tag_filter, username_filter, keyword_filter]})
       console.log('The bot is ready!')
       instaBot.on('message', (message) => {
           // received a message sent from the Python script (a simple "print" statement)
-          process.env.NODE_ENV === 'development' ? console.log(message) : null
+          //process.env.NODE_ENV === 'development' ? console.log(message) : null
+          console.log(message);
       })
 
       // end the input stream and allow the process to exit
