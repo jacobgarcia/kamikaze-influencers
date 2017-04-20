@@ -26,8 +26,12 @@ users = db.users
 # User blacklist array - Convert it to a dictionary
 user_array =  (sys.argv[8]).split(",")
 user_dict = {}
-for k in user_array:
-    user_dict[k] = ''
+
+# Empty array definition
+empty_arr = ['']
+if user_array != empty_arr:
+    for k in user_array:
+        user_dict[k] = ''
 
 # The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
 ## The tags must be splitted since all of them come in a single String

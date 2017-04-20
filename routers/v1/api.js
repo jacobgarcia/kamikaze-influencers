@@ -416,8 +416,7 @@ router.use((req, res, next) => {
 router.route('/automation/self/start')
 .post((req, res) => {
     //TODO: Update password encryption
-    //const username = req._username
-    const username = req.body.username
+    const username = req._username
     User.findOne({ username })
     .exec((error, user) => {
       // Get user username, password and preferences
@@ -436,8 +435,7 @@ router.route('/automation/self/start')
       console.log('The bot is ready!')
       instaBot.on('message', (message) => {
           // received a message sent from the Python script (a simple "print" statement)
-          //process.env.NODE_ENV === 'development' ? console.log(message) : null
-          console.log(message);
+          process.env.NODE_ENV === 'development' ? console.log(message) : null
       })
 
       // end the input stream and allow the process to exit
