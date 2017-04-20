@@ -15,6 +15,8 @@ Dependencies versions
 | NodeJS   | v6.10.1  |
 | NPM      | v3.10.10 |
 | MongoDB  | v3.4.2   |
+| Python   | v2.7.10  |
+| PyMongo  | v3.4.0   |
 
 ## Install
 
