@@ -199,11 +199,11 @@ class InstaBot:
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
-
             user_id_url= self.url_user_detail % (user)
             info = self.s.get(user_id_url)
             all_data = json.loads(info.text)
-            id_user = all_data['user']['media']['nodes'][0]['owner']['id']
+            print all_data
+            id_user = all_data['user']['id']
             #Update the user_name with the user_id
             self.user_blacklist[user]=id_user
             log_string = "Blacklisted user %s added with ID: %s" % (user, id_user)
