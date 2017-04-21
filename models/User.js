@@ -24,9 +24,10 @@ const schema = new Schema({
     commenting: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ String ],
-    tag_filter: [ String ],
-    username_filter: [ String ],
-    keyword_filter: [ String ]
+    tag_blacklist: [ String ],
+    username_blacklist: [ String ],
+    keyword_blacklist: [ String ],
+    comment_text: String
   }
 })
 

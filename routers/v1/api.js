@@ -203,36 +203,36 @@ router.route('/users/self/tags')
 })
 
 
-router.route('/users/self/blacktags')
+router.route('/users/self/filtertags')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.blacktags
+  const usernames = req.body.tag_blacklist
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_filter': usernames } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_blacklist': tag_blacklist } }, { new: true })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     res.status(200).json({ user })
   })
 })
 
-router.route('/users/self/blackusers')
+router.route('/users/self/filterusers')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.blackusers
+  const usernames = req.body.username_blacklist
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.username_filter': blackusers } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.username_blacklist': username_blacklist } }, { new: true })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     res.status(200).json({ user })
   })
 })
 
-router.route('/users/self/blackkeys')
+router.route('/users/self/filterkeys')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.blackkeys
+  const usernames = req.body.keyword_blacklist
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_filter': blackkeys } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_blacklist': keyword_blacklist } }, { new: true })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     res.status(200).json({ user })
@@ -429,9 +429,9 @@ router.route('/automation/self/start')
       const { liking, commenting, following } = preferences
 
       // Get if user has blacklisted something
-      const { tag_filter, username_filter, keyword_filter } = preferences
+      const { tag_blacklist, username_blacklist, keyword_blacklist } = preferences
 
-      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following, tag_filter, username_filter, keyword_filter]})
+      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
       console.log('The bot is ready!')
       instaBot.on('message', (message) => {
           // received a message sent from the Python script (a simple "print" statement)

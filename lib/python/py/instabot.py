@@ -596,7 +596,7 @@ class InstaBot:
         if time.time() > self.next_iteration["Comments"] and self.comments_per_day != 0 \
                 and len(self.media_by_tag) > 0 \
                 and self.check_exisiting_comment(self.media_by_tag[0]['code']) == False:
-            comment_text = self.generate_comment()
+            comment_text = self.get_comment()
             log_string = "Trying to comment: %s" % (self.media_by_tag[0]['id'])
             self.write_log(log_string)
             if self.comment(self.media_by_tag[0]['id'], comment_text) != False:
@@ -606,6 +606,12 @@ class InstaBot:
     def add_time(self, time):
         """ Make some random for next iteration"""
         return time * 0.9 + time * 0.2 * random.random()
+
+    def get_comment(self):
+        # Get comment text from database
+        preferences = self.users.find_one({"username":self.user_login}, {"preferences.comment_text":1, "_id":0})
+        comment_text = preferences['preferences']['comment_text']
+        return comment_text
 
     def generate_comment(self):
         c_list = list(itertools.product(
