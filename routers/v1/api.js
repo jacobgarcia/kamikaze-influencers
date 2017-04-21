@@ -378,7 +378,7 @@ router.route('/locations')
       return res.status(503).json({ error: { message: 'No more valid access tokens in the server!' }})
 
       /* Retrieve access_token from local database */
-      request.get({url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=' + admin.access_token}, (error, response) => {
+      request.get({ url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=' + admin.access_token }, (error, response) => {
         if (error) return res.status(500).json({ error })
 
           let body = undefined
@@ -390,12 +390,12 @@ router.route('/locations')
           /* Token has expired, mark access_token as dirty and trigger endpoint again */
           if (body.meta.error_type === "OAuthAccessTokenException"){
             // Mark as dirty
-            Token.findOneAndUpdate({ 'access_token':admin.access_token }, { $set: { 'dirty': true } })
+            Token.findOneAndUpdate({ 'access_token': admin.access_token }, { $set: { 'dirty': true } })
             .exec((error, user) => {
               if (error) return res.status(500).json({ error })
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
-              request.get({url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization}}, (error, response) => {
+              request.get({ url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
                   if (error) return res.status(500).json({ error })
                   try { // Set a safe json parse
                     body = JSON.parse(response.body)
@@ -448,7 +448,9 @@ router.route('/users/self/automation/start')
       const { liking, commenting, following } = preferences
 
       const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following ]})
-      console.log('The bot is ready!')
+
+      process.env.NODE_ENV === 'development' ? console.log('The bot is ready!') : null
+
       instaBot.on('message', (message) => {
           // received a message sent from the Python script (a simple "print" statement)
           process.env.NODE_ENV === 'development' ? console.log(message) : null
@@ -461,14 +463,16 @@ router.route('/users/self/automation/start')
           throw err
         }
 
-        console.log('Finished')
+        process.env.NODE_ENV === 'development' ? console.log('Finished') : null
       })
 
       // end the input stream and allow the process to exit
-    /*  instaBot.end(function (err) {
+      /*
+      instaBot.end(function (err) {
         if (err) throw err;
         console.log('finished');
-      });*/
+      });
+      */
      res.status(200).json({'message': 'The automation stub is here!'})
     })
 

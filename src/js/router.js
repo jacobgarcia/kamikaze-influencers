@@ -7,7 +7,6 @@ import Dashboard from './containers/Dashboard'
 import Profile from './containers/Profile'
 import Logout from './containers/Logout'
 import Time from './containers/Time'
-import Geocoder from './containers/site'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token')
@@ -25,9 +24,7 @@ const Routes = (
       <Route path='profile' component={Profile}/>
       <Route path='logout' component={Logout}/>
       <Route path='time' component={Time}/>
-      <Route path='geocoder' component={Geocoder}/>
     </Route>
-
   </Router>
 )
 
