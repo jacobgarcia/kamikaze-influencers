@@ -58,7 +58,7 @@ router.route('/users/authenticate')
           }
           if (!foundUser) {
             new User({
-              username,
+              username: username.toLowerCase(),
               password,
               fullName: user.fullName,
               website: user.website,
@@ -190,24 +190,49 @@ router.route('/users/self/locations')
   })
 })
 
-router.route('/users/self/usernames')
-.put((req, res) => {
-  const username = req._username
-  const usernames = req.body.usernames
-
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.usernames': usernames } }, { new: true })
-  .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
-    res.status(200).json({ user })
-  })
-})
-
 router.route('/users/self/tags')
 .put((req, res) => {
   const username = req._username
   const tags = req.body.tags
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+
+router.route('/users/self/filtertags')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.tag_blacklist
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_blacklist': tag_blacklist } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/filterusers')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.username_blacklist
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.username_blacklist': username_blacklist } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/filterkeys')
+.put((req, res) => {
+  const username = req._username
+  const usernames = req.body.keyword_blacklist
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_blacklist': keyword_blacklist } }, { new: true })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
     res.status(200).json({ user })
@@ -432,9 +457,10 @@ router.use((req, res, next) => {
 
 /* AUTOMATION INSTAGRAM PROCESS */
 
-router.route('/users/self/automation/start')
+
+router.route('/automation/self/start')
 .post((req, res) => {
-    //TODO: Update password logic
+    //TODO: Update password encryption logic
     const username = req._username
     User.findOne({ username })
     .exec((error, user) => {
@@ -442,27 +468,24 @@ router.route('/users/self/automation/start')
       const { username, password, preferences } = user
 
       // Get tags, locations and usernames array
-      const { tags, locations, usernames } = preferences
+      const { tags, locations } = preferences
 
       // Get if user set to active each activity
       const { liking, commenting, following } = preferences
 
-      const instaBot = new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, commenting, following ]})
+      // Get if user has blacklisted something
+      const { tag_blacklist, username_blacklist, keyword_blacklist } = preferences
 
-      process.env.NODE_ENV === 'development' ? console.log('The bot is ready!') : null
-
-      instaBot.on('message', (message) => {
+      new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
+      .on('message', (message) => {
           // received a message sent from the Python script (a simple "print" statement)
           process.env.NODE_ENV === 'development' ? console.log(message) : null
       })
-
-      // end the input stream and allow the process to exit
-      instaBot.end((err) => {
+      .end((err) => {
         if (err) {
           winston.log(error, username)
           throw err
         }
-
         process.env.NODE_ENV === 'development' ? console.log('Finished') : null
       })
 
@@ -473,6 +496,8 @@ router.route('/users/self/automation/start')
         console.log('finished');
       });
       */
+
+
      res.status(200).json({'message': 'The automation stub is here!'})
     })
 

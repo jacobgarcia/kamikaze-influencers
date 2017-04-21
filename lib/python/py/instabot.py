@@ -12,6 +12,8 @@ import atexit
 import signal
 import itertools
 import sys
+import pymongo
+from pymongo import MongoClient
 
 from unfollow_protocol import unfollow_protocol
 
@@ -104,6 +106,11 @@ class InstaBot:
     # For new_auto_mod
     next_iteration = {"Like": 0, "Follow": 0, "Unfollow": 0, "Comments": 0}
 
+    # Connect to mongo database
+    client = MongoClient()
+    db = client.influencers
+    users = db.users
+
     def __init__(self, login, password,
                  like_per_day=1000,
                  media_max_like=50,
@@ -192,11 +199,10 @@ class InstaBot:
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
-
             user_id_url= self.url_user_detail % (user)
             info = self.s.get(user_id_url)
             all_data = json.loads(info.text)
-            id_user = all_data['user']['media']['nodes'][0]['owner']['id']
+            id_user = all_data['user']['id']
             #Update the user_name with the user_id
             self.user_blacklist[user]=id_user
             log_string = "Blacklisted user %s added with ID: %s" % (user, id_user)
@@ -380,6 +386,7 @@ class InstaBot:
                                                  (self.media_by_tag[i]['id'],
                                                   self.like_counter)
                                     self.write_log(log_string)
+                                    self.post_db("likes", self.media_by_tag[i]['id'])
                                 elif like.status_code == 400:
                                     log_string = "Not liked: %i" \
                                                  % (like.status_code)
@@ -445,6 +452,7 @@ class InstaBot:
                     self.comments_counter += 1
                     log_string = 'Write: "%s". #%i.' % (comment_text, self.comments_counter)
                     self.write_log(log_string)
+                    self.post_db("comments", media_id)
                 return comment
             except:
                 self.write_log("Except on comment!")
@@ -460,6 +468,7 @@ class InstaBot:
                     self.follow_counter += 1
                     log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
                     self.write_log(log_string)
+                    self.post_db("follows", user_id)
                 return follow
             except:
                 self.write_log("Except on follow!")
@@ -587,7 +596,7 @@ class InstaBot:
         if time.time() > self.next_iteration["Comments"] and self.comments_per_day != 0 \
                 and len(self.media_by_tag) > 0 \
                 and self.check_exisiting_comment(self.media_by_tag[0]['code']) == False:
-            comment_text = self.generate_comment()
+            comment_text = self.get_comment()
             log_string = "Trying to comment: %s" % (self.media_by_tag[0]['id'])
             self.write_log(log_string)
             if self.comment(self.media_by_tag[0]['id'], comment_text) != False:
@@ -597,6 +606,12 @@ class InstaBot:
     def add_time(self, time):
         """ Make some random for next iteration"""
         return time * 0.9 + time * 0.2 * random.random()
+
+    def get_comment(self):
+        # Get comment text from database
+        preferences = self.users.find_one({"username":self.user_login}, {"preferences.comment_text":1, "_id":0})
+        comment_text = preferences['preferences']['comment_text']
+        return comment_text
 
     def generate_comment(self):
         c_list = list(itertools.product(
@@ -817,3 +832,7 @@ class InstaBot:
                 self.logger.info(log_text)
             except UnicodeEncodeError:
                 print("Your text has unicode problem!")
+
+    def post_db(self, key, media_id):
+        """ Post new information to the database showing new likes, follows or comments """
+        self.users.update({"username":self.user_login}, {'$push': {key:media_id}})

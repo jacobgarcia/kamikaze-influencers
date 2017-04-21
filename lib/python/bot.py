@@ -22,6 +22,17 @@ print 'Tag List:', (sys.argv[3]).split(",")
 client = MongoClient()
 db = client.influencers
 users = db.users
+
+# User blacklist array - Convert it to a dictionary
+user_array =  (sys.argv[8]).split(",")
+user_dict = {}
+
+# Empty array definition
+empty_arr = ['']
+if user_array != empty_arr:
+    for k in user_array:
+        user_dict[k] = ''
+
 # The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
 ## The tags must be splitted since all of them come in a single String
 ### Uses ternary operator to enable or disable feature based on boolean labels
@@ -29,28 +40,24 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                like_per_day= (1000 if sys.argv[4] == "true" else 0),
                comments_per_day= (50 if sys.argv[6] == "true" else 0),
                tag_list=(sys.argv[3]).split(","),
-               tag_blacklist=['rain', 'thunderstorm'],
-               user_blacklist={},
+               tag_blacklist=(sys.argv[7]).split(","),
+               user_blacklist=user_dict,
                max_like_for_one_tag=50,
                follow_per_day=(300 if sys.argv[5] == "true" else 0),
                follow_time=1*60,
-               unfollow_per_day=300,
-               unfollow_break_min=15,
-               unfollow_break_max=30,
+               unfollow_per_day=0,
+               unfollow_break_min=0,
+               unfollow_break_max=0,
                log_mod=0,
                proxy='',
                # Use unwanted username list to block users which have username contains one of this string
                ## Doesn't have to match entirely example: mozart will be blocked because it contains *art
                ### freefollowers will be blocked because it contains free
-               unwanted_username_list=['second','stuff','art','project','love','life','food','blog','free','keren','photo','graphy','indo',
-                                       'travel','art','shop','store','sex','toko','jual','online','murah','jam','kaos','case','baju','fashion',
-                                        'corp','tas','butik','grosir','karpet','sosis','salon','skin','care','cloth','tech','rental',
-                                        'kamera','beauty','express','kredit','collection','impor','preloved','follow','follower','gain',
-                                        '.id','_id','bags'],
+               unwanted_username_list=(sys.argv[9]).split(","),
                unfollow_whitelist=['example_user_1','example_user_2'])
 end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
 current_time = int(datetime.datetime.now().strftime("%s")) * 1000
-print "End Time: ", current_time < int(end_time['timeEnd'])
+
 while (current_time < int(end_time['timeEnd'])):
     end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
     current_time = int(datetime.datetime.now().strftime("%s")) * 1000

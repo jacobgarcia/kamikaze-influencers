@@ -9,9 +9,9 @@ const schema = new Schema({
   website: String,
   profile_picture: String,
   // Accout info for metrics
-  likes: { type: Number, default: 0 },
-  comments: { type: Number, default: 0 },
-  follows: { type: Number, default: 0 },
+  likes: [ String ],
+  comments: [ String ],
+  follows: [ String ],
   // End accout info for metrics
   instagram: {
     id: String,
@@ -24,8 +24,10 @@ const schema = new Schema({
     commenting: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ String ],
-    gender: { type: Number, default: 0 },
-    usernames: [ String ]
+    tag_blacklist: [ String ],
+    username_blacklist: [ String ],
+    keyword_blacklist: [ String ],
+    comment_text: String
   }
 })
 
