@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+const Location = new Schema({
+    description: String,
+    coordinates: String
+},{ _id : false })
+
 const schema = new Schema({
   fullName: String,
   username: { type: String, required: true, unique: true, index: true },
@@ -23,7 +28,7 @@ const schema = new Schema({
     following: { type: Boolean, default: false },
     commenting: { type: Boolean, default: false },
     tags: [ String ],
-    locations: [ String ],
+    locations: [ Location ],
     tag_blacklist: [ String ],
     username_blacklist: [ String ],
     keyword_blacklist: [ String ],

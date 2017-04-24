@@ -9,6 +9,7 @@ import PayPalButton from '../components/PayPalButton'
 import Switch from '../components/Switch'
 import TimeJS from '../time'
 import Tags from '../components/Tags'
+import Geocoder from './Geocoder'
 
 class Dashboard extends Component {
 
@@ -34,7 +35,9 @@ class Dashboard extends Component {
       tags: [],
       locations: [],
       gender: 0,
-      usernames: []
+      usernames: [],
+      // Location
+      value: null
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -43,6 +46,7 @@ class Dashboard extends Component {
     this.removeNotification = this.removeNotification.bind(this)
     this.tagsChange = this.tagsChange.bind(this)
     this.locationsChange = this.locationsChange.bind(this)
+    this.onSelect = this.onSelect.bind(this)
   }
 
   tick() {
@@ -139,6 +143,10 @@ class Dashboard extends Component {
     notifications.splice(notifications.indexOf('0'), 1)
 
     localStorage.setItem('notifications', JSON.stringify(notifications))
+  }
+
+  onSelect(value){
+    this.setState({ value: value })
   }
 
   onLikingChange() {
@@ -244,7 +252,13 @@ class Dashboard extends Component {
                 <h4>Locations</h4>
                 <div className='loader small hidden' id='locations-loader'></div>
               </div>
-              <Tags onChange={this.locationsChange} tags={this.state.locations}/>
+                   <Geocoder
+                     accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
+                     onSelect={this.onSelect}
+                     showLoader={true}
+                     onChange={this.locationsChange}
+                     locations={this.state.locations}
+                    />
             </div>
             <div className='section'>
               <h4>Gender</h4>
@@ -256,13 +270,6 @@ class Dashboard extends Component {
                 <input type="radio" name="gender" id="male"></input>
                 <label htmlFor="male">Male</label>
               </div>
-            </div>
-            <div className='section'>
-              <div className='section-title'>
-                <h4>Usernames</h4>
-                <div className='loader small hidden' id='usernames-loader'></div>
-              </div>
-              <Tags onChange={this.usernamesChange} tags={this.state.usernames}/>
             </div>
           </div>
         </div>

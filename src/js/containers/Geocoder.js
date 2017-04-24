@@ -18,7 +18,7 @@ import LocationBar from '../components/LocationBar'
        searchTime: new Date(),
        locations: this.props.locations || [],
        locationString: '',
-       clicked: false
+       coordinatesString: ''
      }
 
      this.componentDidMount = this.componentDidMount.bind(this)
@@ -32,6 +32,12 @@ import LocationBar from '../components/LocationBar'
      this.deleteLocation = this.deleteLocation.bind(this)
    }
 
+   componentWillReceiveProps(nextProps) {
+     if (nextProps.locations !== this.state.locations) {
+       this.setState({ locations: nextProps.locations })
+     }
+   }
+
    componentDidMount() {
      if (this.props.focusOnMount){
           ReactDOM.findDOMNode(this.refs.input).focus()
@@ -39,8 +45,8 @@ import LocationBar from '../components/LocationBar'
    }
 
    onInput(e) {
-     this.setState({loading:true});
-     var value = e.target.value;
+     this.setState({loading:true})
+     var value = e.target.value
      if (value === '') {
        this.setState({
          results: [],
@@ -57,7 +63,7 @@ import LocationBar from '../components/LocationBar'
          this.props.types,
          value,
          this.onResult)
-
+         // Show the input string in the search bar
          this.setState({
             locationString: value
          })
@@ -122,28 +128,35 @@ import LocationBar from '../components/LocationBar'
    clickOption(place, listLocation) {
      this.props.onSelect(place)
      this.state.locationString = place.place_name
+     this.state.coordinatesString = place.center[0] + ',' + place.center[1]
      this.setState({focus:listLocation})
      // focus on the input after click to maintain key traversal
      ReactDOM.findDOMNode(this.refs.input).focus()
-     this.setState({ clicked: true })
-     this.addLocation(this.state.locationString)
+     this.addLocation(this.state.locationString, this.state.coordinatesString)
      return false
    }
 
-   addLocation(location) {
+   addLocation(description, coordinates) {
+     /* Set object definitions */
+     var location = {
+       description: description,
+       coordinates: coordinates
+     }
+
      if (this.state.locations.includes(location)) {
        this.setState({ locationString: '' })
        return
      }
 
-     if (location === '' || location === ',') return
+     if (description === '' || description === ',') return
+
 
      this.setState((prevState) => {
        locations: prevState.locations.push(location)
      }, () => this.props.onChange(this.state.locations))
 
      this.setState({ locationString: '' })
-
+     this.setState({ coordinatesString: '' })
    }
 
    deleteLocation(index) {
@@ -160,16 +173,18 @@ import LocationBar from '../components/LocationBar'
        onKeyDown={this.onKeyDown}
        placeholder={this.props.inputPlaceholder}
        type='text'
-       value={this.state.locationString}/>;
+       value={this.state.locationString}/>
+     var locations = this.state.locations
      return (
        <div>
          <div className='tags'>
            {this.props.inputPosition === 'top' && input}
-           {this.state.locations.map((location, index) =>
-             <div className='tag' key={`location-${index}`}>
-               <span key={index} className='delete' onClick={() => this.deleteLocation(index)}></span>
-               <span>{location}</span>
-               </div>
+           {Object.keys(locations).map((location, index) =>
+            <div className='tag' key={`location-${index}`}>
+              <a id={JSON.stringify(locations[location].description)}></a>
+              <span key={index} className='delete' onClick={() => this.deleteLocation(index)}></span>
+              <span>{locations[location].description}</span>
+            </div>
            )}
            </div>
          {this.state.results.length > 0 && (
@@ -228,3 +243,10 @@ import LocationBar from '../components/LocationBar'
 }
 
  export default Geocoder
+
+ // {this.state.locations.map((location, index) =>
+ //   <div className='tag' key={`location-${index}`}>
+ //     <span key={index} className='delete' onClick={() => this.deleteLocation(index)}></span>
+ //     <span>{location}</span>
+ //   </div>
+ // )}
