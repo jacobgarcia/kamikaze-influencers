@@ -25,8 +25,6 @@ class NetworkRequest {
 
   static setUser(callback, errCallback) {
     return axios.post(`${window.baseUrl}/users`)
-    .then(callback)
-    .catch(errCallback)
   }
 
   static updateLiking(liking) {
@@ -42,9 +40,12 @@ class NetworkRequest {
   }
 
   static getHallOfFame() {
-    return axios.get(`${window.baseUrl}/halloffame`)
+    return axios.get(`${window.baseUrl}/automation/self/start`)
   }
 
+  static startAutomation() {
+    return axios.post(`${window.baseUrl}/automation/self/start`)
+  }
 
   static setTime() {
 

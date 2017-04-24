@@ -184,17 +184,27 @@ class Dashboard extends Component {
   onFollowingChange() {
 
     NetworkRequest.updateFollowing(!this.state.following)
-    .then((response) => {
+    .then(response => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
         following: response.data.user.preferences.following
       })
     })
-    .catch((error) => {
+    .catch(error => {
       // TODO: handle error
       console.log(error)
     })
 
+  }
+
+  startAutomation() {
+    NetworkRequest.startAutomation()
+    .then(response => {
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   render() {
@@ -204,7 +214,9 @@ class Dashboard extends Component {
     return (
       <div className='dashboard'>
         <div className='hero-dashboard'></div>
-        <Intro visible={this.state.introVisible} onEnd={this.removeNotification}/>
+        <Intro
+          visible={this.state.introVisible}
+          onEnd={this.removeNotification}/>
         <div className='content-section'>
           <div className='hall-section'>
             <h4>Hall of fame</h4>
@@ -220,6 +232,7 @@ class Dashboard extends Component {
                 <label>Remaining time</label>
                 <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
+                <h3 onClick={this.startAutomation}>Start automation</h3>
                 <p><Link to='/time'>Add time</Link></p>
               </div>
             </div>

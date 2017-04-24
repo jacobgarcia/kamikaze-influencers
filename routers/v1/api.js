@@ -112,7 +112,6 @@ router.use((req, res, next) => {
     if (error) //End next requests and send a 401 (unauthorized)}
       return res.status(401).json({error,  message: 'Failed to authenticate token'})
     // TIP: After here in every request we can access the IG username in req._username
-    console.log(decoded)
     req._username = decoded.username
 
     next()
@@ -444,14 +443,13 @@ router.route('/locations')
 */
 
 router.use((req, res, next) => {
-  User.find({ username: req._username })
+  User.findOne({ username: req._username })
   .exec((error, user) => {
     if (error) return res.status(500).json({ error })
-
     // Check if the user has remaining time
-    if (user.timeEnd < Date.now)
-      return res.status(403).json({ error: { message: 'No time available' }})
-    next()
+    if (user.timeEnd > Date.now())
+      return next()
+    res.status(403).json({ error: { message: 'No time available' }})
   })
 })
 
