@@ -294,7 +294,7 @@ router.route('/users/self/payments')
       Item.findById(item_id)
       .exec((error, item) => {
         if (error) {
-          console.log(error)
+          winston.log(error)
           return res.status(500).json({ error })
         }
 
@@ -318,15 +318,13 @@ router.route('/users/self/payments')
             user.timeEnd = user.timeEnd + timeToAdd
           }
 
-          console.log(user.timeEnd)
-          console.log(Date.now(user.timeEnd))
-
           user.save((error, savedUser) => {
             if (error) {
-              console.log(error)
+              winston.log(error)
               return res.status(500).json({ error })
             }
-              res.status(200).json({ user })
+
+            res.status(200).json({ user })
           })
 
         })
@@ -350,22 +348,25 @@ router.route('/payments')
   // Get the package ID from DB and get the cost and time, dont't get it from the user
   Item.findById(item_id)
   .exec((error, item) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
 
     const information = {
-      "intent":"sale",
-      "redirect_urls":{
-        "return_url":"http://localhost:8080/time",
-        "cancel_url":"http://localhost:8080/time"
+      'intent':'sale',
+      'redirect_urls':{
+        'return_url':"http://localhost:8080/time",
+        'cancel_url':"http://localhost:8080/time"
       },
-      "payer":{
-        "payment_method":"paypal"
+      'payer':{
+        'payment_method': 'paypal'
       },
-      "transactions": [
+      'transactions': [
         {
-          "amount":{
-            "total": item.price,
-            "currency": "USD"
+          'amount':{
+            'total': item.price,
+            'currency': 'USD'
           },
           'custom': item._id,
           'description': item.description
@@ -389,7 +390,7 @@ router.route('/payments')
       })
     })
     .catch((error) => {
-      console.log(error)
+      winston.log(error)
       return res.status(500).json({ error })
     })
 
@@ -403,8 +404,10 @@ router.route('/locations')
 .get((req, res) => {
   Token.findOne({ 'dirty': false })
   .exec((error, admin) => {
-    if (error)
+    if (error) {
+      winston.log(error)
       res.status(500).json({ error })
+    }
 
     if (!admin)
       return res.status(503).json({ error: { message: 'No more valid access tokens in the server!' }})

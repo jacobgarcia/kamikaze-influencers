@@ -211,9 +211,15 @@ a {
   .geo-coder {
     .locations-list {
       @include owa_boxshadow;
+      border-radius: 0 0 10px 10px;
+      overflow: hidden;
       li {
-        padding: 3px 5px;
+        color: $dark-gray;
+        padding: 5px 9px;
         border-bottom: 1px solid $lightGray;
+        &:hover {
+          color: #000;
+        }
       }
     }
   }
