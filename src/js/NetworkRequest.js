@@ -51,6 +51,16 @@ class NetworkRequest {
 
   }
 
+  static updateFilterTags(filtertags) {
+    return axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
+  }
+  static updateFilterUsers(filterusers) {
+    return axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
+  }
+  static updateFilterKeys(filterkeys) {
+    return axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
+  }
+
   static setPayment(item_id) {
     return axios.post(`${window.baseUrl}/payments`, { item_id })
   }

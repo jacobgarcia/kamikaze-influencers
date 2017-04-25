@@ -10,6 +10,8 @@ const Footer = (props) => {
           <ul>
             <li><a href='/about'>About</a></li>
             <li><a href='/contact'>Contact</a></li>
+            <li><a href='/usage'>Usage policy</a></li>
+            <li><a href='/privacy'>Privacy policy</a></li>
           </ul>
           {props.loggedin ? <a href='/logout'>Log out</a> : ''}
         </div>

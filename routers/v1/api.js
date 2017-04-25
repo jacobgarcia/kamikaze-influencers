@@ -76,13 +76,12 @@ router.route('/users/authenticate')
 
               // Create and send token
               const token = jwt.sign({ username: newUser.username }, config.jwt_secret)
-              newUser.notifications.push('0')
+              newUser.notifications = ['0']
 
               res.status(201).json({ 'message': 'New user on board. Welcome aboard!', token, user: newUser })
 
             })
           } else { // Else is important, otherwise iw will run before saving user
-
             // Create and send token
             const token = jwt.sign({ username: foundUser.username }, config.jwt_secret)
             res.status(200).json({'message': 'User already registered. Welcome again!', token, user: foundUser })
@@ -205,11 +204,14 @@ router.route('/users/self/tags')
 router.route('/users/self/filtertags')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.tag_blacklist
+  const tag_blacklist = req.body.filtertags
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_blacklist': tag_blacklist } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -217,11 +219,14 @@ router.route('/users/self/filtertags')
 router.route('/users/self/filterusers')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.username_blacklist
+  const username_blacklist = req.body.filterusers
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.username_blacklist': username_blacklist } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -229,11 +234,14 @@ router.route('/users/self/filterusers')
 router.route('/users/self/filterkeys')
 .put((req, res) => {
   const username = req._username
-  const usernames = req.body.keyword_blacklist
+  const keyword_blacklist = req.body.filterkeys
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_blacklist': keyword_blacklist } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })

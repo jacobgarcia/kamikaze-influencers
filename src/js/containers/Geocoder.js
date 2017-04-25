@@ -176,10 +176,10 @@ import LocationBar from '../components/LocationBar'
        value={this.state.locationString}/>
      var locations = this.state.locations
      return (
-       <div>
+       <div className='geo-coder'>
          <div className='tags'>
-           {this.props.inputPosition === 'top' && input}
-           {Object.keys(locations).map((location, index) =>
+           { this.props.inputPosition === 'top' && input }
+           { Object.keys(locations).map((location, index) =>
             <div className='tag' key={`location-${index}`}>
               <a id={JSON.stringify(locations[location].description)}></a>
               <span key={index} className='delete' onClick={() => this.deleteLocation(index)}></span>
@@ -188,7 +188,7 @@ import LocationBar from '../components/LocationBar'
            )}
            </div>
          {this.state.results.length > 0 && (
-           <ul className={`${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
+           <ul className={`locations-list${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
              {this.state.results.map((result, i) => (
                <li key={result.id}>
                  <a href='#'
@@ -199,7 +199,7 @@ import LocationBar from '../components/LocationBar'
              ))}
            </ul>
          )}
-         {this.props.inputPosition === 'bottom' && input}
+         { this.props.inputPosition === 'bottom' && input }
        </div>
      )
    }

@@ -13,8 +13,8 @@ const webpackConfigDev = require(path.resolve('config/webpack-dev.config.js'))
 gulp.task('sass', () =>
   gulp.src(path.resolve('src/styles/master.scss'))
       .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-      .pipe(rename({suffix: '.min'}))
-      .pipe(gulp.dest('./dist/styles'))
+      .pipe(rename({ suffix: '.min' }))
+      .pipe(gulp.dest('./dist'))
 )
 
 // Possible duplicate?
@@ -23,8 +23,8 @@ gulp.task('sassDev', () =>
       .pipe(sourcemaps.init())
       .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
       .pipe(sourcemaps.write())
-      .pipe(rename({suffix: '.min'}))
-      .pipe(gulp.dest('./dist/styles'))
+      .pipe(rename({ suffix: '.min' }))
+      .pipe(gulp.dest('./dist'))
 )
 
 // Possible duplicate?

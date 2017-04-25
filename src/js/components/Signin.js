@@ -98,7 +98,7 @@ class Signin extends Component {
               className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
             <label htmlFor={`password-${this.props.id}`}>Contraseña</label>
           </div>
-          <input type='button' value='Registrarse' className='red' onClick={this.signinUser}/>
+          <input type='button' value='OK' className='red' onClick={this.signinUser}/>
         </div>
       </div>
     )

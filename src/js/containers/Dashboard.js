@@ -18,7 +18,7 @@ class Dashboard extends Component {
 
     // Get posible notifications
     const notifications = JSON.parse(localStorage.getItem('notifications'))
-    const newUser = notifications.includes('0')
+    const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
       hallOfFame: [
@@ -31,6 +31,10 @@ class Dashboard extends Component {
       liking: false,
       commenting: false,
       following: false,
+      // filters
+      filtertags: [],
+      filterusers: [],
+      filterkeys: [],
       // Targeting
       tags: [],
       locations: [],
@@ -166,7 +170,6 @@ class Dashboard extends Component {
   }
 
   onCommentingChange() {
-
     NetworkRequest.updateCommenting(!this.state.commenting)
     .then((response) => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -178,7 +181,42 @@ class Dashboard extends Component {
       // TODO: handle error
       console.log(error)
     })
+  }
 
+  filterTagsChange() {
+    NetworkRequest.updateFilterTags(this.state.filtertags)
+    .then(response => {
+      this.setState({
+        filtertags: response.data.user.preferences.filtertags
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
+  filterUsersChange() {
+    NetworkRequest.updateFilterUsers(this.state.filterusers)
+    .then(response => {
+      this.setState({
+        filterusers: response.data.user.preferences.filterusers
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
+  filterKeysChange() {
+    NetworkRequest.updateFilterKeys(this.state.filterkeys)
+    .then(response => {
+      this.setState({
+        filterkeys: response.data.user.preferences.filterkeys
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
   onFollowingChange() {
@@ -232,7 +270,7 @@ class Dashboard extends Component {
                 <label>Remaining time</label>
                 <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
-                <h3 onClick={this.startAutomation}>Start automation</h3>
+                <h3 className='automation' onClick={this.startAutomation}>Start automation</h3>
                 <p><Link to='/time'>Add time</Link></p>
               </div>
             </div>
@@ -255,34 +293,54 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='section-title'>
+                <h4 className='filters'>Filters</h4>
+              </div>
+            </div>
+            <div className='section'>
+              <div className='title'>
                 <h4>Hashtags</h4>
                 <div className='loader small hidden' id='tags-loader'></div>
               </div>
               <Tags onChange={this.tagsChange} tags={this.state.tags}/>
             </div>
             <div className='section'>
-              <div className='section-title'>
+              <div className='title'>
                 <h4>Locations</h4>
                 <div className='loader small hidden' id='locations-loader'></div>
               </div>
-                   <Geocoder
-                     accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
-                     onSelect={this.onSelect}
-                     showLoader={true}
-                     onChange={this.locationsChange}
-                     locations={this.state.locations}
-                    />
+               <Geocoder
+                 accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
+                 onSelect={this.onSelect}
+                 showLoader={true}
+                 onChange={this.locationsChange}
+                 locations={this.state.locations}
+                />
             </div>
             <div className='section'>
-              <h4>Gender</h4>
-              <div className='gender-selection'>
-                <input type="radio" name="gender" id="both"></input>
-                <label htmlFor="both">Both</label>
-                <input type="radio" name="gender" id="female"></input>
-                <label htmlFor="female">Female</label>
-                <input type="radio" name="gender" id="male"></input>
-                <label htmlFor="male">Male</label>
+              <div className='section-title'>
+                <h4 className='exceptions'>Exceptions</h4>
               </div>
+            </div>
+            <div className='section'>
+              <div className='title'>
+                <h4>Hashtags blacklist</h4>
+                <div className='loader small hidden' id='blackhashtags-loader'></div>
+              </div>
+              <Tags onChange={this.filterTagsChange} tags={this.state.filtertags}/>
+            </div>
+            <div className='section'>
+              <div className='title'>
+                <h4>Username blacklist</h4>
+                <div className='loader small hidden' id='blackusers-loader'></div>
+              </div>
+              <Tags onChange={this.filterUsersChange} tags={this.state.filterusers}/>
+            </div>
+            <div className='section'>
+              <div className='title'>
+                <h4>Keyword</h4>
+                <div className='loader small hidden' id='blackkeywords-loader'></div>
+              </div>
+              <Tags onChange={this.filterKeysChange} tags={this.state.filterkeys}/>
             </div>
           </div>
         </div>
