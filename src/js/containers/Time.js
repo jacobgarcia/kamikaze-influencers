@@ -14,6 +14,27 @@ const TimeLink = (props) => {
   )
 }
 
+const TimeCard = (props) => {
+  return (
+    <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
+      { props.item.name ? <img src='/'></img> : undefined }
+      { props.item.name ? <h2>{props.item.name}</h2> : undefined }
+      { props.item.name ? <p>{props.item.description}</p> : undefined }
+      <span className='days'>{props.item.days} { props.item.days > 1 ? 'days ' : 'day '}</span>
+      <div className='price-wrapper'>
+        <span className='price'>${props.item.price}</span>
+        { props.item.days > 1 ? <span className='per-day'>${Math.round((props.item.price/props.item.days)*100)/100} per day</span> : undefined }
+      </div>
+      <div className='buy-now'>
+        <input type='button'
+          onClick={() => this.purchaseTime(props.item._id)}
+          className={`${props.item.type === 1 ? 'red' : 'white'}`}
+          value={`${props.item.type === 1 ? 'Buy Fame' : 'Buy Time'}`}></input>
+      </div>
+    </div>
+  )
+}
+
 class Time extends Component {
 
   constructor(props) {
@@ -21,7 +42,8 @@ class Time extends Component {
 
     this.state = {
       remainingTime: 0,
-      items: [],
+      fameItems:[],
+      timeItems:[],
       links: [],
       showPayment: false,
       paymentId: undefined,
@@ -74,7 +96,8 @@ class Time extends Component {
     NetworkRequest.getTimeItems()
     .then((response) => {
       this.setState({
-        items: response.data.items
+        fameItems: response.data.items.filter((item) => item.type === 1),
+        timeItems: response.data.items.filter((item) => item.type === 0)
       })
     })
     .catch((error) => {
@@ -140,6 +163,7 @@ class Time extends Component {
 
     return (
       <div className='time'>
+        <div className='hero-dashboard'></div>
         <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
             {
@@ -159,26 +183,22 @@ class Time extends Component {
           </div>
         </div>
         <div className='section'>
-
-          <div className='time-card'>
+          <div className='time-card main working'>
             <label>Remaining time</label>
             <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
             <h2>{`${hours}:${minutes}:${seconds}`}</h2>
           </div>
-          {this.state.items.map((item, index) => {
-            return (
-              <div className='time-card' key={index}>
-                <img src='/'></img>
-                <h2>{item.name}</h2>
-                <p>{item.description}</p>
-                <span className='days'>{item.days} Day</span>
-                <span className='price'>${item.price}</span>
-                <div className='buy-now'>
-                  <input type='button' onClick={() => this.purchaseTime(item._id)} className='red' value='Buy now'></input>
-                </div>
-              </div>
-            )
-          })}
+          <div className='fame-items'>
+            { this.state.fameItems.map((item, index) =>
+              <TimeCard item={item} key={index}/>
+            )}
+          </div>
+          <div className='time-items'>
+            <h3>Time packages</h3>
+            { this.state.timeItems.map((item, index) =>
+              <TimeCard item={item} key={index}/>
+            )}
+          </div>
 
         </div>
         <Footer loggedin={true}></Footer>
