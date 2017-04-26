@@ -102,7 +102,7 @@ a {
   color: inherit;
 }
 
-.dashboard {
+.dashboard, .time {
   position: relative;
   .hero-dashboard {
     position: absolute;
@@ -154,13 +154,65 @@ a {
 
 .time-card {
   @include owa_boxshadow;
-  margin: 10px 30px;
-  padding: 50px;
+  margin: 10px auto;
+  padding: 25px 50px;
   max-width: 400px;
+  width: 100%;
   text-align: center;
   background: #fff;
+  .price-wrapper {
+    display: flex;
+    flex-direction: column;
+    span { line-height: 1.2; }
+    span.per-day {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: $gray;
+    }
+  }
+  &.default {
+    box-shadow: none;
+  }
+  &.mini {
+    display: flex;
+    justify-content: space-between;
+  }
   &.main {
-    padding: 15px;
+    padding: 15px 40px 30px;
+    position: relative;
+    .label-wrapper {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      .button {
+        cursor: pointer;
+        font-weight: 600;
+        color: $red;
+        padding-left: 22px;
+        background: url('/static/img/icons/play.png') no-repeat left center;
+        background-size: 16px;
+        &.restart {
+          background: url('/static/img/icons/restart.png') no-repeat left center;
+          background-size: 16px;
+        }
+      }
+    }
+    &.working::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      background: linear-gradient(90deg, $red 10%, $purple 35%, $purple 65%, $red 100%);
+      animation-duration: 3s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: infinite;
+      animation-name: placeholder;
+      animation-timing-function: linear;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
     label {
       display: block;
       text-align: left;
@@ -337,6 +389,10 @@ a {
       }
       &.commenting {
         background: url('/static/img/icons/comment.png') no-repeat left center;
+        background-size: contain;
+      }
+      &.unfollowing {
+        background: url('/static/img/icons/unfollow.png') no-repeat left center;
         background-size: contain;
       }
       &.following {
@@ -566,14 +622,21 @@ nav {
   }
 }
 
-input[type="button"].red {
-  @include owa_boxshadow;
-  color: #fff;
-  background: $red;
-  padding: 6px 15px;
+input[type="button"] {
+  padding: 8px 18px;
   font-weight: 600;
   text-transform: uppercase;
   text-align: center;
+  &.red {
+    @include owa_boxshadow;
+    color: #fff;
+    background: linear-gradient(90deg, $red, $purple);
+  }
+  &.white {
+    @include owa_boxshadow;
+    color: $red;
+    background: #fff;
+  }
 }
 
 .hover {
@@ -876,6 +939,15 @@ input[type="button"].red {
   }
 }
 
+@keyframes placeholder {
+  0%{
+      background-position: -468px 0
+  }
+  100%{
+      background-position: 468px 0
+  }
+}
+
 @keyframes fadeout {
   0% {
     opacity: 1;
@@ -889,6 +961,15 @@ input[type="button"].red {
   100% {
     opacity: 0;
     display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .fame-items {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-height: 500px;
   }
 }
 
