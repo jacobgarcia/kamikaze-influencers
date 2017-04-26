@@ -23,6 +23,7 @@ const schema = new Schema({
     bio: String
   },
   timeEnd: { type: Number, required: true, default: Date.now() },
+  fameEnd: { type: Number, required: true, default: Date.now() }, //Hall of fame time
   preferences: {
     liking: { type: Boolean, default: false },
     following: { type: Boolean, default: false },
