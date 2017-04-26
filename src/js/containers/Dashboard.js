@@ -28,9 +28,12 @@ class Dashboard extends Component {
       remainingTime: 0,
       introVisible: newUser,
       // Set state
+      working: true,
       liking: false,
       commenting: false,
       following: false,
+      unfollowing: false,
+      comment: '',
       // filters
       filtertags: [],
       filterusers: [],
@@ -51,6 +54,7 @@ class Dashboard extends Component {
     this.tagsChange = this.tagsChange.bind(this)
     this.locationsChange = this.locationsChange.bind(this)
     this.onSelect = this.onSelect.bind(this)
+    this.onCommentChange = this.onCommentChange.bind(this)
   }
 
   tick() {
@@ -73,6 +77,11 @@ class Dashboard extends Component {
       console.log(error)
       document.getElementById('tags-loader').classList.add('hidden')
     })
+  }
+
+  onCommentChange(event) {
+    const { value, name } = event.target
+    console.log(value, name)
   }
 
   usernamesChange(usernames) {
@@ -266,15 +275,22 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
-              <div className='time-card main'>
-                <label>Remaining time</label>
-                <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
+              <div className={`time-card main ${this.state.working ? 'working' : ''}`}>
+                <div className='label-wrapper'>
+                  <label>Remaining time</label>
+                  <label onClick={this.startAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
+                </div>
+                <h1>{ days===1 ? `${days} day` : `${days} days`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
-                <h3 className='automation' onClick={this.startAutomation}>Start automation</h3>
-                <p><Link to='/time'>Add time</Link></p>
               </div>
             </div>
             <div className='section switching'>
+              {/*['liking','following','unfollowing','commenting'].map((key, index) => {
+                <div className='switch-section'>
+                  <span className={`${key} ${this.state.liking ? 'active' : '' }`}>{key}</span>
+                  <Switch id="0" onChange={this.onLikingChange} active={this.state[key]}/>
+                </div>
+              })*/}
               <div className='switch-section'>
                 <span className={`liking ${this.state.liking ? 'active' : '' }`}>Liking</span>
                 <Switch id="0" onChange={this.onLikingChange} active={this.state.liking}/>
@@ -284,11 +300,15 @@ class Dashboard extends Component {
                 <Switch id="1" onChange={this.onFollowingChange} active={this.state.following}/>
               </div>
               <div className='switch-section'>
+                <span className={`unfollowing ${this.state.unfollowing ? 'active' : '' }`}>Unfollowing</span>
+                <Switch id="2" onChange={this.onUnfollowingChange} active={this.state.unfollowing}/>
+              </div>
+              <div className='switch-section'>
                 <span className={`commenting ${this.state.commenting ? 'active' : '' }`}>Commenting</span>
-                <Switch id="2" onChange={this.onCommentingChange} active={this.state.commenting}/>
+                <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder="Add your comment here"></input>
+                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment'></input>
               </div>
             </div>
             <div className='section'>
