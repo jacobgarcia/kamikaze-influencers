@@ -8,7 +8,7 @@ const schema = new Schema({
   hallOfFame: { Boolean, default: false },
   price: { type: Number, required: true },
   discount: Number,
-  type: { type: Number, default: 0 }
+  type: { type: Number, default: 0 } // Type 1 is fame, 0 is default
 })
 
 module.exports = mongoose.model('Item', schema)
