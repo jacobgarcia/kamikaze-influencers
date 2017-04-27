@@ -18,6 +18,10 @@ export default class Landing extends Component {
       <div className='landing'>
         <Signin show={this.state.showSignin} id='landing' title='Registrarse'/>
         <div className='hero'>
+          <video controls poster="/assets/img/posterimage.png"  playsInline autoPlay loop>
+            <source src="/static/video/hero.mp4" type="video/mp4"/>
+            Your browser doesn't support video
+          </video>
           <div className='content'>
             <h1>Seguidores reales en poco tiempo</h1>
             <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interactuar contigo</p>

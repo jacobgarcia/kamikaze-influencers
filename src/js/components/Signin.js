@@ -69,12 +69,18 @@ class Signin extends Component {
     })
   }
 
+  handleSubmit(event) {
+    event.preventDefault()
+    signinUser()
+  }
+
 
   render() {
     return (
       <div className={`hover ${this.state.showSignin ? '' : 'hidden'}`}>
         {this.state.showSignin}
         <div className='signin-body'>
+          <form onSubmit={this.handleSubmit}>
           <span className='close' onClick={this.hideSignin}></span>
           <div className='title'>
             { this.state.isLoading ? <div className='loader' id='usernames-loader'></div> : <h3>{this.props.title}</h3> }
@@ -98,7 +104,8 @@ class Signin extends Component {
               className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
             <label htmlFor={`password-${this.props.id}`}>Contraseña</label>
           </div>
-          <input type='button' value='OK' className='red' onClick={this.signinUser}/>
+          <input type='submit' value='OK' className='red' onClick={this.signinUser}/>
+          </form>
         </div>
       </div>
     )
