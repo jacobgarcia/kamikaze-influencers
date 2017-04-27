@@ -468,22 +468,22 @@ router.route('/locations/translate/:location')
    or not
 */
 
-// router.use((req, res, next) => {
-//   User.findOne({ username: req.body.username })
-//   .exec((error, user) => {
-//     if (error) return res.status(500).json({ error })
-//     // Check if the user has remaining time
-//     if (user.timeEnd > Date.now())
-//       return next()
-//     res.status(403).json({ error: { message: 'No time available' }})
-//   })
-// })
+router.use((req, res, next) => {
+  User.findOne({ username: req._username })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    // Check if the user has remaining time
+    if (user.timeEnd > Date.now())
+      return next()
+    res.status(403).json({ error: { message: 'No time available' }})
+  })
+})
 
 /* AUTOMATION INSTAGRAM PROCESS */
 router.route('/automation/self/start')
 .post((req, res) => {
     //TODO: Update password encryption logic
-    const username = req.body.username
+    const username = req._username
     User.findOne({ username })
     .exec((error, user) => {
       // Get user username, password and preferences
@@ -526,22 +526,5 @@ router.route('/automation/self/start')
           })
         })
       })
-
-
-      //   new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
-      //   .on('message', (message) => {
-      //       // received a message sent from the Python script (a simple "print" statement)
-      //       process.env.NODE_ENV === 'development' ? console.log(message) : null
-      //   })
-      //   .end((err) => {
-      //     if (err) {
-      //       winston.log(error, username)
-      //       throw err
-      //     }
-      //     process.env.NODE_ENV === 'development' ? console.log('Finished') : null
-      //   })
-       //
-      //  res.status(200).json({'message': 'The automation has started'})
-
 
 module.exports = router
