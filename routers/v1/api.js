@@ -400,8 +400,13 @@ router.route('/payments')
 })
 
 /* GET ID's FOR LOCATIONS ON IG */
-router.route('/locations')
+router.route('/locations/translate/:location')
 .get((req, res) => {
+  const location = (req.params.location)
+  // Return an empty string if there is no locations
+  if (!location) return res.status(200).json(location)
+
+  // Find any valid access_token
   Token.findOne({ 'dirty': false })
   .exec((error, admin) => {
     if (error) {
@@ -412,35 +417,45 @@ router.route('/locations')
     if (!admin)
       return res.status(503).json({ error: { message: 'No more valid access tokens in the server!' }})
 
-      /* Retrieve access_token from local database */
-      request.get({ url:'https://api.instagram.com/v1/locations/search?lat=19.282610&lng=-99.655665&access_token=' + admin.access_token }, (error, response) => {
+      // Get coordinates for specified location
+      let locationTags = []
+      const coordinates = location.split(",")
+      request.get({ url:'https://api.instagram.com/v1/locations/search?lat=' + coordinates[1] + '&lng=' + coordinates[0] + '&access_token=' + admin.access_token }, (error, response) => {
         if (error) return res.status(500).json({ error })
 
-          let body = undefined
+          let places = undefined
 
           try { // Set a safe json parse
-            body = JSON.parse(response.body)
+            places = JSON.parse(response.body)
           } catch (error) { res.status(500).json({ error }) }
 
           /* Token has expired, mark access_token as dirty and trigger endpoint again */
-          if (body.meta.error_type === "OAuthAccessTokenException"){
+          if (places.meta.error_type === "OAuthAccessTokenException"){
             // Mark as dirty
             Token.findOneAndUpdate({ 'access_token': admin.access_token }, { $set: { 'dirty': true } })
             .exec((error, user) => {
               if (error) return res.status(500).json({ error })
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
-              request.get({ url:'http://localhost:8080/v1/locations', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
+              request.get({ url:'http://localhost:8080/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
                   if (error) return res.status(500).json({ error })
                   try { // Set a safe json parse
                     body = JSON.parse(response.body)
                   } catch (error) { res.status(500).json({ error }) }
                   /* Return new response */
-                  return res.status(body.meta.code).json(body)
+                  res.write(body)
+                  res.end()
               })
             })
           }
-          else return res.status(body.meta.code).json(body)
+          else {
+            (places.data).forEach((place) => {
+              // Only push if there are no errors in the id by IG
+              if(place.id != 0) locationTags.push('l:'.concat(place.id))
+            })
+             res.write(locationTags.toString())
+             res.end()
+          }
       })
   })
 })
@@ -465,8 +480,6 @@ router.use((req, res, next) => {
 })
 
 /* AUTOMATION INSTAGRAM PROCESS */
-
-
 router.route('/automation/self/start')
 .post((req, res) => {
     //TODO: Update password encryption logic
@@ -485,31 +498,33 @@ router.route('/automation/self/start')
       // Get if user has blacklisted something
       const { tag_blacklist, username_blacklist, keyword_blacklist } = preferences
 
-      new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
-      .on('message', (message) => {
-          // received a message sent from the Python script (a simple "print" statement)
-          process.env.NODE_ENV === 'development' ? console.log(message) : null
+      // Translate locations into IG codes. Each for every location
+      let locationTags = []
+      let counter = 0
+      locations.forEach((location) => {
+        request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
+            if (error) return res.status(500).json({ error })
+            locationTags.push(response.body)
+            counter ++
+            if (counter === locations.length) {
+                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
+                  .on('message', (message) => {
+                      // received a message sent from the Python script (a simple "print" statement)
+                      process.env.NODE_ENV === 'development' ? console.log(message) : null
+                  })
+                  .end((err) => {
+                    if (err) {
+                      winston.log(error, username)
+                      throw err
+                    }
+                    process.env.NODE_ENV === 'development' ? console.log('Finished') : null
+                  })
+
+                 res.status(200).json({'message': 'The automation has started'})
+            }
+            })
+          })
+        })
       })
-      .end((err) => {
-        if (err) {
-          winston.log(error, username)
-          throw err
-        }
-        process.env.NODE_ENV === 'development' ? console.log('Finished') : null
-      })
-
-      // end the input stream and allow the process to exit
-      /*
-      instaBot.end(function (err) {
-        if (err) throw err;
-        console.log('finished');
-      });
-      */
-
-
-     res.status(200).json({'message': 'The automation stub is here!'})
-    })
-
-})
 
 module.exports = router
