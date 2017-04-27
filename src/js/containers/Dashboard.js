@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 
 import Intro from '../components/Intro'
 import NetworkRequest from '../NetworkRequest'
-import FameItem from '../Components/FameItem'
+import FameItem from '../components/FameItem'
 import Footer from '../components/Footer'
 import PayPalButton from '../components/PayPalButton'
 import Switch from '../components/Switch'
