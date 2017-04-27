@@ -34,7 +34,7 @@ const schema = new Schema({
     tag_blacklist: [ String ],
     username_blacklist: [ String ],
     keyword_blacklist: [ String ],
-    comment_text: String
+    comment_text: { type: String, default: null}
   }
 })
 

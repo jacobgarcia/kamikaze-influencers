@@ -597,6 +597,8 @@ class InstaBot:
                 and len(self.media_by_tag) > 0 \
                 and self.check_exisiting_comment(self.media_by_tag[0]['code']) == False:
             comment_text = self.get_comment()
+            if comment_text is None:
+                comment_text = self.generate_comment()
             log_string = "Trying to comment: %s" % (self.media_by_tag[0]['id'])
             self.write_log(log_string)
             if self.comment(self.media_by_tag[0]['id'], comment_text) != False:
