@@ -548,17 +548,19 @@ a {
     align-items: center;
     position: relative;
     overflow-x: hidden;
+    overflow-y: hidden;
     video {
       overflow-x: hidden;
+      overflow-y: hidden;
       position: absolute;
-       top: 50%;
-       left: 50%;
-       min-width: 100%;
-       min-height: 100%;
-       width: auto;
-       height: auto;
-       z-index: -100;
-       transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -100;
+      transform: translate(-50%, -50%);
       &::-webkit-media-controls {
         display:none !important;
       }
