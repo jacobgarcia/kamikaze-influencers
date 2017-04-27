@@ -28,6 +28,7 @@ const schema = new Schema({
     liking: { type: Boolean, default: false },
     following: { type: Boolean, default: false },
     commenting: { type: Boolean, default: false },
+    unfollowing: { type: Boolean, default: false }
     tags: [ String ],
     locations: [ Location ],
     tag_blacklist: [ String ],

@@ -493,7 +493,7 @@ router.route('/automation/self/start')
       const { tags, locations } = preferences
 
       // Get if user set to active each activity
-      const { liking, commenting, following } = preferences
+      const { liking, commenting, following, unfollowing } = preferences
 
       // Get if user has blacklisted something
       const { tag_blacklist, username_blacklist, keyword_blacklist } = preferences
@@ -507,7 +507,7 @@ router.route('/automation/self/start')
             locationTags.push(response.body)
             counter ++
             if (counter === locations.length) {
-                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist]})
+                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist, unfollowing]})
                   .on('message', (message) => {
                       // received a message sent from the Python script (a simple "print" statement)
                       process.env.NODE_ENV === 'development' ? console.log(message) : null
