@@ -31,9 +31,9 @@ const schema = new Schema({
     unfollowing: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ Location ],
-    tag_blacklist: [ String ],
-    username_blacklist: [ String ],
-    keyword_blacklist: [ String ],
+    filtertags: [ String ],
+    filterusers: [ String ],
+    filterkeys: [ String ],
     comment_text: { type: String, default: null}
   }
 })

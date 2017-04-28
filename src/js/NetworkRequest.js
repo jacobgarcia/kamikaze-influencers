@@ -55,16 +55,6 @@ class NetworkRequest {
 
   }
 
-  static updateFilterTags(filtertags) {
-    return axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
-  }
-  static updateFilterUsers(filterusers) {
-    return axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
-  }
-  static updateFilterKeys(filterkeys) {
-    return axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
-  }
-
   static setPayment(item_id) {
     return axios.post(`${window.baseUrl}/payments`, { item_id })
   }
@@ -96,6 +86,30 @@ class NetworkRequest {
   static setTags(tags) {
     return new Promise((resolve, reject) => {
       axios.put(`${window.baseUrl}/users/self/tags`, { tags })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setFilteredTags(filtertags) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setFilteredUsers(filterusers) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setFilteredKeys(filterkeys) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
       .then((response) => resolve(response))
       .catch((error) => reject(error))
     })

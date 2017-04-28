@@ -216,9 +216,9 @@ router.route('/users/self/tags')
 router.route('/users/self/filtertags')
 .put((req, res) => {
   const username = req._username
-  const tag_blacklist = req.body.filtertags
+  const filtertags = req.body.filtertags
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.tag_blacklist': tag_blacklist } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filtertags': filtertags } }, { new: true })
   .exec((error, user) => {
     if (error) {
       winston.log(error)
@@ -231,9 +231,9 @@ router.route('/users/self/filtertags')
 router.route('/users/self/filterusers')
 .put((req, res) => {
   const username = req._username
-  const username_blacklist = req.body.filterusers
+  const filterusers = req.body.filterusers
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.username_blacklist': username_blacklist } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterusers': filterusers } }, { new: true })
   .exec((error, user) => {
     if (error) {
       winston.log(error)
@@ -246,9 +246,9 @@ router.route('/users/self/filterusers')
 router.route('/users/self/filterkeys')
 .put((req, res) => {
   const username = req._username
-  const keyword_blacklist = req.body.filterkeys
+  const filterkeys = req.body.filterkeys
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.keyword_blacklist': keyword_blacklist } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterkeys': filterkeys } }, { new: true })
   .exec((error, user) => {
     if (error) {
       winston.log(error)
@@ -508,7 +508,7 @@ router.route('/automation/self/start')
       const { liking, commenting, following, unfollowing } = preferences
 
       // Get if user has blacklisted something
-      const { tag_blacklist, username_blacklist, keyword_blacklist } = preferences
+      const { filtertags, filterusers, filterkeys } = preferences
 
       // Translate locations into IG codes. Each for every location
       let locationTags = []
@@ -519,7 +519,7 @@ router.route('/automation/self/start')
             locationTags.push(response.body)
             counter ++
             if (counter === locations.length) {
-                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, username_blacklist, keyword_blacklist, unfollowing]})
+                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, filterusers, filterkeys, unfollowing]})
                   .on('message', (message) => {
                       // received a message sent from the Python script (a simple "print" statement)
                       process.env.NODE_ENV === 'development' ? console.log(message) : null

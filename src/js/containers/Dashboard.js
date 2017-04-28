@@ -85,22 +85,6 @@ class Dashboard extends Component {
     console.log(value, name)
   }
 
-  usernamesChange(usernames) {
-    document.getElementById('usernames-loader').classList.remove('hidden')
-    NetworkRequest.setUsernames(usernames)
-    .then((response) => {
-      const user = response.data.user
-      // Update local information
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-      document.getElementById('usernames-loader').classList.add('hidden')
-    })
-    .catch((error) => {
-      // TODO: handle error
-      console.log(error)
-      document.getElementById('usernames-loader').classList.add('hidden')
-    })
-  }
-
   locationsChange(localizations) {
     document.getElementById('locations-loader').classList.remove('hidden')
     NetworkRequest.setLocations(localizations)
@@ -134,10 +118,13 @@ class Dashboard extends Component {
     this.setState({
       tags: user.preferences.tags,
       locations: user.preferences.locations,
-      usernames: user.preferences.usernames,
       liking: user.preferences.liking,
       following: user.preferences.following,
-      commenting: user.preferences.commenting
+      commenting: user.preferences.commenting,
+      unfollowing: user.preferences.unfollowing,
+      filtertags: user.preferences.filtertags,
+      filterusers: user.preferences.filterusers,
+      filterkeys: user.preferences.filterkeys
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
@@ -193,39 +180,51 @@ class Dashboard extends Component {
     })
   }
 
-  filterTagsChange() {
-    NetworkRequest.updateFilterTags(this.state.filtertags)
-    .then(response => {
-      this.setState({
-        filtertags: response.data.user.preferences.filtertags
-      })
+  filterTagsChange(filtertags) {
+    document.getElementById('blackhashtags-loader').classList.remove('hidden')
+    NetworkRequest.setFilteredTags(filtertags)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('blackhashtags-loader').classList.add('hidden')
     })
-    .catch(error => {
+    .catch((error) => {
+      // TODO: handle error
       console.log(error)
+      document.getElementById('blackhashtags-loader').classList.add('hidden')
     })
   }
 
-  filterUsersChange() {
-    NetworkRequest.updateFilterUsers(this.state.filterusers)
-    .then(response => {
-      this.setState({
-        filterusers: response.data.user.preferences.filterusers
-      })
+  filterUsersChange(filterusers) {
+    document.getElementById('blackusers-loader').classList.remove('hidden')
+    NetworkRequest.setFilteredUsers(filterusers)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('blackusers-loader').classList.add('hidden')
     })
-    .catch(error => {
+    .catch((error) => {
+      // TODO: handle error
       console.log(error)
+      document.getElementById('blackusers-loader').classList.add('hidden')
     })
   }
 
-  filterKeysChange() {
-    NetworkRequest.updateFilterKeys(this.state.filterkeys)
-    .then(response => {
-      this.setState({
-        filterkeys: response.data.user.preferences.filterkeys
-      })
+  filterKeysChange(filterkeys) {
+    document.getElementById('blackkeywords-loader').classList.remove('hidden')
+    NetworkRequest.setFilteredKeys(filterkeys)
+    .then((response) => {
+      const user = response.data.user
+      // Update local information
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      document.getElementById('blackkeywords-loader').classList.add('hidden')
     })
-    .catch(error => {
+    .catch((error) => {
+      // TODO: handle error
       console.log(error)
+      document.getElementById('blackkeywords-loader').classList.add('hidden')
     })
   }
 
@@ -359,14 +358,14 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Hashtags blacklist</h4>
+                <h4>Hashtag</h4>
                 <div className='loader small hidden' id='blackhashtags-loader'></div>
               </div>
               <Tags onChange={this.filterTagsChange} tags={this.state.filtertags}/>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Username blacklist</h4>
+                <h4>Username</h4>
                 <div className='loader small hidden' id='blackusers-loader'></div>
               </div>
               <Tags onChange={this.filterUsersChange} tags={this.state.filterusers}/>
