@@ -82,7 +82,17 @@ class Dashboard extends Component {
 
   onCommentChange(event) {
     const { value, name } = event.target
-    console.log(value, name)
+    NetworkRequest.updateComment(value)
+    .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        comment: response.data.user.preferences.comment_text
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
   }
 
   locationsChange(localizations) {
@@ -124,7 +134,8 @@ class Dashboard extends Component {
       unfollowing: user.preferences.unfollowing,
       filtertags: user.preferences.filtertags,
       filterusers: user.preferences.filterusers,
-      filterkeys: user.preferences.filterkeys
+      filterkeys: user.preferences.filterkeys,
+      comment: user.preferences.comment_text
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
@@ -323,7 +334,7 @@ class Dashboard extends Component {
                 <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment'></input>
+                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment}></input>
               </div>
             </div>
             <div className='section'>

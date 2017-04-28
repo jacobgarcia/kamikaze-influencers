@@ -43,6 +43,10 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/unfollowing`, { unfollowing })
   }
 
+  static updateComment(comment_text) {
+    return axios.put(`${window.baseUrl}/users/self/comment`, { comment_text })
+  }
+
   static getHallOfFame() {
     return axios.get(`${window.baseUrl}/automation/self/start`)
   }

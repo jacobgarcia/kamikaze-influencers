@@ -258,6 +258,21 @@ router.route('/users/self/filterkeys')
   })
 })
 
+router.route('/users/self/comment')
+.put((req, res) => {
+  const username = req._username
+  const comment = req.body.comment_text
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.comment_text': comment } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
+})
+
 router.route('/users/self/payments')
 .post((req, res) => {
   const username = req._username
