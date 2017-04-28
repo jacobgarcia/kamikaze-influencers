@@ -189,7 +189,7 @@ import LocationBar from '../components/LocationBar'
            { this.props.inputPosition === 'top' && input }
            </div>
          {this.state.results.length > 0 && (
-           <ul className={`locations-list${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
+           <ul className='locations-list'>
              {this.state.results.map((result, i) => (
                <li key={result.id}>
                  <a href='#'
@@ -230,10 +230,10 @@ import LocationBar from '../components/LocationBar'
      endpoint: 'https://api.tiles.mapbox.com',
      inputClass: '',
      resultClass: '',
-     resultsClass: '',
+     resultsClass: 'geo-coder',
      resultFocusClass: 'strong',
      inputPosition: 'top',
-     inputPlaceholder: 'Search',
+     inputPlaceholder: 'Enter a location to search',
      showLoader: false,
      source: 'mapbox.places',
      proximity: '',
