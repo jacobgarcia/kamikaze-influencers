@@ -151,6 +151,18 @@ router.route('/users/self/following')
   })
 })
 
+router.route('/users/self/unfollowing')
+.put((req, res) => {
+  const username = req._username
+  const unfollowing = req.body.unfollowing
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.unfollowing': unfollowing } }, { new: true })
+  .exec((error, user) => {
+    if (error) return res.status(500).json({ error })
+    res.status(200).json({ user })
+  })
+})
+
 router.route('/users/self/commenting')
 .put((req, res) => {
   const username = req._username

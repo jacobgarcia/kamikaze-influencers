@@ -50,6 +50,7 @@ class Dashboard extends Component {
     this.onLikingChange = this.onLikingChange.bind(this)
     this.onCommentingChange = this.onCommentingChange.bind(this)
     this.onFollowingChange = this.onFollowingChange.bind(this)
+    this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
     this.tagsChange = this.tagsChange.bind(this)
     this.locationsChange = this.locationsChange.bind(this)
@@ -235,6 +236,21 @@ class Dashboard extends Component {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
         following: response.data.user.preferences.following
+      })
+    })
+    .catch(error => {
+      // TODO: handle error
+      console.log(error)
+    })
+
+  }
+
+  onUnfollowingChange() {
+    NetworkRequest.updateUnfollowing(!this.state.unfollowing)
+    .then(response => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        unfollowing: response.data.user.preferences.unfollowing
       })
     })
     .catch(error => {
