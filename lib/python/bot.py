@@ -39,7 +39,7 @@ if user_array != empty_arr:
 bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                like_per_day= (1000 if sys.argv[4] == "true" else 0),
                comments_per_day= (50 if sys.argv[6] == "true" else 0),
-               tag_list=(sys.argv[3]).split(","),
+               tag_list=((sys.argv[3]).split(",") if sys.argv[3] != '' else ['love', 'instagood','photooftheday','beautiful','tbt','happy','cute','fashion','followme','me','follow','like4like','picoftheday','selfie','summer']),
                tag_blacklist=(sys.argv[7]).split(","),
                user_blacklist=user_dict,
                max_like_for_one_tag=50,
