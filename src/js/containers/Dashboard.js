@@ -355,7 +355,7 @@ class Dashboard extends Component {
                 <div className='loader small hidden' id='locations-loader'></div>
               </div>
                <Geocoder
-                 accessToken='pk.eyJ1IjoidG1jdyIsImEiOiJIZmRUQjRBIn0.lRARalfaGHnPdRcc-7QZYQ'
+                 accessToken='pk.eyJ1IjoiZmF0YWxyYWluY2xvdWQiLCJhIjoiY2oyMjRiOHd5MDAwazJxbWs0YmZ6ZmV1cSJ9.IsBKnV_Eu9clUU3PVxRMAA'
                  onSelect={this.onSelect}
                  showLoader={true}
                  onChange={this.locationsChange}

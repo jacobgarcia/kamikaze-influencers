@@ -52,6 +52,7 @@ import LocationBar from '../components/LocationBar'
          results: [],
          focus: null,
          loading:false,
+         locationString: value
        })
      } else {
         LocationBar.search(
@@ -178,7 +179,6 @@ import LocationBar from '../components/LocationBar'
      return (
        <div className='geo-coder'>
          <div className='tags'>
-           { this.props.inputPosition === 'top' && input }
            { Object.keys(locations).map((location, index) =>
             <div className='tag' key={`location-${index}`}>
               <a id={JSON.stringify(locations[location].description)}></a>
@@ -186,6 +186,7 @@ import LocationBar from '../components/LocationBar'
               <span>{locations[location].description}</span>
             </div>
            )}
+           { this.props.inputPosition === 'top' && input }
            </div>
          {this.state.results.length > 0 && (
            <ul className={`locations-list${this.props.showLoader && this.state.loading ? 'loading' : ''} ${this.props.resultsClass}`}>
@@ -237,7 +238,7 @@ import LocationBar from '../components/LocationBar'
      source: 'mapbox.places',
      proximity: '',
      bbox: '',
-     types: '',
+     types: 'region,place,district,locality',
      onSuggest: function() {},
      focusOnMount: true
 }
