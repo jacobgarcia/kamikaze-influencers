@@ -131,7 +131,14 @@ class NetworkRequest {
       .then((res) => resolve(res))
       .catch((error) => reject(error))
     })
+  }
 
+  static getHallOfFame() {
+    return new Promise((resolve, reject) => {
+      axios(`${window.baseUrl}/users/fame`)
+      .then((res) => resolve(res))
+      .catch((error) => reject(error))
+    })
   }
 
 }

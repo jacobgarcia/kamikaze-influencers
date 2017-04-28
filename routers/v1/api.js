@@ -273,6 +273,19 @@ router.route('/users/self/comment')
   })
 })
 
+router.route('/users/fame')
+.get((req, res) => {
+  User.find({ fameEnd:{ $gt: Date.now()} })
+  .select('username profile_picture -_id')
+  .exec((error, famous) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ famous })
+  })
+})
+
 router.route('/users/self/payments')
 .post((req, res) => {
   const username = req._username

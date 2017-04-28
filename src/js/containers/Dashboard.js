@@ -115,6 +115,21 @@ class Dashboard extends Component {
     clearInterval(this.interval)
   }
 
+  componentWillMount() {
+    // Add users to hall of fame
+    NetworkRequest.getHallOfFame()
+    .then((response) => {
+      this.setState({
+        hallOfFame: response.data.famous
+      })
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
+  }
+
+
   componentDidMount() {
 
     let user = {}
@@ -292,7 +307,7 @@ class Dashboard extends Component {
           onEnd={this.removeNotification}/>
         <div className='content-section'>
           <div className='hall-section'>
-            <h4>Hall of fame</h4>
+            <h4>Hall of Fame</h4>
             <div className='hall-of-fame'>
               {this.state.hallOfFame.map((user, index) =>
                 <FameItem user={user} key={index}/>
