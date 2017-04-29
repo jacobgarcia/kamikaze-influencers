@@ -28,12 +28,13 @@ const schema = new Schema({
     liking: { type: Boolean, default: false },
     following: { type: Boolean, default: false },
     commenting: { type: Boolean, default: false },
+    unfollowing: { type: Boolean, default: false },
     tags: [ String ],
     locations: [ Location ],
-    tag_blacklist: [ String ],
-    username_blacklist: [ String ],
-    keyword_blacklist: [ String ],
-    comment_text: String
+    filtertags: [ String ],
+    filterusers: [ String ],
+    filterkeys: [ String ],
+    comment_text: { type: String, default: null}
   }
 })
 

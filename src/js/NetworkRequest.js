@@ -39,6 +39,14 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/following`, { following })
   }
 
+  static updateUnfollowing(unfollowing) {
+    return axios.put(`${window.baseUrl}/users/self/unfollowing`, { unfollowing })
+  }
+
+  static updateComment(comment_text) {
+    return axios.put(`${window.baseUrl}/users/self/comment`, { comment_text })
+  }
+
   static getHallOfFame() {
     return axios.get(`${window.baseUrl}/automation/self/start`)
   }
@@ -49,16 +57,6 @@ class NetworkRequest {
 
   static setTime() {
 
-  }
-
-  static updateFilterTags(filtertags) {
-    return axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
-  }
-  static updateFilterUsers(filterusers) {
-    return axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
-  }
-  static updateFilterKeys(filterkeys) {
-    return axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
   }
 
   static setPayment(item_id) {
@@ -97,6 +95,30 @@ class NetworkRequest {
     })
   }
 
+  static setFilteredTags(filtertags) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setFilteredUsers(filterusers) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static setFilteredKeys(filterkeys) {
+    return new Promise((resolve, reject) => {
+      axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
+      .then((response) => resolve(response))
+      .catch((error) => reject(error))
+    })
+  }
+
   static getToken(code, callback, errCallback) {
     axios.post(`${window.baseUrl}/users/authenticate`, { code })
     .then((response) => callback(response))
@@ -109,7 +131,14 @@ class NetworkRequest {
       .then((res) => resolve(res))
       .catch((error) => reject(error))
     })
+  }
 
+  static getHallOfFame() {
+    return new Promise((resolve, reject) => {
+      axios(`${window.baseUrl}/users/fame`)
+      .then((res) => resolve(res))
+      .catch((error) => reject(error))
+    })
   }
 
 }

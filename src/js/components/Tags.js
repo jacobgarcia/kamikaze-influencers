@@ -45,7 +45,9 @@ class Tags extends Component {
     })
 
     if (tagsText.includes(',')) {
-      const tag = tagsText.slice(0, -1).toLowerCase()
+      let tag = tagsText.slice(0, -1).toLowerCase()
+      // Parse the tag without the #
+      tag = tag.replace('#','')
       this.addTag(tag)
     }
   }
