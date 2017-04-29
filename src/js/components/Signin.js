@@ -54,12 +54,8 @@ class Signin extends Component {
 
     NetworkRequest.signinUser(user)
     .then(response => {
-      console.log('response', response)
-      console.log(response.data)
       localStorage.setItem('token', response.data.token)
-      console.log('setting notifications', response.data.user.notifications)
       localStorage.setItem('notifications', JSON.stringify(response.data.user.notifications))
-      console.log('Rerouting')
       location.replace('/')
     })
     .catch((error, other) => {
