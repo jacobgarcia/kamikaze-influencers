@@ -381,7 +381,7 @@ class Dashboard extends Component {
                 <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment}></input>
+                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}></input>
               </div>
             </div>
             <div className='section'>
