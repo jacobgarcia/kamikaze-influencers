@@ -11,11 +11,13 @@ class Logout extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+  }
 
-    location.replace('/')
+  componentDidMount() {
+    setTimeout(location.replace('/'), 2000)
   }
 
   render() {
