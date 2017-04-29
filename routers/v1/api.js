@@ -558,10 +558,13 @@ router.route('/automation/self/start')
 .post((req, res) => {
   //TODO: Update password encryption logic
   const username = req._username
+
   User.findOne({ username })
   .exec((error, user) => {
     // Get user username, password and preferences
     const { username, password, preferences } = user
+
+    process.env.NODE_ENV === 'development' ? console.log('Stating automation for username ' +  username) : null
 
     // Get tags, locations and usernames array
     const { tags, locations } = preferences
@@ -577,7 +580,11 @@ router.route('/automation/self/start')
     let counter = 0
     locations.forEach((location) => {
       request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
-          if (error) return res.status(500).json({ error })
+          if (error) {
+            console.log(error)
+            return res.status(500).json({ error })
+          }
+          
           locationTags.push(response.body)
           counter ++
           if (counter === locations.length) {
