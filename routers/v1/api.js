@@ -273,23 +273,84 @@ router.route('/users/self/comment')
   })
 })
 
-router.route('/users/fame')
+router.route('/users/self/instagram/id')
 .get((req, res) => {
-  User.find({ fameEnd:{ $gt: Date.now()} })
-  .select('username profile_picture instagram.id -_id')
-  .exec((error, famous) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('instagram.id -_id')
+  .exec((error, instagram) => {
     if (error) {
       winston.log(error)
       return res.status(500).json({ error })
     }
-    res.status(200).json({ famous })
+    res.status(200).json({ instagram })
   })
 })
 
+router.route('/users/fame')
+.get((req, res) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('fameFollowers -_id')
+  .exec((error, followers) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: followers.fameFollowers  } })
+    .select('username profile_picture instagram.id -_id')
+    .exec((error, famous) => {
+      if (error) {
+        winston.log(error)
+        return res.status(500).json({ error })
+      }
+       res.status(200).json({ famous })
+    })
+  })
+
+})
+
 router.route('/users/fame/follow')
-.post((req, res) => {
+.put((req, res) => {
   const username = req._username
   const user_id = req.body.user_id
+
+  User.findOne({ username })
+  .exec((error, user) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+      const instaFollow = new PythonShell('lib/python/follow.py', { pythonOptions: ['-u'], args: [ username, user.password, user_id] })
+      /* Wait for the response in the follow */
+      instaFollow.on('message', (message) => {
+        // end the input stream and allow the process to exit
+        instaFollow.end((error) => {
+          if (error) {
+            winston.log(error)
+            return res.status(500).json({ error })
+          }
+        })
+
+        const follow = JSON.parse(message)
+
+        if (follow.status === 'error') {
+          return res.status(403).json({ error: {'message': 'Exception on follwing the specified user'}})
+        }
+
+        if (follow.status === 'success') {
+          User.findOneAndUpdate({ username }, { $push: { 'fameFollowers': follow.id } }, { new: true })
+          .exec((error, user) => {
+            if (error) {
+              winston.log(error)
+              return res.status(500).json({ error })
+            }
+            res.status(200).json({ user })
+          })
+        }
+
+      })
+  })
 
 })
 router.route('/users/self/payments')

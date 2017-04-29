@@ -35,7 +35,8 @@ const schema = new Schema({
     filterusers: [ String ],
     filterkeys: [ String ],
     comment_text: { type: String, default: null}
-  }
+  },
+  fameFollowers: [ String ]
 })
 
 module.exports = mongoose.model('User', schema)

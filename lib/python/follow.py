@@ -23,10 +23,17 @@ def follow(user_id):
         follow = s.post(url_follow)
         if follow.status_code == 200:
             log_string = "Followed: %s." % (user_id)
-            print log_string
+            follow_info = {}
+            follow_info['status'] = 'success'
+            follow_info['id'] = user_id
+            follow_json = json.dumps(follow_info)
+            print follow_json
             return follow
     except:
-        print "Except on follow!"
+        follow_info = {}
+        follow_info['status'] = 'error'
+        follow_json = json.dumps(follow_info)
+        print follow_json
     return False
 
 # Login routine without definition
