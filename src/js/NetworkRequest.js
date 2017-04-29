@@ -48,7 +48,7 @@ class NetworkRequest {
   }
 
   static updateFameFollowers(user_id) {
-    return axios.put(`${window.baseUrl}/users/fame/follow`, { user_id })
+    return axios.put(`${window.baseUrl}/users/self/follow`, { user_id })
   }
 
   static getHallOfFame() {
@@ -141,7 +141,7 @@ class NetworkRequest {
 
   static getHallOfFame() {
     return new Promise((resolve, reject) => {
-      axios(`${window.baseUrl}/users/fame`)
+      axios(`${window.baseUrl}/users/self/famous`)
       .then((res) => resolve(res))
       .catch((error) => reject(error))
     })

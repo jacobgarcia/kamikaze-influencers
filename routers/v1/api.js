@@ -273,6 +273,23 @@ router.route('/users/self/comment')
   })
 })
 
+router.route('/users/self/follow')
+.put((req, res) => {
+  const username = req._username
+  const user_id = req.body.user_id
+
+  User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
+
+})
+
+
 router.route('/users/self/instagram/id')
 .get((req, res) => {
   const username = req._username
@@ -287,7 +304,7 @@ router.route('/users/self/instagram/id')
   })
 })
 
-router.route('/users/fame')
+router.route('/users/self/famous')
 .get((req, res) => {
   const username = req._username
   User.findOne({ username })
@@ -310,49 +327,7 @@ router.route('/users/fame')
 
 })
 
-router.route('/users/fame/follow')
-.put((req, res) => {
-  const username = req._username
-  const user_id = req.body.user_id
 
-  User.findOne({ username })
-  .exec((error, user) => {
-    if (error) {
-      winston.log(error)
-      return res.status(500).json({ error })
-    }
-      const instaFollow = new PythonShell('lib/python/follow.py', { pythonOptions: ['-u'], args: [ username, user.password, user_id] })
-      /* Wait for the response in the follow */
-      instaFollow.on('message', (message) => {
-        // end the input stream and allow the process to exit
-        instaFollow.end((error) => {
-          if (error) {
-            winston.log(error)
-            return res.status(500).json({ error })
-          }
-        })
-
-        const follow = JSON.parse(message)
-
-        if (follow.status === 'error') {
-          return res.status(403).json({ error: {'message': 'Exception on follwing the specified user'}})
-        }
-
-        if (follow.status === 'success') {
-          User.findOneAndUpdate({ username }, { $push: { 'fameFollowers': follow.id } }, { new: true })
-          .exec((error, user) => {
-            if (error) {
-              winston.log(error)
-              return res.status(500).json({ error })
-            }
-            res.status(200).json({ user })
-          })
-        }
-
-      })
-  })
-
-})
 router.route('/users/self/payments')
 .post((req, res) => {
   const username = req._username
