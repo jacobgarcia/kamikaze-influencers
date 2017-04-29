@@ -32,7 +32,7 @@ router.route('/users/authenticate')
     // end the input stream and allow the process to exit
     instaLogin.end((error) => {
       if (error) {
-        winston.log(error)
+        console.log(error)
         return res.status(500).json({ error })
       }
 
@@ -43,7 +43,7 @@ router.route('/users/authenticate')
       }
 
       if (user.status === 'error_connection') {
-        winston.log('Connection attempt to Instagram failed.')
+        console.log('Connection attempt to Instagram failed.')
         return res.status(500).json({ error: {'message': 'Connection attempt to Instagram has failed.'}})
       }
 

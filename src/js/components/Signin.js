@@ -17,6 +17,7 @@ class Signin extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.signinUser = this.signinUser.bind(this)
     this.hideSignin = this.hideSignin.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,7 +72,7 @@ class Signin extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    signinUser()
+    this.signinUser()
   }
 
 
