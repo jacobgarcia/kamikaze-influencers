@@ -277,6 +277,9 @@ router.route('/users/self/follow')
 .put((req, res) => {
   const username = req._username
   const user_id = req.body.user_id
+  const timeToAdd = 300000 // 5 minutes
+
+  // TODO: validate if the account in the body belongs to hall of fame. Else do nothing
 
   User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
   .exec((error, user) => {
@@ -284,7 +287,25 @@ router.route('/users/self/follow')
       winston.log(error)
       return res.status(500).json({ error })
     }
-    res.status(200).json({ user })
+
+    const now = Date.now()
+
+    // Check if timeEnd has allready passed
+    // 1491790971264
+    if (user.timeEnd < now) {
+      user.timeEnd = now + timeToAdd
+    } else {
+      user.timeEnd = user.timeEnd + timeToAdd
+    }
+
+      user.save((error, savedUser) => {
+        if (error) {
+          winston.log(error)
+          return res.status(500).json({ error })
+        }
+      res.status(200).json({ user })
+    })
+
   })
 
 })
