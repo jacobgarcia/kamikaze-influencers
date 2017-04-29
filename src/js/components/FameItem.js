@@ -10,6 +10,10 @@ class FameItem extends Component {
     }
   }
 
+  onFollow(id){
+    console.log("Your IG id is " + id)
+  }
+
   render() {
     const user = this.props.user
 
@@ -21,7 +25,7 @@ class FameItem extends Component {
             <a href={'http://www.instagram.com/' + user.username}>{user.username}</a>
             <span>{user.fullName}</span>
           </div>
-          <input type="button" value="+"></input>
+          <input type="button" value="+" onClick={() => this.onFollow(user.instagram.id)}></input>
         </div>
       </div>
 

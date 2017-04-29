@@ -276,7 +276,7 @@ router.route('/users/self/comment')
 router.route('/users/fame')
 .get((req, res) => {
   User.find({ fameEnd:{ $gt: Date.now()} })
-  .select('username profile_picture -_id')
+  .select('username profile_picture instagram.id -_id')
   .exec((error, famous) => {
     if (error) {
       winston.log(error)
@@ -286,6 +286,12 @@ router.route('/users/fame')
   })
 })
 
+router.route('/users/fame/follow')
+.post((req, res) => {
+  const username = req._username
+  const user_id = req.body.user_id
+
+})
 router.route('/users/self/payments')
 .post((req, res) => {
   const username = req._username
@@ -547,7 +553,7 @@ router.route('/automation/self/start')
             locationTags.push(response.body)
             counter ++
             if (counter === locations.length) {
-                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, filterusers, filterkeys, unfollowing]})
+                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing]})
                   .on('message', (message) => {
                       // received a message sent from the Python script (a simple "print" statement)
                       process.env.NODE_ENV === 'development' ? console.log(message) : null
@@ -558,10 +564,10 @@ router.route('/automation/self/start')
                       throw err
                     }
                     process.env.NODE_ENV === 'development' ? console.log('Finished') : null
-                  })
 
-                 res.status(200).json({'message': 'The automation has started'})
-            }
+                  })
+                    res.status(200).json({'message': 'The automation has started'})
+                  }
             })
           })
         })

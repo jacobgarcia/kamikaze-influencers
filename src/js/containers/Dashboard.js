@@ -21,10 +21,7 @@ class Dashboard extends Component {
     const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
-      hallOfFame: [
-        { username: 'cesargdm', profile_picture: '' },
-        { username: 'thavatta17', profile_picture: '' }
-      ],
+      hallOfFame: [],
       remainingTime: 0,
       introVisible: newUser,
       // Set state
