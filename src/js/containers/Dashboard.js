@@ -343,7 +343,7 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
-              <div className={`time-card main ${this.state.working ? 'working' : ''}`}>
+              <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
                 <div className='label-wrapper'>
                   <label>Remaining time</label>
                   <label onClick={this.startAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
