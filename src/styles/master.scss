@@ -260,6 +260,47 @@ a {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
+  .inline-error {
+    left: 130px;
+    transform: translateY(-50%);
+    transform: translateY(calc(-50% + 15px));
+    position: absolute;
+    background: $red;
+    max-width: 200px;
+    padding: 10px 15px;
+    color: #fff;
+    z-index: 99;
+    font-size: .8rem;
+    line-height: 1.2;
+    @include owa_boxshadow;
+    transition: 1s;
+    opacity: 1;
+    &.hidden {
+      opacity: 0;
+    }
+    .caret.left {
+      @include owa_boxshadow;
+      position: absolute;
+      display: block;
+      background: $red;
+      width: 15px;
+      height: 15px;
+      left: -7px;
+      transform: rotate(45deg);
+      bottom: 50%;
+      bottom: calc(50% - 7px);
+    }
+    .title {
+      margin: 0;
+      margin-bottom: 5px;
+      padding: 0;
+      text-align: center;
+      opacity: 1;
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 500;
+    }
+  }
   .geo-coder {
     .locations-list {
       @include owa_boxshadow;
@@ -361,6 +402,7 @@ a {
       display: flex;
       justify-content: space-between;
       margin-bottom: 35px;
+      position: relative;
     }
     .commenting-field {
       max-height: 100px;
