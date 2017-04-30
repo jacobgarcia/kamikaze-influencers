@@ -1022,18 +1022,31 @@ input[type="button"], input[type="submit"] {
     padding: 0 20px 10px;
     .fame-item-content {
       background: #fff;
-      max-width: 300px;
+      width: 275px;
       display: flex;
-      padding: 15px 20px;
+      padding: 20px;
       flex-shrink: 0;
       border-radius: 3px;
       align-items: center;
       justify-content: space-between;
       @include owa_boxshadow;
+      .profile {
+        min-width: 0;
+        a {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
       input {
-        background: transparent;
-        font-size: 2rem;
-        margin-left: 30px;
+        background: rgb(46, 172, 226);
+        color: #fff;
+        font-size: .8rem;
+        font-weight: 600;
+        padding: 5px 8px;
+        margin-left: 20px;
+        &.disabled {
+          background: $gray;
+        }
       }
     }
   }
