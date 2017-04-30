@@ -13,19 +13,19 @@ class FameItem extends Component {
   }
 
   onFollow(user_id){
-    console.log("Your IG id is " + user_id)
     //document.getElementById('tags-loader').classList.remove('hidden')
     NetworkRequest.updateFameFollowers(user_id)
     .then((response) => {
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.props.onFollow(response.data.user.timeEnd)
       //document.getElementById('tags-loader').classList.add('hidden')
       this.setState({
         following: true
       })
     })
-    .catch((error) => {
+    .catch(error => {
       // TODO: handle error
       console.log(error)
     //  document.getElementById('tags-loader').classList.add('hidden')
@@ -38,11 +38,11 @@ class FameItem extends Component {
 
     let button = undefined
     if (user.instagram.id === instagram_id) {
-      button = <input type="button" value=""></input>
+      button = null
     } else if (this.state.following){
-        button = <input type="button" value="Following"></input>
+        button = <input type="button" className='disabled' value="Following"></input>
     } else {
-        button = <input type="button" value="+" onClick={() => this.onFollow(user.instagram.id)}></input>
+        button = <input type="button" value="Follow" onClick={() => this.onFollow(user.instagram.id)}></input>
     }
     return (
       <div className='fame-item'>
