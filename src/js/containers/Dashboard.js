@@ -21,10 +21,13 @@ class Dashboard extends Component {
     const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
-      hallOfFame: [
-        { username: 'cesargdm', profile_picture: '' },
-        { username: 'thavatta17', profile_picture: '' }
-      ],
+      hallOfFame: [{
+        'username': 'spotify',
+        'profile_picture':'',
+        'instagram':{
+          'id': '224223453'
+        }
+      }],
       remainingTime: 0,
       introVisible: newUser,
       // Set state
@@ -45,7 +48,8 @@ class Dashboard extends Component {
       gender: 0,
       usernames: [],
       // Location
-      value: null
+      value: null,
+      instagram_id: ''
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -60,9 +64,16 @@ class Dashboard extends Component {
   }
 
   tick() {
-    this.setState((prevState) => ({
-      remainingTime: prevState.remainingTime - 1,
-    }))
+    if (this.state.remainingTime > 0) {
+      this.setState((prevState) => ({
+        remainingTime: prevState.remainingTime - 1
+      }))
+    }
+    else {
+      this.setState((prevState) => ({
+        remainingTime: 0
+      }))
+    }
   }
 
   tagsChange(tags) {
@@ -122,6 +133,18 @@ class Dashboard extends Component {
     .then((response) => {
       this.setState({
         hallOfFame: response.data.famous
+      })
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
+
+    // Get IG id
+    NetworkRequest.getInstagramId()
+    .then((response) => {
+      this.setState({
+        instagram_id: response.data.instagram.instagram.id
       })
     })
     .catch((error) => {
@@ -337,7 +360,7 @@ class Dashboard extends Component {
             <h4>Hall of Fame</h4>
             <div className='hall-of-fame'>
               {this.state.hallOfFame.map((user, index) =>
-                <FameItem user={user} key={index}/>
+                <FameItem user={user} key={index} instagram_id={this.state.instagram_id}/>
               )}
             </div>
           </div>

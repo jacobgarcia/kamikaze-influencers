@@ -47,6 +47,10 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/comment`, { comment_text })
   }
 
+  static updateFameFollowers(user_id) {
+    return axios.put(`${window.baseUrl}/users/self/follow`, { user_id })
+  }
+
   static getHallOfFame() {
     return axios.get(`${window.baseUrl}/automation/self/start`)
   }
@@ -119,6 +123,8 @@ class NetworkRequest {
     })
   }
 
+
+
   static getToken(code, callback, errCallback) {
     axios.post(`${window.baseUrl}/users/authenticate`, { code })
     .then((response) => callback(response))
@@ -135,7 +141,15 @@ class NetworkRequest {
 
   static getHallOfFame() {
     return new Promise((resolve, reject) => {
-      axios(`${window.baseUrl}/users/fame`)
+      axios(`${window.baseUrl}/users/self/famous`)
+      .then((res) => resolve(res))
+      .catch((error) => reject(error))
+    })
+  }
+
+  static getInstagramId() {
+    return new Promise((resolve, reject) => {
+      axios(`${window.baseUrl}/users/self/instagram/id`)
       .then((res) => resolve(res))
       .catch((error) => reject(error))
     })
