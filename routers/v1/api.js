@@ -15,6 +15,18 @@ const Token = require(path.resolve('models/Token'))
 const config = require(path.resolve('config/config'))
 const PayPalService = require(path.resolve('routers/v1/PayPalService'))
 
+// This will write in a file all system logs
+const fs = require('fs')
+const util = require('util')
+const log_file = fs.createWriteStream(path.resolve('main.log'))
+const log_stdout = process.stdout
+
+// Redefine log
+console.log = (data, ...args) => {
+  log_file.write(`${util.format(data)} ${args.map((arg) => ('\n' + util.format(arg)) )} [${new Date()}]\n`)
+  log_stdout.write(`${util.format(data)} ${args.map((arg) => ('\n' + util.format(arg)) )}\n`)
+}
+
 mongoose.connect(config.database)
 
 const baseUrl = 'https://api.instagram.com/v1'
@@ -32,7 +44,7 @@ router.route('/users/authenticate')
     // end the input stream and allow the process to exit
     instaLogin.end((error) => {
       if (error) {
-        winston.log(error)
+        console.log(error)
         return res.status(500).json({ error })
       }
 
@@ -43,7 +55,7 @@ router.route('/users/authenticate')
       }
 
       if (user.status === 'error_connection') {
-        winston.log('Connection attempt to Instagram failed.')
+        console.log('Connection attempt to Instagram failed.')
         return res.status(500).json({ error: {'message': 'Connection attempt to Instagram has failed.'}})
       }
 
@@ -102,8 +114,13 @@ router.route('/users/authenticate')
 
 //We may want to protect agains brute force attaks to get our jwt secret
 router.use((req, res, next) => {
+  // Check if we have authorization header
+  if (!req.headers.authorization)
+    return res.status(403).json({error: { message: 'Token not provided' } })
+
   const token = req.headers.authorization.split(' ')[1]
 
+  // Check if we have a token
   if (!token)
     return res.status(403).json({error: { message: 'Token not provided' } })
   // We can ensure every request is made by authenticated users in our server.
@@ -368,12 +385,14 @@ router.route('/users/self/payments')
   // TODO: validate payment
   PayPalService.getPaymentToken()
   .then((response) => {
+    // Get access PayPal token
     return response.body.access_token
   })
-  .then((token) => {
+  .then(token => {
+    // Get the payment details
     return PayPalService.getPaymentDetails(token, payment.paymentId)
   })
-  .then((response) => {
+  .then(response => {
     const { status, body } = response
     const { custom, amount } = body.transactions[0]
     const item_id = custom
@@ -398,8 +417,10 @@ router.route('/users/self/payments')
     .save((error, payment) => {
 
       if (error) {
+        if (error.code === 11000) {
+          return res.status(400).json({ error: { message: 'This payment has been already registered.'}})
+        }
         console.log(error)
-        // TODO: handle correctly error that paypal_id purchase marks as duplicated
         return res.status(500).json({ error })
       }
 
@@ -408,7 +429,7 @@ router.route('/users/self/payments')
       Item.findById(item_id)
       .exec((error, item) => {
         if (error) {
-          winston.log(error)
+          console.log(error)
           return res.status(500).json({ error })
         }
 
@@ -432,9 +453,19 @@ router.route('/users/self/payments')
             user.timeEnd = user.timeEnd + timeToAdd
           }
 
+          // Check if the item included hall of fame
+          if (item.hallOfFame) {
+            // Add Fame End time :)
+            if (user.fameEnd < now) {
+              user.fameEnd = now + timeToAdd
+            } else {
+              user.fameEnd = user.fameEnd + timeToAdd
+            }
+          }
+
           user.save((error, savedUser) => {
             if (error) {
-              winston.log(error)
+              console.log(error)
               return res.status(500).json({ error })
             }
 
@@ -449,7 +480,10 @@ router.route('/users/self/payments')
 
   })
   .catch((error) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
   })
 
 })
@@ -596,49 +630,56 @@ router.use((req, res, next) => {
 /* AUTOMATION INSTAGRAM PROCESS */
 router.route('/automation/self/start')
 .post((req, res) => {
-    //TODO: Update password encryption logic
-    const username = req._username
-    User.findOne({ username })
-    .exec((error, user) => {
-      // Get user username, password and preferences
-      const { username, password, preferences } = user
+  //TODO: Update password encryption logic
+  const username = req._username
 
-      // Get tags, locations and usernames array
-      const { tags, locations } = preferences
+  User.findOne({ username })
+  .exec((error, user) => {
+    // Get user username, password and preferences
+    const { username, password, preferences } = user
 
-      // Get if user set to active each activity
-      const { liking, commenting, following, unfollowing } = preferences
+    process.env.NODE_ENV === 'development' ? console.log('Stating automation for username ' +  username) : null
 
-      // Get if user has blacklisted something
-      const { filtertags, filterusers, filterkeys } = preferences
+    // Get tags, locations and usernames array
+    const { tags, locations } = preferences
 
-      // Translate locations into IG codes. Each for every location
-      let locationTags = []
-      let counter = 0
-      locations.forEach((location) => {
-        request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
-            if (error) return res.status(500).json({ error })
-            locationTags.push(response.body)
-            counter ++
-            if (counter === locations.length) {
-                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing]})
-                  .on('message', (message) => {
-                      // received a message sent from the Python script (a simple "print" statement)
-                      process.env.NODE_ENV === 'development' ? console.log(message) : null
-                  })
-                  .end((err) => {
-                    if (err) {
-                      winston.log(error, username)
-                      throw err
-                    }
-                    process.env.NODE_ENV === 'development' ? console.log('Finished') : null
+    // Get if user set to active each activity
+    const { liking, commenting, following, unfollowing } = preferences
 
-                  })
-                    res.status(200).json({'message': 'The automation has started'})
+    // Get if user has blacklisted something
+    const { filtertags, filterusers, filterkeys } = preferences
+
+    // Translate locations into IG codes. Each for every location
+    let locationTags = []
+    let counter = 0
+    locations.forEach((location) => {
+      request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
+          if (error) {
+            console.log(error)
+            return res.status(500).json({ error })
+          }
+
+          locationTags.push(response.body)
+          counter ++
+          if (counter === locations.length) {
+                new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, filterusers, filterkeys, unfollowing]})
+                .on('message', (message) => {
+                    // received a message sent from the Python script (a simple "print" statement)
+                    process.env.NODE_ENV === 'development' ? console.log(message) : null
+                })
+                .end((err) => {
+                  if (err) {
+                    console.log(error, username)
+                    throw err
                   }
-            })
-          })
+                  process.env.NODE_ENV === 'development' ? console.log('Finished') : null
+                })
+
+               res.status(200).json({'message': 'The automation has started'})
+          }
         })
       })
+    })
+  })
 
 module.exports = router

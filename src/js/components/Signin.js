@@ -17,6 +17,7 @@ class Signin extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.signinUser = this.signinUser.bind(this)
     this.hideSignin = this.hideSignin.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,12 +54,8 @@ class Signin extends Component {
 
     NetworkRequest.signinUser(user)
     .then(response => {
-      console.log('response', response)
-      console.log(response.data)
       localStorage.setItem('token', response.data.token)
-      console.log('setting notifications', response.data.user.notifications)
       localStorage.setItem('notifications', JSON.stringify(response.data.user.notifications))
-      console.log('Rerouting')
       location.replace('/')
     })
     .catch((error, other) => {
@@ -71,7 +68,7 @@ class Signin extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    signinUser()
+    this.signinUser()
   }
 
 

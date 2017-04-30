@@ -36,6 +36,7 @@ class Dashboard extends Component {
       commenting: false,
       following: false,
       unfollowing: false,
+      showAlertFollow: false,
       comment: '',
       // filters
       filtertags: [],
@@ -275,18 +276,44 @@ class Dashboard extends Component {
     NetworkRequest.updateFollowing(!this.state.following)
     .then(response => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
+      const following = response.data.user.preferences.following
       this.setState({
-        following: response.data.user.preferences.following
+        following
       })
+      return following
+    })
+    .then(following => {
+      if (!following) {
+        NetworkRequest.updateUnfollowing(false)
+        .then(response => {
+          this.setState({
+            unfollowing: response.data.user.preferences.unfollowing
+          })
+        })
+      }
     })
     .catch(error => {
       // TODO: handle error
       console.log(error)
     })
-
   }
 
   onUnfollowingChange() {
+
+    // Check if following is active
+    if (!this.state.following) {
+      this.setState({
+        showAlertFollow: true,
+        following: false
+      },
+      setTimeout(() => {
+        this.setState({
+          showAlertFollow: false
+        })
+      }, 4000))
+      return
+    }
+
     NetworkRequest.updateUnfollowing(!this.state.unfollowing)
     .then(response => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -332,7 +359,7 @@ class Dashboard extends Component {
           </div>
           <div className='main-section'>
             <div className='section center'>
-              <div className={`time-card main ${this.state.working ? 'working' : ''}`}>
+              <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
                 <div className='label-wrapper'>
                   <label>Remaining time</label>
                   <label onClick={this.startAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
@@ -355,6 +382,11 @@ class Dashboard extends Component {
               <div className='switch-section'>
                 <span className={`following ${this.state.following ? 'active' : '' }`}>Following</span>
                 <Switch id="1" onChange={this.onFollowingChange} active={this.state.following}/>
+                <div className={`inline-error ${this.state.showAlertFollow ? 'active' : 'hidden'}`}>
+                  <div className='caret left'></div>
+                  <span className='title'>Need to follow first</span>
+                  <p>You need to activate this in order to unfollow the new followings.</p>
+                </div>
               </div>
               <div className='switch-section'>
                 <span className={`unfollowing ${this.state.unfollowing ? 'active' : '' }`}>Unfollowing</span>
@@ -365,7 +397,7 @@ class Dashboard extends Component {
                 <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment}></input>
+                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}></input>
               </div>
             </div>
             <div className='section'>

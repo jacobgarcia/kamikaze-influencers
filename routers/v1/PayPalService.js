@@ -40,8 +40,10 @@ class PayPalService {
 
       request(options, (error, response) => {
 
-        if (error)
+        if (error) {
+          console.log(error)
           return reject({ status: 500, error: { error } })
+        }
 
         const { statusCode, statusMessage, body } = response
 

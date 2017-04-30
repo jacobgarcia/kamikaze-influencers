@@ -14,6 +14,10 @@ const TimeLink = (props) => {
   )
 }
 
+const MessageCard = (props) => {
+
+}
+
 const TimeCard = (props) => {
   return (
     <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
@@ -27,7 +31,7 @@ const TimeCard = (props) => {
       </div>
       <div className='buy-now'>
         <input type='button'
-          onClick={() => this.purchaseTime(props.item._id)}
+          onClick={() => props.purchaseTime(props.item._id)}
           className={`${props.item.type === 1 ? 'red' : 'white'}`}
           value={`${props.item.type === 1 ? 'Buy Fame' : 'Buy Time'}`}></input>
       </div>
@@ -66,7 +70,10 @@ class Time extends Component {
 
   purchaseTime(time_id) {
     this.setState({
-      showPayment: true
+      showPayment: true,
+      links: undefined,
+      paymentId: undefined,
+      transactions: undefined
     })
 
     NetworkRequest.setPayment(time_id)
@@ -78,9 +85,11 @@ class Time extends Component {
         paymentId,
         transactions
       })
+
     })
     .catch((error) => {
       // TODO: handle error
+      console.log(error.response)
       console.log(error)
     })
   }
@@ -107,6 +116,7 @@ class Time extends Component {
 
     const query = this.props.location.query
 
+    // Check if we have a payement in the URL
     const payment = {
       payerId: query.PayerID,
       paymentId: query.paymentId,
@@ -118,9 +128,11 @@ class Time extends Component {
       // Send payment confirmation
       NetworkRequest.setPaymentConfimation(payment)
       .then((response) => {
+
         //Reload user and time
         this.setState({
           remainingTime: TimeJS.secondsTo(response.data.user.timeEnd)
+
         })
         clearInterval(this.interval)
         this.interval = setInterval(() => this.tick(), 1000)
@@ -166,14 +178,18 @@ class Time extends Component {
         <div className='hero-dashboard'></div>
         <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
+            <h2>Payment Details</h2>
             {
               this.state.transactions ?
                 <div>
-                  {this.state.transactions[0].amount.total}
-                  {this.state.transactions[0].amount.currency}
+                  <p className='description-element'><span className='bold'>Number of items: </span>1</p>
+                  <p className='description-element'><span className='bold'>Total: </span>{this.state.transactions[0].amount.total}{this.state.transactions[0].amount.currency}</p>
+                  <p className='description-element'><span className='bold'>Currency: </span>{this.state.transactions[0].amount.currency}</p>
+                  <p className='description-element'><span className='bold'>Description: </span>{this.state.transactions[0].description}</p>
+                  <p className='description-element'><span className='bold'>Aplication: </span>Inmediate</p>
                 </div>
               :
-                null
+              <div className='loader relative center'></div>
             }
             {
                 this.state.links ? this.state.links.map((link, index) =>
@@ -183,20 +199,20 @@ class Time extends Component {
           </div>
         </div>
         <div className='section'>
-          <div className='time-card main working'>
+          <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
             <label>Remaining time</label>
             <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
             <h2>{`${hours}:${minutes}:${seconds}`}</h2>
           </div>
           <div className='fame-items'>
             { this.state.fameItems.map((item, index) =>
-              <TimeCard item={item} key={index}/>
+              <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
             )}
           </div>
           <div className='time-items'>
             <h3>Time packages</h3>
             { this.state.timeItems.map((item, index) =>
-              <TimeCard item={item} key={index}/>
+              <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
             )}
           </div>
 

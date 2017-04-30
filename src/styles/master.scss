@@ -31,6 +31,10 @@ li {
   list-style: none;
 }
 
+span.bold {
+  font-weight: 500;
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -136,6 +140,12 @@ a {
   width: 25px;
   height: 25px;
   animation: spin 1s linear infinite;
+  &.relative {
+    position: relative;
+  }
+  &.center {
+    margin: 0 auto;
+  }
   &.small {
     border-width: 2px;
     width: 15px;
@@ -196,6 +206,25 @@ a {
           background-size: 16px;
         }
       }
+    }
+    &.stoped {
+      h1, h2 {
+        color: $gray;
+      }
+      .button.restart {
+        display: none;
+      }
+    }
+    &.stoped::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      background: $lightGray;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
     &.working::after {
       content: '';
@@ -260,6 +289,47 @@ a {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
+  .inline-error {
+    left: 130px;
+    transform: translateY(-50%);
+    transform: translateY(calc(-50% + 15px));
+    position: absolute;
+    background: $red;
+    max-width: 200px;
+    padding: 10px 15px;
+    color: #fff;
+    z-index: 99;
+    font-size: .8rem;
+    line-height: 1.2;
+    @include owa_boxshadow;
+    transition: 1s;
+    opacity: 1;
+    &.hidden {
+      opacity: 0;
+    }
+    .caret.left {
+      @include owa_boxshadow;
+      position: absolute;
+      display: block;
+      background: $red;
+      width: 15px;
+      height: 15px;
+      left: -7px;
+      transform: rotate(45deg);
+      bottom: 50%;
+      bottom: calc(50% - 7px);
+    }
+    .title {
+      margin: 0;
+      margin-bottom: 5px;
+      padding: 0;
+      text-align: center;
+      opacity: 1;
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 500;
+    }
+  }
   .geo-coder {
     .locations-list {
       @include owa_boxshadow;
@@ -361,6 +431,7 @@ a {
       display: flex;
       justify-content: space-between;
       margin-bottom: 35px;
+      position: relative;
     }
     .commenting-field {
       max-height: 100px;
@@ -684,6 +755,12 @@ input[type="button"], input[type="submit"] {
     text-align: center;
     display: flex;
     flex-direction: column;
+    max-width: 300px;
+    text-align: left;
+    .description-element {
+      border-bottom: 1px solid $lightGray;
+      padding: 5px 2px;
+    }
     .title {
       display: flex;
       justify-content: center;
@@ -737,11 +814,12 @@ input[type="button"], input[type="submit"] {
       }
     }
     .paypal-button {
-      display: inline-block;
+      display: block;
       height: 30px;
       width: 153px;
       background: url('/static/img/icons/paypal-button.png') no-repeat center center;
       background-size: cover;
+      margin: 20px auto 0;
     }
     .close {
       cursor: pointer;

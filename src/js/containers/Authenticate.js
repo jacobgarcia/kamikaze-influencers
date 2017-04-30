@@ -25,7 +25,7 @@ class Authenticate extends Component {
       location.replace('/')
     }, (error) => {
       // TODO: display error message and return landing
-      console.log('Got error:', error)
+      console.log(error)
       //location.replace('/')
     })
 
