@@ -248,11 +248,14 @@ class InstaBot:
                 self.login_status = True
                 log_string = '%s login success!' % (self.user_login)
                 self.write_log(log_string)
+                print 'login_success'
             else:
                 self.login_status = False
                 self.write_log('Login error! Check your login data!')
+                print 'credentials_error'
         else:
             self.write_log('Login error! Connection error!')
+            print 'verify_account'
 
     def logout(self):
         now_time = datetime.datetime.now()
