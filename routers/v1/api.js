@@ -50,16 +50,16 @@ router.route('/users/authenticate')
 
       const user = JSON.parse(message)
 
-      if (user.status === 'error') {
-        return res.status(403).json({ error: {'message': 'Invalid Instagram username and password.'}})
+      if (user.status === 'credentials_error') {
+        return res.status(401).json({ error: {'message': 'Invalid Instagram username and password.'}})
       }
 
-      if (user.status === 'error_connection') {
+      if (user.status === 'verify_account') {
         console.log('Connection attempt to Instagram failed.')
-        return res.status(500).json({ error: {'message': 'Connection attempt to Instagram has failed.'}})
+        return res.status(418).json({ error: {'message': 'Verify your activity on Instagram.'}})
       }
 
-      if (user.status === 'success') {
+      if (user.status === 'login_success') {
         /* Save the user in the DB */
         //TODO: Encrypt password using an SHA1 algorithm
         User.findOne({ username }, { password: 0 })
@@ -559,6 +559,54 @@ router.route('/payments')
 
 })
 
+router.route('/automation/self/stats')
+.get((req, res) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('likes follows unfollows comments -_id')
+  .exec((error, stats) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ stats })
+  })
+})
+
+/*
+   ADMIN DASHBOARD STATS
+
+   Here all the stats for the admin will be done
+   TODO: Check if the user has admin permission
+*/
+router.route('/admin/self/total/users')
+.get((req, res) => {
+
+  User.find({ username })
+  .select('username -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/last/users')
+.get((req, res) => {
+
+  User.find({ username })
+  .select('username -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
 /* GET ID's FOR LOCATIONS ON IG */
 router.route('/locations/translate/:location')
 .get((req, res) => {
@@ -677,8 +725,8 @@ router.route('/automation/self/start')
                         process.env.NODE_ENV === 'development' ? console.log(message) : null
 
                         if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
-                        if (message === 'credentials_error') return res.status(403).json({error: {'message': 'Credentials has changed. Login again.'}})
-                        if (message === 'verify_account') return res.status(202).json({error: {'message': 'Verify your account again.'}})
+                        if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
+                        if (message === 'verify_account') return res.status(418).json({error: {'message': 'Verify your account again.'}})
                     })
                     .end((err) => {
                       if (err) {
@@ -711,6 +759,9 @@ router.route('/automation/self/start')
       }
 
     })
+
+
+
 })
 
 module.exports = router

@@ -53,16 +53,16 @@ if login.status_code == 200:
     if finder != -1:
         ui = UserInfo()
         user_info = ui.get_user_info_by_login(username)
-        user_info['status'] = 'success'
+        user_info['status'] = 'login_success'
         user_json = json.dumps(user_info)
         print user_json
     else:
         user_info = {}
-        user_info['status'] = 'error'
+        user_info['status'] = 'credentials_error'
         user_json = json.dumps(user_info)
         print user_json
 else:
     user_info = {}
-    user_info['status'] = 'error_connection'
+    user_info['status'] = 'verify_account'
     user_json = json.dumps(user_info)
     print user_json

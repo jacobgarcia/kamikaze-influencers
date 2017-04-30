@@ -155,6 +155,14 @@ class NetworkRequest {
     })
   }
 
+  static getAutomationStats() {
+    return new Promise((resolve, reject) => {
+      axios(`${window.baseUrl}/automation/self/stats`)
+      .then((res) => resolve(res))
+      .catch((error) => reject(error))
+    })
+  }
+
 }
 
 export default NetworkRequest

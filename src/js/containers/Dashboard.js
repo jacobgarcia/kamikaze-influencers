@@ -49,7 +49,13 @@ class Dashboard extends Component {
       usernames: [],
       // Location
       value: null,
-      instagram_id: ''
+      // Hall of fame usage
+      instagram_id: '',
+      // Statistics
+      likes: 0,
+      follows: 0,
+      unfollows: 0,
+      comments: 0
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -145,6 +151,22 @@ class Dashboard extends Component {
     .then((response) => {
       this.setState({
         instagram_id: response.data.instagram.instagram.id
+      })
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
+
+    // Get stats for bot
+    NetworkRequest.getAutomationStats()
+    .then((response) => {
+      const stats = response.data.stats
+      this.setState({
+        likes: stats.likes.length,
+        follows: stats.follows.length,
+        unfollows: stats.unfollows.length,
+        comments: stats.comments.length
       })
     })
     .catch((error) => {
@@ -385,6 +407,7 @@ class Dashboard extends Component {
               <div className='switch-section'>
                 <span className={`liking ${this.state.liking ? 'active' : '' }`}>Liking</span>
                 <Switch id="0" onChange={this.onLikingChange} active={this.state.liking}/>
+                <span>{this.state.likes}</span>
               </div>
               <div className='switch-section'>
                 <span className={`following ${this.state.following ? 'active' : '' }`}>Following</span>
@@ -394,14 +417,17 @@ class Dashboard extends Component {
                   <span className='title'>Need to follow first</span>
                   <p>You need to activate this in order to unfollow the new followings.</p>
                 </div>
+                <span>{this.state.follows}</span>
               </div>
               <div className='switch-section'>
                 <span className={`unfollowing ${this.state.unfollowing ? 'active' : '' }`}>Unfollowing</span>
                 <Switch id="2" onChange={this.onUnfollowingChange} active={this.state.unfollowing}/>
+                <span>{this.state.unfollows}</span>
               </div>
               <div className='switch-section'>
                 <span className={`commenting ${this.state.commenting ? 'active' : '' }`}>Commenting</span>
                 <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
+                <span>{this.state.comments}</span>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
                 <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}></input>

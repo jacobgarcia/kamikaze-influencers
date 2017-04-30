@@ -17,6 +17,7 @@ const schema = new Schema({
   likes: [ String ],
   comments: [ String ],
   follows: [ String ],
+  unfollows: [ String ],
   // End accout info for metrics
   instagram: {
     id: String,

@@ -502,6 +502,7 @@ class InstaBot:
                     self.unfollow_counter += 1
                     log_string = "Unfollow: %s #%i." % (user_id, self.unfollow_counter)
                     self.write_log(log_string)
+                    self.post_db("unfollows", user_id)
                 return unfollow
             except:
                 self.write_log("Exept on unfollow!")
