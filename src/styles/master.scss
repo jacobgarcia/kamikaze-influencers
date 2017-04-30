@@ -1026,9 +1026,10 @@ input[type="button"], input[type="submit"] {
       display: flex;
       padding: 15px 20px;
       flex-shrink: 0;
-      @include owa_boxshadow;
       border-radius: 3px;
       align-items: center;
+      justify-content: space-between;
+      @include owa_boxshadow;
       input {
         background: transparent;
         font-size: 2rem;
