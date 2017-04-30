@@ -474,20 +474,20 @@ class InstaBot:
                 self.write_log("Except on follow!")
         return False
 
-        def famous_follow(self, user_id):
-            """ Send http request to follow """
-            if (self.login_status):
-                url_follow = self.url_follow % (user_id)
-                try:
-                    follow = self.s.post(url_follow)
-                    if follow.status_code == 200:
-                        self.follow_counter += 1
-                        log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
-                        self.write_log(log_string)
-                    return follow
-                except:
-                    self.write_log("Except on follow!")
-            return False
+    def famous_follow(self, user_id):
+        """ Send http request to follow. Same method as above but without writing to the db """
+        if (self.login_status):
+            url_follow = self.url_follow % (user_id)
+            try:
+                follow = self.s.post(url_follow)
+                if follow.status_code == 200:
+                    self.follow_counter += 1
+                    log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
+                    self.write_log(log_string)
+                return follow
+            except:
+                self.write_log("Except on follow!")
+        return False
 
     def unfollow(self, user_id):
         """ Send http request to unfollow """
