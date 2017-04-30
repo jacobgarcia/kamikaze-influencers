@@ -78,7 +78,6 @@ class Dashboard extends Component {
   }
 
   onFollow(newTimeEnd) {
-    console.log('onFollow')
     const remainingTime = Math.floor(newTimeEnd/1000) - Math.floor(Date.now()/1000)
     this.setState({
       remainingTime
