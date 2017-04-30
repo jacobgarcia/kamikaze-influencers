@@ -61,6 +61,7 @@ class Dashboard extends Component {
     this.locationsChange = this.locationsChange.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.onCommentChange = this.onCommentChange.bind(this)
+    this.onFollow = this.onFollow.bind(this)
   }
 
   tick() {
@@ -74,6 +75,14 @@ class Dashboard extends Component {
         remainingTime: 0
       }))
     }
+  }
+
+  onFollow(newTimeEnd) {
+    console.log('onFollow')
+    const remainingTime = Math.floor(newTimeEnd/1000) - Math.floor(Date.now()/1000)
+    this.setState({
+      remainingTime
+    })
   }
 
   tagsChange(tags) {
@@ -360,7 +369,10 @@ class Dashboard extends Component {
             <h4>Hall of Fame</h4>
             <div className='hall-of-fame'>
               {this.state.hallOfFame.map((user, index) =>
-                <FameItem user={user} key={index} instagram_id={this.state.instagram_id}/>
+                <FameItem user={user}
+                  onFollow={this.onFollow}
+                  key={index}
+                  instagram_id={this.state.instagram_id}/>
               )}
             </div>
           </div>
