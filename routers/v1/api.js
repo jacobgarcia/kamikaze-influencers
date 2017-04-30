@@ -475,6 +475,9 @@ router.route('/users/self/payments')
             }
           }
 
+          //Set user as a paid one
+          user.paidUser = true
+
           user.save((error, savedUser) => {
             if (error) {
               console.log(error)
@@ -582,8 +585,8 @@ router.route('/automation/self/stats')
 router.route('/admin/self/total/users')
 .get((req, res) => {
 
-  User.find({ username })
-  .select('username -_id')
+  User.find({})
+  .select('profile_picture username paidUser -_id')
   .exec((error, users) => {
     if (error) {
       winston.log(error)
@@ -595,9 +598,39 @@ router.route('/admin/self/total/users')
 
 router.route('/admin/self/last/users')
 .get((req, res) => {
+  const days = 2592000000 //  30 days
 
-  User.find({ username })
-  .select('username -_id')
+  User.find({ joinDate:{ $gt: Date.now() - days } })
+  .select('profile_picture username paidUser -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/total/payments')
+.get((req, res) => {
+
+  Payment.find({})
+  .select('amount -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/last/payments')
+.get((req, res) => {
+  const days = 2592000000 //  30 days
+  
+  Payment.find({ date:{ $gt: Date.now() - days } })
+  .select('amount -_id')
   .exec((error, users) => {
     if (error) {
       winston.log(error)

@@ -158,21 +158,8 @@ class Dashboard extends Component {
       console.log(error)
     })
 
-    // Get stats for bot
-    NetworkRequest.getAutomationStats()
-    .then((response) => {
-      const stats = response.data.stats
-      this.setState({
-        likes: stats.likes.length,
-        follows: stats.follows.length,
-        unfollows: stats.unfollows.length,
-        comments: stats.comments.length
-      })
-    })
-    .catch((error) => {
-      // TODO: handle error
-      console.log(error)
-    })
+    // Get Statistics
+    this.onStatsChange()
   }
 
 
@@ -209,7 +196,13 @@ class Dashboard extends Component {
       })
       this.interval = setInterval(() => this.tick(), 1000)
     }
+
+    //State to reload the stats every minute or so
+    const reloadTime = 60000
+    setInterval( () => this.onStatsChange(), reloadTime)
   }
+
+
 
   removeNotification() {
     const notifications = JSON.parse(localStorage.getItem('notifications'))
@@ -222,6 +215,23 @@ class Dashboard extends Component {
     this.setState({ value: value })
   }
 
+  onStatsChange(){
+    // Get stats for bot
+    NetworkRequest.getAutomationStats()
+    .then((response) => {
+      const stats = response.data.stats
+      this.setState({
+        likes: stats.likes.length,
+        follows: stats.follows.length,
+        unfollows: stats.unfollows.length,
+        comments: stats.comments.length
+      })
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
+  }
   onLikingChange() {
 
     NetworkRequest.updateLiking(!this.state.liking)
