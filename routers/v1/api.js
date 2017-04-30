@@ -292,7 +292,7 @@ router.route('/users/self/comment')
 
 router.route('/users/self/follow')
 .put((req, res) => {
-  const username = req.body.username
+  const username = req._username
   const user_id = req.body.user_id
   const timeToAdd = 300000 // 5 minutes
 

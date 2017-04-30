@@ -95,9 +95,16 @@ class Time extends Component {
   }
 
   tick() {
-    this.setState((prevState) => ({
-      remainingTime: prevState.remainingTime - 1,
-    }))
+    if (this.state.remainingTime > 0) {
+      this.setState((prevState) => ({
+        remainingTime: prevState.remainingTime - 1
+      }))
+    }
+    else {
+      this.setState((prevState) => ({
+        remainingTime: 0
+      }))
+    }
   }
 
   componentWillMount() {
