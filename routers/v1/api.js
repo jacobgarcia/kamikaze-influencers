@@ -649,37 +649,34 @@ router.route('/automation/self/start')
     // Get if user has blacklisted something
     const { filtertags, filterusers, filterkeys } = preferences
 
-    // Translate locations into IG codes. Each for every location
-    let locationTags = []
-    let counter = 0
-    locations.forEach((location) => {
-      request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
-          if (error) {
-            console.log(error)
-            return res.status(500).json({ error })
-          }
+      // Translate locations into IG codes. Each for every location
+      let locationTags = []
+      let counter = 0
+      locations.forEach((location) => {
+        request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
+            if (error) return res.status(500).json({ error })
+            locationTags.push(response.body)
+            counter ++
+            if (counter === locations.length) {
+                  new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing]})
+                  .on('message', (message) => {
+                      // received a message sent from the Python script (a simple "print" statement)
+                      process.env.NODE_ENV === 'development' ? console.log(message) : null
+                  })
+                  .end((err) => {
+                    if (err) {
+                      winston.log(error, username)
+                      throw err
+                    }
+                    process.env.NODE_ENV === 'development' ? console.log('Finished') : null
 
-          locationTags.push(response.body)
-          counter ++
-          if (counter === locations.length) {
-                new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, tag_blacklist, filterusers, filterkeys, unfollowing]})
-                .on('message', (message) => {
-                    // received a message sent from the Python script (a simple "print" statement)
-                    process.env.NODE_ENV === 'development' ? console.log(message) : null
-                })
-                .end((err) => {
-                  if (err) {
-                    console.log(error, username)
-                    throw err
+                  })
+                    res.status(200).json({'message': 'The automation has started'})
                   }
-                  process.env.NODE_ENV === 'development' ? console.log('Finished') : null
-                })
-
-               res.status(200).json({'message': 'The automation has started'})
-          }
+            })
+          })
         })
       })
     })
-  })
 
 module.exports = router
