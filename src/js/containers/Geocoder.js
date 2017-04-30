@@ -55,15 +55,6 @@ import LocationBar from '../components/LocationBar'
          locationString: value
        })
      } else {
-        LocationBar.search(
-         this.props.endpoint,
-         this.props.source,
-         this.props.accessToken,
-         this.props.proximity,
-         this.props.bbox,
-         this.props.types,
-         value,
-         this.onResult)
          // Show the input string in the search bar
          this.setState({
             locationString: value
@@ -166,6 +157,18 @@ import LocationBar from '../components/LocationBar'
      }, () => this.props.onChange(this.state.locations))
    }
 
+   search(value) {
+     LocationBar.search(
+      this.props.endpoint,
+      this.props.source,
+      this.props.accessToken,
+      this.props.proximity,
+      this.props.bbox,
+      this.props.types,
+      value,
+      this.onResult)
+   }
+
    render() {
      var input = <input
        ref='input'
@@ -188,6 +191,7 @@ import LocationBar from '../components/LocationBar'
            )}
            { this.props.inputPosition === 'top' && input }
            </div>
+          <input type="button" value="Search" onClick={() => this.search(this.state.locationString)}/>
          {this.state.results.length > 0 && (
            <ul className='locations-list'>
              {this.state.results.map((result, i) => (
@@ -244,10 +248,3 @@ import LocationBar from '../components/LocationBar'
 }
 
  export default Geocoder
-
- // {this.state.locations.map((location, index) =>
- //   <div className='tag' key={`location-${index}`}>
- //     <span key={index} className='delete' onClick={() => this.deleteLocation(index)}></span>
- //     <span>{location}</span>
- //   </div>
- // )}
