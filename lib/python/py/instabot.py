@@ -474,6 +474,21 @@ class InstaBot:
                 self.write_log("Except on follow!")
         return False
 
+        def famous_follow(self, user_id):
+            """ Send http request to follow """
+            if (self.login_status):
+                url_follow = self.url_follow % (user_id)
+                try:
+                    follow = self.s.post(url_follow)
+                    if follow.status_code == 200:
+                        self.follow_counter += 1
+                        log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
+                        self.write_log(log_string)
+                    return follow
+                except:
+                    self.write_log("Except on follow!")
+            return False
+
     def unfollow(self, user_id):
         """ Send http request to unfollow """
         if (self.login_status):
@@ -545,7 +560,7 @@ class InstaBot:
             #Follow if there is something to follow
             if toFollow:
                 for user_id in toFollow:
-                    self.follow(user_id) #follow user
+                    self.famous_follow(user_id) #follow user
                     self.users.update({"username":self.user_login}, {'$pull': {"toFollow":user_id}}) #remove user from buffer
 
             # ------------------- Get media_id -------------------

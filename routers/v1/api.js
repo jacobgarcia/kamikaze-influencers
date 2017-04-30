@@ -275,39 +275,49 @@ router.route('/users/self/comment')
 
 router.route('/users/self/follow')
 .put((req, res) => {
-  const username = req._username
+  const username = req.body.username
   const user_id = req.body.user_id
   const timeToAdd = 300000 // 5 minutes
 
   // TODO: validate if the account in the body belongs to hall of fame. Else do nothing
-
-  User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
+  User.findOne({ fameEnd:{ $gt: Date.now()}, 'instagram.id': user_id})
   .exec((error, user) => {
     if (error) {
       winston.log(error)
       return res.status(500).json({ error })
     }
 
-    const now = Date.now()
-
-    // Check if timeEnd has allready passed
-    // 1491790971264
-    if (user.timeEnd < now) {
-      user.timeEnd = now + timeToAdd
-    } else {
-      user.timeEnd = user.timeEnd + timeToAdd
-    }
-
-      user.save((error, savedUser) => {
+    // if the account is famous then continue, else return shit
+    if (user){
+      User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
+      .exec((error, user) => {
         if (error) {
           winston.log(error)
           return res.status(500).json({ error })
         }
-      res.status(200).json({ user })
-    })
 
+        const now = Date.now()
+
+        // Check if timeEnd has allready passed
+        // 1491790971264
+        if (user.timeEnd < now) {
+          user.timeEnd = now + timeToAdd
+        } else {
+          user.timeEnd = user.timeEnd + timeToAdd
+        }
+
+          user.save((error, savedUser) => {
+            if (error) {
+              winston.log(error)
+              return res.status(500).json({ error })
+            }
+          res.status(200).json({ user })
+        })
+
+      })
+    }
+    else return res.status(403).json({ error: { message: 'Get outta of here you hacker! You will not get free time' }})
   })
-
 })
 
 
@@ -329,15 +339,16 @@ router.route('/users/self/famous')
 .get((req, res) => {
   const username = req._username
   User.findOne({ username })
-  .select('fameFollowers -_id')
+  .select('fameFollowers follows -_id')
   .exec((error, followers) => {
     if (error) {
       winston.log(error)
       return res.status(500).json({ error })
     }
-    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: followers.fameFollowers  } })
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
+      console.log((followers.follows).concat(followers.fameFollowers))
       if (error) {
         winston.log(error)
         return res.status(500).json({ error })
