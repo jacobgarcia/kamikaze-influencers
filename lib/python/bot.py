@@ -59,11 +59,12 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
 end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
 current_time = int(datetime.datetime.now().strftime("%s")) * 1000
 
-while (current_time < int(end_time['timeEnd'])):
-    ## The user has still time
-    end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
-    current_time = int(datetime.datetime.now().strftime("%s")) * 1000
-    
+## Automation is now active
+users.update({"username":sys.argv[1]}, {'$set': {'automationActive':True}})
+
+isActive = {}
+isActive['automationActive'] = True
+while (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
     #print("# MODE 0 = ORIGINAL MODE BY LEVPASHA")
     #print("## MODE 1 = MODIFIED MODE BY KEMONG")
     #print("### MODE 2 = ORIGINAL MODE + UNFOLLOW WHO DON'T FOLLOW BACK")
@@ -121,3 +122,13 @@ while (current_time < int(end_time['timeEnd'])):
 
     else :
         print ("Wrong mode!")
+
+    ## The user has still time ?
+    end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
+    current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+
+    ## The automation is still active ?
+    isActive = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"automationActive":1, "_id":0})))
+
+## The automation is not active anymore
+users.update({"username":sys.argv[1]}, {'$set': {'automationActive':False}})

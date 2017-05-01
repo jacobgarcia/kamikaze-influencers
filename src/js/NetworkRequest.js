@@ -59,6 +59,10 @@ class NetworkRequest {
     return axios.post(`${window.baseUrl}/automation/self/start`)
   }
 
+  static stopAutomation() {
+    return axios.put(`${window.baseUrl}/automation/self/stop`)
+  }
+
   static setTime() {
 
   }

@@ -55,7 +55,9 @@ class Dashboard extends Component {
       likes: 0,
       follows: 0,
       unfollows: 0,
-      comments: 0
+      comments: 0,
+      // track if settings has changed
+      changed:false
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -63,10 +65,15 @@ class Dashboard extends Component {
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
-    this.tagsChange = this.tagsChange.bind(this)
-    this.locationsChange = this.locationsChange.bind(this)
+    this.onTagsChange = this.onTagsChange.bind(this)
+    this.onLocationsChange = this.onLocationsChange.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.onCommentChange = this.onCommentChange.bind(this)
+    this.startAutomation = this.startAutomation.bind(this)
+    this.restartAutomation = this.restartAutomation.bind(this)
+    this.onFilterTagsChange = this.onFilterTagsChange.bind(this)
+    this.onFilterUsersChange = this.onFilterUsersChange.bind(this)
+    this.onFilterKeysChange = this.onFilterKeysChange.bind(this)
   }
 
   tick() {
@@ -82,10 +89,13 @@ class Dashboard extends Component {
     }
   }
 
-  tagsChange(tags) {
+  onTagsChange(tags) {
     document.getElementById('tags-loader').classList.remove('hidden')
     NetworkRequest.setTags(tags)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -102,6 +112,9 @@ class Dashboard extends Component {
     const { value, name } = event.target
     NetworkRequest.updateComment(value)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
         comment: response.data.user.preferences.comment_text
@@ -113,10 +126,13 @@ class Dashboard extends Component {
     })
   }
 
-  locationsChange(localizations) {
+  onLocationsChange(localizations) {
     document.getElementById('locations-loader').classList.remove('hidden')
     NetworkRequest.setLocations(localizations)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -232,20 +248,20 @@ class Dashboard extends Component {
       console.log(error)
     })
   }
-  onLikingChange() {
 
+  onLikingChange() {
     NetworkRequest.updateLiking(!this.state.liking)
     .then((response) => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
-        liking: response.data.user.preferences.liking
+        liking: response.data.user.preferences.liking,
+        changed: true
       })
     })
     .catch((error) => {
       // TODO: catch error
       console.log(error)
     })
-
   }
 
   onCommentingChange() {
@@ -253,6 +269,7 @@ class Dashboard extends Component {
     .then((response) => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
+        changed: true,
         commenting: response.data.user.preferences.commenting
       })
     })
@@ -262,10 +279,13 @@ class Dashboard extends Component {
     })
   }
 
-  filterTagsChange(filtertags) {
+  onFilterTagsChange(filtertags) {
     document.getElementById('blackhashtags-loader').classList.remove('hidden')
     NetworkRequest.setFilteredTags(filtertags)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -278,10 +298,13 @@ class Dashboard extends Component {
     })
   }
 
-  filterUsersChange(filterusers) {
+  onFilterUsersChange(filterusers) {
     document.getElementById('blackusers-loader').classList.remove('hidden')
     NetworkRequest.setFilteredUsers(filterusers)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -294,10 +317,13 @@ class Dashboard extends Component {
     })
   }
 
-  filterKeysChange(filterkeys) {
+  onFilterKeysChange(filterkeys) {
     document.getElementById('blackkeywords-loader').classList.remove('hidden')
     NetworkRequest.setFilteredKeys(filterkeys)
     .then((response) => {
+      this.setState({
+        changed: true
+      })
       const user = response.data.user
       // Update local information
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -311,13 +337,13 @@ class Dashboard extends Component {
   }
 
   onFollowingChange() {
-
     NetworkRequest.updateFollowing(!this.state.following)
     .then(response => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       const following = response.data.user.preferences.following
       this.setState({
-        following
+        following,
+        changed: true
       })
       return following
     })
@@ -343,7 +369,7 @@ class Dashboard extends Component {
     if (!this.state.following) {
       this.setState({
         showAlertFollow: true,
-        following: false
+        following: false,
       },
       setTimeout(() => {
         this.setState({
@@ -357,6 +383,7 @@ class Dashboard extends Component {
     .then(response => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
       this.setState({
+        changed: true,
         unfollowing: response.data.user.preferences.unfollowing
       })
     })
@@ -370,7 +397,19 @@ class Dashboard extends Component {
   startAutomation() {
     NetworkRequest.startAutomation()
     .then(response => {
-      console.log(response)
+      this.setState({
+        changed: false
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
+  restartAutomation(){
+    NetworkRequest.stopAutomation()
+    .then(response => {
+      this.startAutomation()
     })
     .catch(error => {
       console.log(error)
@@ -401,7 +440,9 @@ class Dashboard extends Component {
               <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
                 <div className='label-wrapper'>
                   <label>Remaining time</label>
-                  <label onClick={this.startAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
+                  { this.state.changed
+                    ? <label onClick={this.restartAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
+                    : <label></label> }
                 </div>
                 <h1>{ days===1 ? `${days} day` : `${days} days`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
@@ -453,7 +494,7 @@ class Dashboard extends Component {
                 <h4>Hashtags</h4>
                 <div className='loader small hidden' id='tags-loader'></div>
               </div>
-              <Tags onChange={this.tagsChange} tags={this.state.tags}/>
+              <Tags onChange={this.onTagsChange} tags={this.state.tags}/>
             </div>
             <div className='section'>
               <div className='title'>
@@ -464,7 +505,7 @@ class Dashboard extends Component {
                  accessToken='pk.eyJ1IjoiZmF0YWxyYWluY2xvdWQiLCJhIjoiY2oyMjRiOHd5MDAwazJxbWs0YmZ6ZmV1cSJ9.IsBKnV_Eu9clUU3PVxRMAA'
                  onSelect={this.onSelect}
                  showLoader={true}
-                 onChange={this.locationsChange}
+                 onChange={this.onLocationsChange}
                  locations={this.state.locations}
                 />
             </div>
@@ -478,21 +519,21 @@ class Dashboard extends Component {
                 <h4>Hashtag</h4>
                 <div className='loader small hidden' id='blackhashtags-loader'></div>
               </div>
-              <Tags onChange={this.filterTagsChange} tags={this.state.filtertags}/>
+              <Tags onChange={this.onFilterTagsChange} tags={this.state.filtertags}/>
             </div>
             <div className='section'>
               <div className='title'>
                 <h4>Username</h4>
                 <div className='loader small hidden' id='blackusers-loader'></div>
               </div>
-              <Tags onChange={this.filterUsersChange} tags={this.state.filterusers}/>
+              <Tags onChange={this.onFilterUsersChange} tags={this.state.filterusers}/>
             </div>
             <div className='section'>
               <div className='title'>
                 <h4>Keyword</h4>
                 <div className='loader small hidden' id='blackkeywords-loader'></div>
               </div>
-              <Tags onChange={this.filterKeysChange} tags={this.state.filterkeys}/>
+              <Tags onChange={this.onFilterKeysChange} tags={this.state.filterkeys}/>
             </div>
           </div>
         </div>

@@ -615,7 +615,7 @@ router.route('/admin/self/total/payments')
 .get((req, res) => {
 
   Payment.find({})
-  .select('amount -_id')
+  .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
       winston.log(error)
@@ -628,9 +628,9 @@ router.route('/admin/self/total/payments')
 router.route('/admin/self/last/payments')
 .get((req, res) => {
   const days = 2592000000 //  30 days
-  
+
   Payment.find({ date:{ $gt: Date.now() - days } })
-  .select('amount -_id')
+  .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
       winston.log(error)
@@ -792,9 +792,20 @@ router.route('/automation/self/start')
       }
 
     })
+})
 
+router.route('/automation/self/stop')
+.put((req, res) => {
+  const username = req._username
 
-
+  User.findOneAndUpdate({ username }, { $set: { 'automationActive': false } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
 })
 
 module.exports = router

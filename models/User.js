@@ -40,7 +40,8 @@ const schema = new Schema({
   fameFollowers: [ String ],
   toFollow: [ String ],
   joinDate: { type: Number, required: true, default: Date.now() }, //Statistics purposes
-  paidUser: { type: Boolean, default: false }
+  paidUser: { type: Boolean, default: false },
+  automationActive: { type: Boolean, default: false }
 })
 
 module.exports = mongoose.model('User', schema)
