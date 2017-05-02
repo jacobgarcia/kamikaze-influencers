@@ -31,6 +31,18 @@ mongoose.connect(config.database)
 
 const baseUrl = 'https://api.instagram.com/v1'
 
+router.route('/items')
+.get((req, res) => {
+  Item.find()
+  .exec((error, items) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ items })
+  })
+})
+
 /* LOGIN INTO OWA AND VALIDATE IF THE USER IS VALID ON IG */
 // TODO: Protect vs brute force attack
 router.route('/users/authenticate')
@@ -145,15 +157,6 @@ router.use((req, res, next) => {
 
     next()
 
-  })
-})
-
-router.route('/items')
-.get((req, res) => {
-  Item.find()
-  .exec((error, items) => {
-    if (error) return res.status(500).json({ error })
-    res.status(200).json({ items })
   })
 })
 
