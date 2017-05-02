@@ -56,7 +56,7 @@ class Intro extends Component {
       case 3:
         return (
           <div className=''>
-            <img src="/" className=''></img>
+            <div className='hall-of-fame-image intro'></div>
             <h3>Become famous</h3>
             <p>Scale the top of the Hall of Fame and start winning new followers much faster.</p>
           </div>
@@ -75,7 +75,7 @@ class Intro extends Component {
         <div className='intro-nav'>
           <div className='control'onClick={() => this.changePage(this.state.page-1)}>{this.state.page === 0 ? '' : 'Back'}</div>
           <ul className='page-nav'>
-            {[0,1,2,3,4].map((number) =>
+            {[0,1,2,3].map((number) =>
               <li onClick={() => this.changePage(number)} key={number} className={this.state.page === number ? 'active' : ''}></li>
             )}
           </ul>
