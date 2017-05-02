@@ -85,7 +85,7 @@ class Tags extends Component {
           onChange={this.handleChange}
           onKeyDown={this.keyDown}
           placeholder='tags,coma,separated'
-          value={this.state.tagsString}></input>
+          value={this.state.tagsString}/>
       </div>
     )
   }

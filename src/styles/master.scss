@@ -379,6 +379,9 @@ a {
     align-items: center;
     border-bottom: 2px solid $gray;
     flex-wrap: wrap;
+    input[type="button"] {
+      max-width: 100px;
+    }
     .tag {
       @include owa_boxshadow;
       height: 30px;
@@ -427,6 +430,11 @@ a {
     flex-direction: row;
   }
   &.switching {
+    .switch-counter {
+      display: flex;
+      align-items: center;
+      span { margin-right: 15px }
+    }
     .switch-section {
       display: flex;
       justify-content: space-between;

@@ -248,11 +248,14 @@ class InstaBot:
                 self.login_status = True
                 log_string = '%s login success!' % (self.user_login)
                 self.write_log(log_string)
+                print 'login_success'
             else:
                 self.login_status = False
                 self.write_log('Login error! Check your login data!')
+                print 'credentials_error'
         else:
             self.write_log('Login error! Connection error!')
+            print 'verify_account'
 
     def logout(self):
         now_time = datetime.datetime.now()
@@ -474,20 +477,20 @@ class InstaBot:
                 self.write_log("Except on follow!")
         return False
 
-        def famous_follow(self, user_id):
-            """ Send http request to follow """
-            if (self.login_status):
-                url_follow = self.url_follow % (user_id)
-                try:
-                    follow = self.s.post(url_follow)
-                    if follow.status_code == 200:
-                        self.follow_counter += 1
-                        log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
-                        self.write_log(log_string)
-                    return follow
-                except:
-                    self.write_log("Except on follow!")
-            return False
+    def famous_follow(self, user_id):
+        """ Send http request to follow. Same method as above but without writing to the db """
+        if (self.login_status):
+            url_follow = self.url_follow % (user_id)
+            try:
+                follow = self.s.post(url_follow)
+                if follow.status_code == 200:
+                    self.follow_counter += 1
+                    log_string = "Followed: %s #%i." % (user_id, self.follow_counter)
+                    self.write_log(log_string)
+                return follow
+            except:
+                self.write_log("Except on follow!")
+        return False
 
     def unfollow(self, user_id):
         """ Send http request to unfollow """
@@ -499,6 +502,7 @@ class InstaBot:
                     self.unfollow_counter += 1
                     log_string = "Unfollow: %s #%i." % (user_id, self.unfollow_counter)
                     self.write_log(log_string)
+                    self.post_db("unfollows", user_id)
                 return unfollow
             except:
                 self.write_log("Exept on unfollow!")
@@ -547,10 +551,9 @@ class InstaBot:
         end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
         current_time = int(datetime.datetime.now().strftime("%s")) * 1000
 
-        while (current_time < int(end_time['timeEnd'])):
-            ## The user has still time
-            end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
-            current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+        isActive = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"automationActive":1, "_id":0})))
+
+        while (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
 
             ####### Check if there are any users to follow
             # Get the toFollow buffer
@@ -577,6 +580,14 @@ class InstaBot:
             # ------------------- Comment -------------------
             self.new_auto_mod_comments()
             # Bot iteration in 1 sec
+
+            ## The user has still time
+            end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
+            current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+
+            ## Is the bot still active ?
+            isActive = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"automationActive":1, "_id":0})))
+
             time.sleep(3)
             # print("Tic!")
 

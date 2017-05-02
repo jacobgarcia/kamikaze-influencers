@@ -50,16 +50,16 @@ router.route('/users/authenticate')
 
       const user = JSON.parse(message)
 
-      if (user.status === 'error') {
-        return res.status(403).json({ error: {'message': 'Invalid Instagram username and password.'}})
+      if (user.status === 'credentials_error') {
+        return res.status(401).json({ error: {'message': 'Invalid Instagram username and password.'}})
       }
 
-      if (user.status === 'error_connection') {
+      if (user.status === 'verify_account') {
         console.log('Connection attempt to Instagram failed.')
-        return res.status(500).json({ error: {'message': 'Connection attempt to Instagram has failed.'}})
+        return res.status(418).json({ error: {'message': 'Verify your activity on Instagram.'}})
       }
 
-      if (user.status === 'success') {
+      if (user.status === 'login_success') {
         /* Save the user in the DB */
         //TODO: Encrypt password using an SHA1 algorithm
         User.findOne({ username }, { password: 0 })
@@ -94,9 +94,22 @@ router.route('/users/authenticate')
 
             })
           } else { // Else is important, otherwise iw will run before saving user
-            // Create and send token
-            const token = jwt.sign({ username: foundUser.username }, config.jwt_secret)
-            res.status(200).json({'message': 'User already registered. Welcome again!', token, user: foundUser })
+            //Update password if the user has changed it since his last login
+            foundUser.password = password
+
+            //Update profile picture
+            foundUser.profile_picture = user.profile_picture
+
+            foundUser.save((error, savedUser) => {
+              if (error) {
+                winston.log(error)
+                return res.status(500).json({ error })
+              }
+              // Create and send token
+              const token = jwt.sign({ username: savedUser.username }, config.jwt_secret)
+              res.status(200).json({'message': 'User already registered. Welcome again!', token, user: foundUser })
+            })
+
           }
         })
       } else {
@@ -462,6 +475,9 @@ router.route('/users/self/payments')
             }
           }
 
+          //Set user as a paid one
+          user.paidUser = true
+
           user.save((error, savedUser) => {
             if (error) {
               console.log(error)
@@ -544,6 +560,84 @@ router.route('/payments')
 
   })
 
+})
+
+router.route('/automation/self/stats')
+.get((req, res) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('likes follows unfollows comments -_id')
+  .exec((error, stats) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ stats })
+  })
+})
+
+/*
+   ADMIN DASHBOARD STATS
+
+   Here all the stats for the admin will be done
+   TODO: Check if the user has admin permission
+*/
+router.route('/admin/self/total/users')
+.get((req, res) => {
+
+  User.find({})
+  .select('profile_picture username paidUser -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/last/users')
+.get((req, res) => {
+  const days = 2592000000 //  30 days
+
+  User.find({ joinDate:{ $gt: Date.now() - days } })
+  .select('profile_picture username paidUser -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/total/payments')
+.get((req, res) => {
+
+  Payment.find({})
+  .select('item_id amount payer username date -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
+})
+
+router.route('/admin/self/last/payments')
+.get((req, res) => {
+  const days = 2592000000 //  30 days
+
+  Payment.find({ date:{ $gt: Date.now() - days } })
+  .select('item_id amount payer username date -_id')
+  .exec((error, users) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ users })
+  })
 })
 
 /* GET ID's FOR LOCATIONS ON IG */
@@ -660,8 +754,12 @@ router.route('/automation/self/start')
               if (counter === locations.length) {
                     new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing]})
                     .on('message', (message) => {
-                        // received a message sent from the Python script (a simple "print" statement)
+                        // Print all the output from the bot
                         process.env.NODE_ENV === 'development' ? console.log(message) : null
+
+                        if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
+                        if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
+                        if (message === 'verify_account') return res.status(418).json({error: {'message': 'Verify your account again.'}})
                     })
                     .end((err) => {
                       if (err) {
@@ -671,7 +769,7 @@ router.route('/automation/self/start')
                       process.env.NODE_ENV === 'development' ? console.log('Finished') : null
 
                     })
-                      res.status(200).json({'message': 'The automation has started'})
+
               }
             })
         })
@@ -694,6 +792,20 @@ router.route('/automation/self/start')
       }
 
     })
+})
+
+router.route('/automation/self/stop')
+.put((req, res) => {
+  const username = req._username
+
+  User.findOneAndUpdate({ username }, { $set: { 'automationActive': false } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      winston.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
 })
 
 module.exports = router

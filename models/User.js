@@ -17,6 +17,7 @@ const schema = new Schema({
   likes: [ String ],
   comments: [ String ],
   follows: [ String ],
+  unfollows: [ String ],
   // End accout info for metrics
   instagram: {
     id: String,
@@ -37,7 +38,10 @@ const schema = new Schema({
     comment_text: { type: String, default: null}
   },
   fameFollowers: [ String ],
-  toFollow: [ String ]
+  toFollow: [ String ],
+  joinDate: { type: Number, required: true, default: Date.now() }, //Statistics purposes
+  paidUser: { type: Boolean, default: false },
+  automationActive: { type: Boolean, default: false }
 })
 
 module.exports = mongoose.model('User', schema)

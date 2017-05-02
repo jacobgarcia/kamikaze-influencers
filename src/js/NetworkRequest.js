@@ -59,6 +59,10 @@ class NetworkRequest {
     return axios.post(`${window.baseUrl}/automation/self/start`)
   }
 
+  static stopAutomation() {
+    return axios.put(`${window.baseUrl}/automation/self/stop`)
+  }
+
   static setTime() {
 
   }
@@ -68,91 +72,51 @@ class NetworkRequest {
   }
 
   static setPaymentConfimation(payment) {
-    return new Promise((resolve, reject) => {
-      axios.post(`${window.baseUrl}/users/self/payments`, { payment })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.post(`${window.baseUrl}/users/self/payments`, { payment })
   }
 
   static setUsernames(usernames) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/usernames`, { usernames })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/usernames`, { usernames })
   }
 
   static setLocations(locations) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/locations`, { locations })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/locations`, { locations })
   }
 
   static setTags(tags) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/tags`, { tags })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/tags`, { tags })
   }
 
   static setFilteredTags(filtertags) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/filtertags`, { filtertags })
   }
 
   static setFilteredUsers(filterusers) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/filterusers`, { filterusers })
   }
 
   static setFilteredKeys(filterkeys) {
-    return new Promise((resolve, reject) => {
-      axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
-      .then((response) => resolve(response))
-      .catch((error) => reject(error))
-    })
+    return axios.put(`${window.baseUrl}/users/self/filterkeys`, { filterkeys })
   }
 
-
-
   static getToken(code, callback, errCallback) {
-    axios.post(`${window.baseUrl}/users/authenticate`, { code })
-    .then((response) => callback(response))
-    .catch((error) => errCallback(error))
+    return axios.post(`${window.baseUrl}/users/authenticate`, { code })
   }
 
   static getProfile() {
-    return new Promise((resolve, reject) => {
-      axios(`${window.baseUrl}/users/self`)
-      .then((res) => resolve(res))
-      .catch((error) => reject(error))
-    })
+    return axios.get(`${window.baseUrl}/users/self`)
   }
 
   static getHallOfFame() {
-    return new Promise((resolve, reject) => {
-      axios(`${window.baseUrl}/users/self/famous`)
-      .then((res) => resolve(res))
-      .catch((error) => reject(error))
-    })
+    return axios.get(`${window.baseUrl}/users/self/famous`)
   }
 
   static getInstagramId() {
-    return new Promise((resolve, reject) => {
-      axios(`${window.baseUrl}/users/self/instagram/id`)
-      .then((res) => resolve(res))
-      .catch((error) => reject(error))
-    })
+    return axios.get(`${window.baseUrl}/users/self/instagram/id`)
+  }
+
+  static getAutomationStats() {
+    return axios.get(`${window.baseUrl}/automation/self/stats`)
   }
 
 }
