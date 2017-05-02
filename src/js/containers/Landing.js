@@ -18,7 +18,7 @@ export default class Landing extends Component {
       <div className='landing'>
         <Signin show={this.state.showSignin} id='landing' title='Registrarse'/>
         <div className='hero'>
-          <video controls poster="/static/img/hero.jpeg"  playsInline autoPlay loop>
+          <video poster="/static/img/hero.jpeg"  playsInline autoPlay loop>
             <source src="/static/video/hero.mp4" type="video/mp4"/>
             Your browser doesn't support video
           </video>
