@@ -61,11 +61,13 @@ class Signin extends Component {
     })
     .catch((error, other) => {
       const status = error.response.status
+
       this.setState({ isLoading: false })
+
       if (status === 418) {
         this.setState({ verifyAccount: true })
       }
-      if (status === 403 || status === 401) {
+      if (status === 401) {
         window.alert('Wrong user or password')
       }
     })
