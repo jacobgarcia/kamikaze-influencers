@@ -7,6 +7,8 @@ import Dashboard from './containers/Dashboard'
 import Profile from './containers/Profile'
 import Logout from './containers/Logout'
 import Time from './containers/Time'
+import Privacy from './containers/Privacy'
+import Usage from './containers/Usage'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token')
@@ -24,8 +26,9 @@ const Routes = (
       <Route path='profile' component={Profile}/>
       <Route path='logout' component={Logout}/>
       <Route path='time' component={Time}/>
+      <Route path='privacy' component={Privacy}/>
+      <Route path='usage' component={Usage}/>
     </Route>
-
   </Router>
 )
 
