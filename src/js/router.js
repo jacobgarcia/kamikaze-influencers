@@ -18,12 +18,21 @@ const isAuthenticated = () => {
   return false
 }
 
+const requireAuth = (nextState, replace) => {
+  if (!isAuthenticated()) {
+    replace({
+      pathname: '/',
+      state: { nextPathname: nextState.location.pathname }
+    })
+  }
+}
+
 const Routes = (
   <Router history={browserHistory}>
     <Route path='/' component={App}>
       <IndexRoute component={ isAuthenticated() ? Dashboard : Landing }/>
       <Route path='logout' component={Logout}/>
-      <Route path='time' component={Time}/>
+      <Route path='time' component={Time} onEnter={requireAuth}/>
       <Route path='privacy' component={Privacy}/>
       <Route path='usage' component={Usage}/>
     </Route>
