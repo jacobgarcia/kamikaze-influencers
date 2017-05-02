@@ -21,10 +21,29 @@ $text-color: rgb(47, 47, 47);
   -webkit-user-drag: none;
 }
 
+video::-webkit-media-controls-start-playback-button {
+  display: none!important;
+  -webkit-appearance: none;
+}
+video::-webkit-media-controls {
+    display:none !important;
+}
+video::-webkit-media-controls-panel {
+  display: none!important;
+  -webkit-appearance: none;
+}
+video::-webkit-media-controls-enclosure {
+  display:none !important;
+}
+
 *, html, body, div, ul, li , input {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+input {
+    -webkit-appearance: none;
 }
 
 li {
