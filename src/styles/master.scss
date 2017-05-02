@@ -273,11 +273,7 @@ a {
     line-height: 1;
     color: $red;
   }
-  h2 {
-    color: $purplish-red;
-    text-transform: uppercase;
-    font-size: 1.4rem;
-  }
+
   img {
     width: 100%;
     height: 250px;
@@ -285,10 +281,22 @@ a {
   }
 }
 
+h2 {
+  color: $purplish-red;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+}
+
 .section {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  .time-items {
+    h2 {
+      margin-top: 50px;
+    }
+  }
   .inline-error {
     left: 130px;
     transform: translateY(-50%);
@@ -1090,7 +1098,7 @@ input[type="button"], input[type="submit"] {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    max-height: 500px;
+    max-height: 550px;
   }
 }
 

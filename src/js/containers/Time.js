@@ -205,25 +205,27 @@ class Time extends Component {
             }
           </div>
         </div>
-        <div className='section'>
-          <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
-            <label>Remaining time</label>
-            <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
-            <h2>{`${hours}:${minutes}:${seconds}`}</h2>
+        <div className='content-section'>
+          <div className='section'>
+            <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
+              <label>Remaining time</label>
+              <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
+              <h2>{`${hours}:${minutes}:${seconds}`}</h2>
+            </div>
+            <div className='fame-items'>
+              { this.state.fameItems.map((item, index) =>
+                <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
+              )}
+            </div>
+            <div className='time-items'>
+              <h2>Time packages</h2>
+              { this.state.timeItems.map((item, index) =>
+                <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
+              )}
+            </div>
           </div>
-          <div className='fame-items'>
-            { this.state.fameItems.map((item, index) =>
-              <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
-            )}
-          </div>
-          <div className='time-items'>
-            <h3>Time packages</h3>
-            { this.state.timeItems.map((item, index) =>
-              <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
-            )}
-          </div>
-
         </div>
+
         <Footer loggedin={true}></Footer>
       </div>
     )
