@@ -157,6 +157,13 @@ class Dashboard extends Component {
     clearInterval(this.interval)
   }
 
+  parseUser(userString) {
+    return new Promise((resolve, reject) => {
+      try { resolve(JSON.parse(userString)) }
+      catch (error) { reject(error) }
+    })
+  }
+
   componentWillMount() {
     // Add users to hall of fame
     NetworkRequest.getHallOfFame()
@@ -164,15 +171,10 @@ class Dashboard extends Component {
       this.setState({
         hallOfFame: response.data.famous
       })
+      // Get the Instagram id
+      return NetworkRequest.getInstagramId()
     })
-    .catch((error) => {
-      // TODO: handle error
-      console.log(error)
-    })
-
-    // Get IG id
-    NetworkRequest.getInstagramId()
-    .then((response) => {
+    .then(response => {
       this.setState({
         instagram_id: response.data.instagram.instagram.id
       })
@@ -184,42 +186,48 @@ class Dashboard extends Component {
 
     // Get Statistics
     this.onStatsChange()
+
+    // Get the user and eload user preferences from localStorage
+
+
   }
+
 
 
   componentDidMount() {
 
-    let user = {}
-    // We don't want a horrible error
-    try { user = JSON.parse(localStorage.getItem('user')) }
-    catch (error) {
-      // TODO: handle error
+    this.parseUser(localStorage.getItem('user'))
+    .then(user => {
+
+      this.setState({
+        tags: user.preferences.tags,
+        locations: user.preferences.locations,
+        liking: user.preferences.liking,
+        following: user.preferences.following,
+        commenting: user.preferences.commenting,
+        unfollowing: user.preferences.unfollowing,
+        filtertags: user.preferences.filtertags,
+        filterusers: user.preferences.filterusers,
+        filterkeys: user.preferences.filterkeys,
+        comment: user.preferences.comment_text
+      })
+
+      const remainingTime = Math.floor(user.timeEnd/1000) - Math.floor(Date.now()/1000)
+
+      // Check if we have time, so we dont't tick negative dates
+      if (remainingTime > 0) {
+        this.setState({
+          remainingTime
+        })
+        this.interval = setInterval(() => this.tick(), 1000)
+      }
+    })
+    .catch(error => {
       console.log(error)
-    }
-    // Reload user preferences from localStorage
-    this.setState({
-      tags: user.preferences.tags,
-      locations: user.preferences.locations,
-      liking: user.preferences.liking,
-      following: user.preferences.following,
-      commenting: user.preferences.commenting,
-      unfollowing: user.preferences.unfollowing,
-      filtertags: user.preferences.filtertags,
-      filterusers: user.preferences.filterusers,
-      filterkeys: user.preferences.filterkeys,
-      comment: user.preferences.comment_text
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const remainingTime = Math.floor(user.timeEnd/1000) - Math.floor(Date.now()/1000)
 
-    // Check if we have time, so we dont't tick negative dates
-    if (remainingTime > 0) {
-      this.setState({
-        remainingTime
-      })
-      this.interval = setInterval(() => this.tick(), 1000)
-    }
 
     //State to reload the stats every minute or so
     const reloadTime = 60000
