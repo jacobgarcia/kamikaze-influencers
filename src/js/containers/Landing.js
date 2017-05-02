@@ -2,15 +2,29 @@ import React, { Component } from 'react'
 
 import Footer from '../components/Footer'
 import Signin from '../components/Signin'
+import NetworkRequest from '../NetworkRequest'
 
 export default class Landing extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      showSignin: false
+      showSignin: false,
+      timeItems: []
     }
 
+  }
+
+  componentWillMount() {
+    NetworkRequest.getTimeItems()
+    .then((response) => {
+      this.setState({
+        timeItems: response.data.items.filter((item) => item.type === 0)
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   render() {
@@ -29,6 +43,20 @@ export default class Landing extends Component {
           </div>
         </div>
         <div className='content'>
+          <div className='aside top'>
+            <div className='mini-section easy'>
+              <h3>Fácil de usar</h3>
+              <p>En un par de clicks estarás recibiendo nuevos seguidores sin necesidad de descargar nada.</p>
+            </div>
+            <div className='mini-section for-all'>
+              <h3>Para todos</h3>
+              <p>Creador de contenido, emprendedor, estudiante. Lo importante es que quieras crecer.</p>
+            </div>
+            <div className='mini-section organic'>
+              <h3>100% Orgánica</h3>
+              <p>Te garantizamos crecer con personas reales. Sin bots ni cuentas falsas.</p>
+            </div>
+          </div>
           <div className='element center'>
             <div className='element-content'>
               <h1>La plataforma para crecer tu cuenta de Instagram más completa y fácil de usar para todo tipo de personas</h1>
@@ -69,11 +97,11 @@ export default class Landing extends Component {
             </div>
             <div className='target'>
               <div className='image-container'>
-                <div className='image gender'></div>
+                <div className='image exceptions'></div>
               </div>
               <div className='element-content'>
-                <h2>Género</h2>
-                <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+                <h2>Excepciones</h2>
+                <p>Evita contenido indeseado y filtra sólo lo que te interesa.</p>
               </div>
             </div>
             <div className='target'>
@@ -90,7 +118,7 @@ export default class Landing extends Component {
         <div className='hall-of-fame'>
           <h1>Tú eres el centro de atención</h1>
           <h3>Deja que las personas te vean y sigan</h3>
-          <div className='hall-of-fame-content'>
+          <div className='aside'>
             <div className='image-container'>
               <div className='hall-of-fame-image'></div>
             </div>
@@ -107,7 +135,17 @@ export default class Landing extends Component {
               <h1>Sólo el tiempo necesario</h1>
               <p>OWA Influencers es sin duda la mejor plataforma para hacer crecer de manera real tu cuenta de Instagram al mejor costo.</p>
               <p>Mira alguno de los paquetes que tenemos para ti.</p>
-              <div className='packages'></div>
+              <div className='packages'>
+                { this.state.timeItems.map((item, index) =>
+                  <div className='timepack' key={index}>
+                    <span className='days'>{item.days} { item.days > 1 ? 'days ' : 'day '}</span>
+                    <div className='price-wrapper'>
+                      <span className='price'>${item.price}</span>
+                      { item.days > 1 ? <span className='per-day'>${Math.round((item.price/item.days)*100)/100} per day</span> : undefined }
+                    </div>
+                  </div>
+                )}
+              </div>
               <p>Todos nuestros paquetes ofrecen tiempo el cual utilizas en la plataforma para hacer crecer tu cuenta y obtener interacción de usuarios reales.</p>
             </div>
           </div>
@@ -115,7 +153,7 @@ export default class Landing extends Component {
         <Footer loggedin={false}>
           <h1>¿Estás listo para recibir una oleada de seguidores?</h1>
           <p>Entra ahora y empieza a crecer tu cuenta de Instagram.</p>
-          <input type='button' value='Registrarse' onClick={this.showSignin}/>
+          <input type='button' value='Registrarse' onClick={() => this.setState({ showSignin: true })}/>
         </Footer>
       </div>
     )
