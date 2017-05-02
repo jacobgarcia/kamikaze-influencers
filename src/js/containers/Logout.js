@@ -14,10 +14,11 @@ class Logout extends Component {
   componentWillMount() {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('notifications')
   }
 
   componentDidMount() {
-    setTimeout(location.replace('/'), 2000)
+     window.setTimeout(location.replace('/'), 2000)
   }
 
   render() {
