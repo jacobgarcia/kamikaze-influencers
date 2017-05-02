@@ -11,7 +11,8 @@ class Signin extends Component {
       showSignin: props.showSignin || false,
       username: '',
       password: '',
-      isLoading: false
+      isLoading: false,
+      verifyAccount: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -59,8 +60,12 @@ class Signin extends Component {
       location.replace('/')
     })
     .catch((error, other) => {
+      const status = error.response.status
       this.setState({ isLoading: false })
-      if (error.response.status === 403) {
+      if (status === 418) {
+        this.setState({ verifyAccount: true })
+      }
+      if (status === 403 || status === 401) {
         window.alert('Wrong user or password')
       }
     })
@@ -101,16 +106,19 @@ class Signin extends Component {
               className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
             <label htmlFor={`password-${this.props.id}`}>Contraseña</label>
           </div>
-          <input type='submit' value='OK' className='red' onClick={this.signinUser}/>
+          {this.state.verifyAccount ?
+            <div className='error'>
+              <span>You need to verify you account, please signin into <a href='https://www.instagram.com' target='blank'>Instagram</a></span>
+            </div>
+            :
+            undefined
+          }
+          <input type='submit' value={`${this.state.verifyAccount ? 'Verified, Continue' : 'OK'}`} className='red' onClick={this.signinUser}/>
           </form>
         </div>
       </div>
     )
   }
 }
-
-// Signin.propTypes = {
-//   key: PropTypes.String.required
-// }
 
 export default Signin

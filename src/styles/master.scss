@@ -34,6 +34,17 @@ li {
 span.bold {
   font-weight: 500;
 }
+.error {
+  padding: 10px 0;
+  span {
+    line-height: 1;
+    font-weight: 500;
+    color: $red;
+    a {
+      text-decoration: underline;
+    }
+  }
+}
 
 html, body, #root {
   height: 100%;
@@ -767,6 +778,13 @@ input[type="button"], input[type="submit"] {
   -webkit-overflow-scrolling: touch;
   &.hidden {
     display: none;
+  }
+  .signin-body {
+    max-width: 250px;
+    input[type="submit"] {
+      display: block;
+      margin: 0 auto;
+    }
   }
   .signin-body, .payment-details {
     background: #fff;
