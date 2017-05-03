@@ -9,10 +9,11 @@ class Signin extends Component {
 
     this.state = {
       showSignin: props.showSignin || false,
-      username: '',
+      username: props.username || '',
       password: '',
       isLoading: false,
-      verifyAccount: false
+      verifyAccount: false,
+      usernameDisabled: props.disabled || false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -23,7 +24,9 @@ class Signin extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      showSignin: nextProps.show
+      showSignin: nextProps.show,
+      username: nextProps.username,
+      usernameDisabled: nextProps.disabled
     })
   }
 
@@ -96,7 +99,8 @@ class Signin extends Component {
               name='username'
               value={this.state.username}
               spellCheck='false'
-              className={this.state.username && this.state.username !== '' ? 'dirty' : ''}/>
+              className={this.state.username && this.state.username !== '' ? 'dirty' : ''}
+              disabled={this.state.usernameDisabled}/>
             <label htmlFor={`username-${this.props.id}`}>Usuario de Instagram</label>
           </div>
           <div className='element'>
@@ -106,7 +110,7 @@ class Signin extends Component {
               name='password'
               value={this.state.password}
               className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
-            <label htmlFor={`password-${this.props.id}`}>Contraseña</label>
+            <label htmlFor={`password-${this.props.id}`}>Contraseña de Instagram</label>
           </div>
           {this.state.verifyAccount ?
             <div className='error'>

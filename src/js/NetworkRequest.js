@@ -51,10 +51,6 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/follow`, { user_id })
   }
 
-  static getHallOfFame() {
-    return axios.get(`${window.baseUrl}/automation/self/start`)
-  }
-
   static startAutomation() {
     return axios.post(`${window.baseUrl}/automation/self/start`)
   }

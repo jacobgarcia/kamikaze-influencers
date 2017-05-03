@@ -777,8 +777,13 @@ router.route('/automation/self/start')
       else {         //else just start the bot
         new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing]})
         .on('message', (message) => {
-            // received a message sent from the Python script (a simple "print" statement)
-            process.env.NODE_ENV === 'development' ? console.log(message) : null
+          // Print all the output from the bot
+          process.env.NODE_ENV === 'development' ? console.log(message) : null
+
+          if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
+          if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
+          if (message === 'verify_account') return res.status(418).json({error: {'message': 'Verify your account again.'}})
+
         })
         .end((err) => {
           if (err) {
@@ -788,7 +793,6 @@ router.route('/automation/self/start')
           process.env.NODE_ENV === 'development' ? console.log('Finished') : null
 
         })
-          res.status(200).json({'message': 'The automation has started'})
       }
 
     })

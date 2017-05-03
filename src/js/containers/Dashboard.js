@@ -10,6 +10,7 @@ import Switch from '../components/Switch'
 import TimeJS from '../time'
 import Tags from '../components/Tags'
 import Geocoder from './Geocoder'
+import Signin from '../components/Signin'
 
 class Dashboard extends Component {
 
@@ -21,13 +22,7 @@ class Dashboard extends Component {
     const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
-      hallOfFame: [{
-        'username': 'spotify',
-        'profile_picture':'',
-        'instagram':{
-          'id': '224223453'
-        }
-      }],
+      hallOfFame: [],
       remainingTime: 0,
       introVisible: newUser,
       // Set state
@@ -57,7 +52,11 @@ class Dashboard extends Component {
       unfollows: 0,
       comments: 0,
       // track if settings has changed
-      changed:false
+      changed:false,
+      // handle password changes
+      showSignin: false,
+      //username
+      username: ''
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -207,7 +206,8 @@ class Dashboard extends Component {
       filtertags: user.preferences.filtertags,
       filterusers: user.preferences.filterusers,
       filterkeys: user.preferences.filterkeys,
-      comment: user.preferences.comment_text
+      comment: user.preferences.comment_text,
+      username: user.username
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
@@ -405,18 +405,23 @@ class Dashboard extends Component {
   startAutomation() {
     NetworkRequest.startAutomation()
     .then(response => {
-      this.setState({
-        changed: false
-      })
+      console.log(response)
     })
     .catch(error => {
-      console.log(error)
+      if (error.response.status === 401){
+        this.setState({
+          showSignin:true
+        })
+      }
     })
   }
 
   restartAutomation(){
     NetworkRequest.stopAutomation()
     .then(response => {
+      this.setState({
+        changed: false
+      })
       this.startAutomation()
     })
     .catch(error => {
@@ -431,6 +436,7 @@ class Dashboard extends Component {
     return (
       <div className='dashboard'>
         <div className='hero-dashboard'></div>
+        <Signin show={this.state.showSignin} id='dashboard' title='Update your password' username={this.state.username} disabled={true}/>
         <Intro
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
