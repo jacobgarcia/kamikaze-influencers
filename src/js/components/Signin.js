@@ -135,6 +135,7 @@ class Signin extends Component {
             undefined
           }
           <input type='submit' value={`${this.state.verifyAccount ? 'Verified, Continue' : 'OK'}`} className='red' onClick={this.signinUser}/>
+          <p className='notice'>Al continuar aceptas nuestra política de uso.</p>
           </form>
         </div>
       </div>
