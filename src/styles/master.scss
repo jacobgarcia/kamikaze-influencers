@@ -103,6 +103,39 @@ input[type="text"], input[type="password"] {
   }
 }
 
+.aside {
+  @include owa_boxshadow;
+  padding: 50px;
+  background: #fff;
+  margin: 20px auto;
+  max-width: 700px;
+  h1 {
+    margin: 20px 0 10px;
+  }
+  &.top {
+    max-width: 800px;
+    transform: translateY(-50px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 10px auto;
+  }
+  .mini-section {
+    flex-grow: 1;
+    text-align: center;
+    padding-top: 150px;
+    max-width: 200px;
+    margin: 20px 0;
+    &.easy { background: url('/static/img/icons/easy.svg') no-repeat center top; background-size: 140px; }
+    &.for-all { background: url('/static/img/icons/for-all.svg') no-repeat center top; background-size: 140px; }
+    &.organic { background: url('/static/img/icons/organic.svg') no-repeat center top; background-size: 140px; }
+    h3 {
+      margin:  5px 0 10px;
+      color: $purple;
+    }
+  }
+}
+
 ::-webkit-input-placeholder { color: #d3d3d3; }
 ::-moz-placeholder { color: #d3d3d3; }
 :-ms-input-placeholder { color: #d3d3d3; }
@@ -576,7 +609,6 @@ h2 {
     font-size: 1.4rem;
     margin-bottom: 20px;
     max-width: 650px;
-    margin: 0 auto;
   }
   h2 {
     color: $red;
@@ -609,8 +641,40 @@ h2 {
 
       &.content { background: url('/static/img/icons/content.svg') center center no-repeat; background-size: 150px; }
       &.location { background: url('/static/img/icons/location.svg') center center no-repeat; background-size: 150px; }
-      &.gender { background: url('/static/img/icons/gender.svg') center center no-repeat; background-size: 150px; }
+      &.exceptions { background: url('/static/img/icons/exceptions.svg') center center no-repeat; background-size: 150px; }
       &.users { background: url('/static/img/icons/users.svg') center center no-repeat; background-size: 150px; }
+    }
+  }
+  .packages {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 40px 0;
+    .timepack {
+      @include owa_boxshadow;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      color: $red;
+      min-height: 64px;
+      min-width: 210px;
+      justify-content: space-around;
+      .days, .price {
+        font-size: 1.4rem;
+        line-height: 1;
+        font-weight: 500;
+      }
+      .price-wrapper {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: column;
+        .per-day {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: rgb(201, 201, 201);
+        }
+      }
     }
   }
   .hall-of-fame {
@@ -619,13 +683,6 @@ h2 {
     background: linear-gradient(135deg, rgba($red,0.55), rgba($purple, 0.55)), url('/static/img/celebrate.jpg') no-repeat center center;
     background-size: cover;
     text-align: center;
-    .hall-of-fame-content {
-      @include owa_boxshadow;
-      padding: 50px;
-      background: #fff;
-      margin: 20px auto;
-      max-width: 600px;
-    }
     > h1, > h3 {
       color: #fff;
     }
@@ -634,6 +691,9 @@ h2 {
     display: flex;
     flex-direction: row;
     margin: 60px 0;
+    h1 {
+      margin: 10px auto 20px;
+    }
     &.center {
       display: block;
       text-align: center;
@@ -690,9 +750,12 @@ h2 {
     h1, p {
       color: #fff;
     }
+    h1 {
+      font-size: 2rem;
+    }
     p {
-      max-width: 700px;
-      margin: 40px 0 30px;
+      max-width: 500px;
+      margin: 20px 0 30px;
     }
     input {
       padding: 7px 15px;
@@ -804,6 +867,7 @@ input[type="button"], input[type="submit"] {
     input[type="submit"] {
       display: block;
       margin: 0 auto;
+      margin-top: 15px;
     }
   }
   .signin-body, .payment-details {
@@ -909,6 +973,7 @@ input[type="button"], input[type="submit"] {
       margin-top: 30px;
       display: flex;
       justify-content: space-between;
+      padding: 0 20px;
       .control {
         color: $dark-gray;
         font-weight: 500;
@@ -936,14 +1001,17 @@ input[type="button"], input[type="submit"] {
     .container {
       background: #fff;
       max-width: 270px;
-      padding: 50px 30px 30px;
+      padding: 30px 10px;
       text-align: center;
+      h3, p {
+        padding: 0 20px;
+      }
       p {
         color: $gray;
       }
       img {
-        height: 180px;
-        width: 180px;
+        height: 200px;
+        width: 200px;
       }
     }
   }
@@ -1065,17 +1133,24 @@ input[type="button"], input[type="submit"] {
   height: 100%;
 }
 
+.hall-of-fame-image {
+  background: url('/static/img/fame.png') no-repeat center center;
+  width: 100%;
+  height: 250px;
+  background-size: contain;
+  &.intro {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+}
+
 .hall-of-fame {
   display: flex;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
   flex-direction: row;
-  .hall-of-fame-image {
-    background: url('/static/img/hofi.png') no-repeat center center;
-    width: 100%;
-    height: 250px;
-    background-size: contain;
-  }
+
   .fame-item {
     padding: 0 20px 10px;
     .fame-item-content {
@@ -1135,6 +1210,13 @@ input[type="button"], input[type="submit"] {
   }
 }
 
+@media (min-width: 580px) {
+  .mini-section {
+    margin: 0 10px;
+
+  }
+}
+
 @media (min-width: 900px) {
   .fame-items {
     display: flex;
@@ -1163,7 +1245,7 @@ input[type="button"], input[type="submit"] {
       max-height: 350px;
       overflow: visible;
       overflow-y: visible;
-      margin-bottom: 300px;
+      margin-bottom: 400px;
     }
   }
   .content-section {
