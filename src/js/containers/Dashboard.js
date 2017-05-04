@@ -55,6 +55,8 @@ class Dashboard extends Component {
       changed:false,
       // handle password changes
       showSignin: false,
+      // handle verify account
+      verifyAccount: false,
       //username
       username: ''
     }
@@ -413,6 +415,11 @@ class Dashboard extends Component {
           showSignin:true
         })
       }
+      if (error.response.status === 418){
+        this.setState({
+          verifyAccount:true
+        })
+      }
     })
   }
 
@@ -437,6 +444,7 @@ class Dashboard extends Component {
       <div className='dashboard'>
         <div className='hero-dashboard'></div>
         <Signin show={this.state.showSignin} id='dashboard' title='Update your password' username={this.state.username} disabled={true}/>
+        <Signin show={this.state.verifyAccount} id='dashboard' title='Verify your account' username={this.state.username} verifyAccount={this.state.verifyAccount} isModule={true}/>
         <Intro
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>

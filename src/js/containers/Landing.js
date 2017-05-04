@@ -16,7 +16,7 @@ export default class Landing extends Component {
   render() {
     return (
       <div className='landing'>
-        <Signin show={this.state.showSignin} id='landing' title='Registrarse'/>
+        <Signin show={this.state.showSignin} id='landing' title='Iniciar sesión'/>
         <div className='hero'>
           <video poster="/static/img/hero.jpeg"  playsInline autoPlay loop>
             <source src="/static/video/hero.mp4" type="video/mp4"/>
@@ -25,7 +25,7 @@ export default class Landing extends Component {
           <div className='content'>
             <h1>Seguidores reales en poco tiempo</h1>
             <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interactuar contigo</p>
-            <input type="button" value="Registrarse" onClick={() => this.setState({ showSignin: true })}/>
+            <input type="button" value="Entrar" onClick={() => this.setState({ showSignin: true })}/>
           </div>
         </div>
         <div className='content'>

@@ -59,6 +59,8 @@ span.bold {
     line-height: 1;
     font-weight: 500;
     color: $red;
+    text-align: center;
+    display: block;
     a {
       text-decoration: underline;
     }

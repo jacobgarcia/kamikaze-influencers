@@ -12,8 +12,9 @@ class Signin extends Component {
       username: props.username || '',
       password: '',
       isLoading: false,
-      verifyAccount: false,
-      usernameDisabled: props.disabled || false
+      verifyAccount: props.verifyAccount || false,
+      usernameDisabled: props.disabled || false,
+      isModule: props.isModule || false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -26,7 +27,9 @@ class Signin extends Component {
     this.setState({
       showSignin: nextProps.show,
       username: nextProps.username,
-      usernameDisabled: nextProps.disabled
+      usernameDisabled: nextProps.disabled,
+      verifyAccount: nextProps.verifyAccount,
+      isModule: nextProps.isModule
     })
   }
 
@@ -92,26 +95,38 @@ class Signin extends Component {
           <div className='title'>
             { this.state.isLoading ? <div className='loader' id='usernames-loader'></div> : <h3>{this.props.title}</h3> }
           </div>
-          <div className='element'>
-            <input type='text'
-              onChange={this.handleChange}
-              id={`username-${this.props.id}`}
+          { !this.state.verifyAccount ?
+            <div className='element'>
+              <input type='text'
+                onChange={this.handleChange}
+                id={`username-${this.props.id}`}
+                name='username'
+                value={this.state.username}
+                spellCheck='false'
+                className={this.state.username && this.state.username !== '' ? 'dirty' : ''}
+                disabled={this.state.usernameDisabled}/>
+              <label htmlFor={`username-${this.props.id}`}>Usuario de Instagram</label>
+            </div>
+            : <input type='text'
               name='username'
               value={this.state.username}
-              spellCheck='false'
-              className={this.state.username && this.state.username !== '' ? 'dirty' : ''}
-              disabled={this.state.usernameDisabled}/>
-            <label htmlFor={`username-${this.props.id}`}>Usuario de Instagram</label>
-          </div>
-          <div className='element'>
-            <input type='password'
-              onChange={this.handleChange}
-              id={`password-${this.props.id}`}
+              hidden/>
+          }
+          { (!this.state.verifyAccount || this.state.isModule)?
+            <div className='element'>
+              <input type='password'
+                onChange={this.handleChange}
+                id={`password-${this.props.id}`}
+                name='password'
+                value={this.state.password}
+                className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
+              <label htmlFor={`password-${this.props.id}`}>Contraseña de Instagram</label>
+            </div>
+            : <input type='password'
               name='password'
               value={this.state.password}
-              className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
-            <label htmlFor={`password-${this.props.id}`}>Contraseña de Instagram</label>
-          </div>
+              hidden/>
+          }
           {this.state.verifyAccount ?
             <div className='error'>
               <span>You need to verify you account, please signin into <a href='https://www.instagram.com' target='blank'>Instagram</a></span>
