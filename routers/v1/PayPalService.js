@@ -1,6 +1,8 @@
 const path = require('path')
 const request = require('request')
 const config = require(path.resolve('config/config.js'))
+
+// Change in prod
 const paypalUrl = 'https://api.sandbox.paypal.com/v1'
 
 class PayPalService {

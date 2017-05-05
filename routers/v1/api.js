@@ -29,7 +29,7 @@ console.log = (data, ...args) => {
 
 mongoose.connect(config.database)
 
-const baseUrl = 'https://api.instagram.com/v1'
+// Change in prod
 const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
