@@ -3,7 +3,7 @@ const request = require('request')
 const config = require(path.resolve('config/config.js'))
 
 // Change in prod
-const paypalUrl = 'https://api.paypal.com/2.0'
+const paypalUrl = 'https://api.paypal.com'
 
 class PayPalService {
 
