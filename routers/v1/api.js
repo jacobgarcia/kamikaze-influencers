@@ -115,7 +115,7 @@ router.route('/users/authenticate')
 
             foundUser.save((error, savedUser) => {
               if (error) {
-                winston.log(error)
+                console.log(error)
                 return res.status(500).json({ error })
               }
               // Create and send token
@@ -215,7 +215,10 @@ router.route('/users/self/commenting')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.commenting': commenting } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -227,7 +230,10 @@ router.route('/users/self/liking')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.liking': liking } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -240,7 +246,10 @@ router.route('/users/self/locations')
   // https://docs.mongodb.com/manual/reference/operator/update/set/#set-fields-in-embedded-documents
   User.findOneAndUpdate({ username }, { $set: { 'preferences.locations': locations } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -252,7 +261,10 @@ router.route('/users/self/tags')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -266,7 +278,7 @@ router.route('/users/self/filtertags')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filtertags': filtertags } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -281,7 +293,7 @@ router.route('/users/self/filterusers')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filterusers': filterusers } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -296,7 +308,7 @@ router.route('/users/self/filterkeys')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filterkeys': filterkeys } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -311,7 +323,7 @@ router.route('/users/self/comment')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.comment_text': comment } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -337,7 +349,7 @@ router.route('/users/self/follow')
       User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
       .exec((error, user) => {
         if (error) {
-          winston.log(error)
+          console.log(error)
           return res.status(500).json({ error })
         }
 
@@ -353,7 +365,7 @@ router.route('/users/self/follow')
 
           user.save((error, savedUser) => {
             if (error) {
-              winston.log(error)
+              console.log(error)
               return res.status(500).json({ error })
             }
           res.status(200).json({ user })
@@ -373,7 +385,7 @@ router.route('/users/self/instagram/id')
   .select('instagram.id -_id')
   .exec((error, instagram) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ instagram })
@@ -387,14 +399,14 @@ router.route('/users/self/famous')
   .select('fameFollowers follows -_id')
   .exec((error, followers) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
       if (error) {
-        winston.log(error)
+        console.log(error)
         return res.status(500).json({ error })
       }
        res.status(200).json({ famous })
@@ -584,7 +596,7 @@ router.route('/automation/self/stats')
   .select('likes follows unfollows comments -_id')
   .exec((error, stats) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ stats })
@@ -604,7 +616,7 @@ router.route('/admin/self/total/users')
   .select('profile_picture username paidUser -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -619,7 +631,7 @@ router.route('/admin/self/last/users')
   .select('profile_picture username paidUser -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -633,7 +645,7 @@ router.route('/admin/self/total/payments')
   .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -648,7 +660,7 @@ router.route('/admin/self/last/payments')
   .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -666,7 +678,7 @@ router.route('/locations/translate/:location')
   Token.findOne({ 'dirty': false })
   .exec((error, admin) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       res.status(500).json({ error })
     }
 
@@ -677,7 +689,10 @@ router.route('/locations/translate/:location')
       let locationTags = []
       const coordinates = location.split(",")
       request.get({ url:'https://api.instagram.com/v1/locations/search?lat=' + coordinates[1] + '&lng=' + coordinates[0] + '&access_token=' + admin.access_token }, (error, response) => {
-        if (error) return res.status(500).json({ error })
+        if (error) {
+          console.log(error)
+          return res.status(500).json({ error })
+        }
 
           let places = undefined
 
@@ -776,7 +791,10 @@ router.route('/automation/self/start')
         let counter = 0
         locations.forEach((location) => {
           request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
-              if (error) return res.status(500).json({ error })
+              if (error) {
+                console.log(error)
+                return res.status(500).json({ error })
+              }
               locationTags.push(response.body)
               counter ++
               if (counter === locations.length) {
@@ -791,7 +809,7 @@ router.route('/automation/self/start')
                     })
                     .end((err) => {
                       if (err) {
-                        winston.log(error, username)
+                        console.log(err, username)
                         throw err
                       }
                       process.env.NODE_ENV === 'development' ? console.log('Finished') : null
