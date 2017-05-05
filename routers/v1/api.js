@@ -30,6 +30,7 @@ console.log = (data, ...args) => {
 mongoose.connect(config.database)
 
 const baseUrl = 'https://api.instagram.com/v1'
+const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
 .get((req, res) => {
@@ -77,7 +78,7 @@ router.route('/users/authenticate')
         User.findOne({ username }, { password: 0 })
         .exec((error, foundUser) => {
           if (error) {
-            winston.log(error)
+            console.log(error)
             return res.status(500).json({ error })
           }
           if (!foundUser) {
@@ -94,7 +95,7 @@ router.route('/users/authenticate')
             })
             .save((error, newUser) => {
               if (error) {
-                winston.log(error)
+                console.log(error)
                 return res.status(500).json({ error })
               }
 
@@ -150,8 +151,10 @@ router.use((req, res, next) => {
     return res.status(403).json({error: { message: 'Token not provided' } })
   // We can ensure every request is made by authenticated users in our server.
   jwt.verify(token, config.jwt_secret, (error, decoded) => {
-    if (error) //End next requests and send a 401 (unauthorized)}
+    if (error) {//End next requests and send a 401 (unauthorized)}
+      console.log(error)
       return res.status(401).json({error,  message: 'Failed to authenticate token'})
+    }
     // TIP: After here in every request we can access the IG username in req._username
     req._username = decoded.username
 
@@ -166,7 +169,10 @@ router.route('/users/self')
   console.log('Finding ', username)
   User.findOne({ username })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     if (!user) return res.status(404).json({ error: { message: 'User not found' } })
     res.status(200).json({ user })
   })
@@ -179,7 +185,10 @@ router.route('/users/self/following')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.following': following } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -191,7 +200,10 @@ router.route('/users/self/unfollowing')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.unfollowing': unfollowing } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -316,7 +328,7 @@ router.route('/users/self/follow')
   User.findOne({ fameEnd:{ $gt: Date.now()}, 'instagram.id': user_id})
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
 
@@ -515,15 +527,15 @@ router.route('/payments')
   Item.findById(item_id)
   .exec((error, item) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
 
     const information = {
       'intent':'sale',
       'redirect_urls':{
-        'return_url':"http://localhost:8080/time",
-        'cancel_url':"http://localhost:8080/time"
+        'return_url': redirectUrl,
+        'cancel_url': redirectUrl
       },
       'payer':{
         'payment_method': 'paypal'
@@ -678,14 +690,20 @@ router.route('/locations/translate/:location')
             // Mark as dirty
             Token.findOneAndUpdate({ 'access_token': admin.access_token }, { $set: { 'dirty': true } })
             .exec((error, user) => {
-              if (error) return res.status(500).json({ error })
+              if (error) {
+                console.log(error)
+                return res.status(500).json({ error })
+              }
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
               request.get({ url:'http://localhost:8080/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
-                  if (error) return res.status(500).json({ error })
+                  if (error) {
+                    console.log(error)
+                    return res.status(500).json({ error })
+                  }
                   try { // Set a safe json parse
                     body = JSON.parse(response.body)
-                  } catch (error) { res.status(500).json({ error }) }
+                  } catch (error) { console.log(error); res.status(500).json({ error }) }
                   /* Return new response */
                   res.write(body)
                   res.end()
@@ -715,7 +733,10 @@ router.route('/locations/translate/:location')
 router.use((req, res, next) => {
   User.findOne({ username: req._username })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     // Check if the user has remaining time
     if (user.timeEnd > Date.now())
       return next()
@@ -731,6 +752,10 @@ router.route('/automation/self/start')
 
   User.findOne({ username })
   .exec((error, user) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     // Get user username, password and preferences
     const { username, password, preferences } = user
 
@@ -790,7 +815,7 @@ router.route('/automation/self/start')
         })
         .end((err) => {
           if (err) {
-            winston.log(error, username)
+            console.log(error, username)
             throw err
           }
           process.env.NODE_ENV === 'development' ? console.log('Finished') : null
@@ -808,7 +833,7 @@ router.route('/automation/self/stop')
   User.findOneAndUpdate({ username }, { $set: { 'automationActive': false } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
