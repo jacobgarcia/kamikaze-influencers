@@ -11,6 +11,7 @@ import TimeJS from '../time'
 import Tags from '../components/Tags'
 import Geocoder from './Geocoder'
 import Signin from '../components/Signin'
+import Localization from '../localization/Localization'
 
 class Dashboard extends Component {
 
@@ -451,14 +452,14 @@ class Dashboard extends Component {
     return (
       <div className='dashboard'>
         <div className='hero-dashboard'></div>
-        <Signin show={this.state.showSignin} id='dashboard' title='Update your password' username={this.state.username} disabled={true}/>
-        <Signin show={this.state.verifyAccount} id='dashboard' title='Verify your account' username={this.state.username} verifyAccount={this.state.verifyAccount} isModule={true}/>
+        <Signin show={this.state.showSignin} id='dashboard' title={Localization.update} username={this.state.username} disabled={true}/>
+        <Signin show={this.state.verifyAccount} id='dashboard' title={Localization.verify} username={this.state.username} verifyAccount={this.state.verifyAccount} isModule={true}/>
         <Intro
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
         <div className='content-section'>
           <div className='hall-section'>
-            <h4>Hall of Fame</h4>
+            <h4>{Localization.fame}</h4>
             <div className='hall-of-fame'>
               {this.state.hallOfFame.map((user, index) =>
                 <FameItem user={user}
@@ -472,30 +473,30 @@ class Dashboard extends Component {
             <div className='section center'>
               <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
                 <div className='label-wrapper'>
-                  <label>Remaining time</label>
+                  <label>{Localization.remaining}</label>
                   { this.state.changed
-                    ? <label onClick={this.restartAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? 'Restart' : 'Start'}</label>
+                    ? <label onClick={this.restartAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? Localization.restart : 'Start'}</label>
                     : <label></label> }
                 </div>
-                <h1>{ days===1 ? `${days} day` : `${days} days`}</h1>
+                <h1>{ days===1 ? `${days} ${Localization.day}` : `${days} ${Localization.days}`}</h1>
                 <h2>{`${hours}:${minutes}:${seconds}`}</h2>
               </div>
             </div>
             <div className='section switching'>
               <div className='switch-section'>
-                <span className={`liking ${this.state.liking ? 'active' : '' }`}>Liking</span>
+                <span className={`liking ${this.state.liking ? 'active' : '' }`}>{Localization.liking}</span>
                 <div className='switch-counter'>
                   <span>{this.state.likes}</span>
                   <Switch id="0" onChange={this.onLikingChange} active={this.state.liking}/>
                 </div>
               </div>
               <div className='switch-section'>
-                <span className={`following ${this.state.following ? 'active' : '' }`}>Following</span>
+                <span className={`following ${this.state.following ? 'active' : '' }`}>{Localization.following}</span>
 
                 <div className={`inline-error ${this.state.showAlertFollow ? 'active' : 'hidden'}`}>
                   <div className='caret left'></div>
-                  <span className='title'>Need to follow first</span>
-                  <p>You need to activate this in order to unfollow the new followings.</p>
+                  <span className='title'>{Localization.need}</span>
+                  <p>{Localization.need_exp}</p>
                 </div>
                 <div className='switch-counter'>
                   <span>{this.state.follows}</span>
@@ -503,38 +504,38 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className='switch-section'>
-                <span className={`unfollowing ${this.state.unfollowing ? 'active' : '' }`}>Unfollowing</span>
+                <span className={`unfollowing ${this.state.unfollowing ? 'active' : '' }`}>{Localization.unfollowing}</span>
                 <div className='switch-counter'>
                   <span>{this.state.unfollows}</span>
                   <Switch id="2" onChange={this.onUnfollowingChange} active={this.state.unfollowing}/>
                 </div>
               </div>
               <div className='switch-section'>
-                <span className={`commenting ${this.state.commenting ? 'active' : '' }`}>Commenting</span>
+                <span className={`commenting ${this.state.commenting ? 'active' : '' }`}>{Localization.commenting}</span>
                 <div className='switch-counter'>
                   <span>{this.state.comments}</span>
                   <Switch id="3" onChange={this.onCommentingChange} active={this.state.commenting}/>
                 </div>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder="Add your comment here" onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}/>
+                <input type="text" placeholder={Localization.add_comment} onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}/>
               </div>
             </div>
             <div className='section'>
               <div className='section-title'>
-                <h4 className='filters'>Filters</h4>
+                <h4 className='filters'>{Localization.filters}</h4>
               </div>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Hashtags</h4>
+                <h4>{Localization.hashtags}</h4>
                 <div className='loader small hidden' id='tags-loader'></div>
               </div>
-              <Tags onChange={this.onTagsChange} tags={this.state.tags}/>
+              <Tags onChange={this.onTagsChange} tags={this.state.tags} placeholder={Localization.separated}/>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Locations</h4>
+                <h4>{Localization.locations}</h4>
                 <div className='loader small hidden' id='locations-loader'></div>
               </div>
                <Geocoder
@@ -547,29 +548,29 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='section-title'>
-                <h4 className='exceptions'>Exceptions</h4>
+                <h4 className='exceptions'>{Localization.blacklist}</h4>
               </div>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Hashtag</h4>
+                <h4>{Localization.hashtag}</h4>
                 <div className='loader small hidden' id='blackhashtags-loader'></div>
               </div>
-              <Tags onChange={this.onFilterTagsChange} tags={this.state.filtertags}/>
+              <Tags onChange={this.onFilterTagsChange} tags={this.state.filtertags} placeholder={Localization.separated}/>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Username</h4>
+                <h4>{Localization.username}</h4>
                 <div className='loader small hidden' id='blackusers-loader'></div>
               </div>
-              <Tags onChange={this.onFilterUsersChange} tags={this.state.filterusers}/>
+              <Tags onChange={this.onFilterUsersChange} tags={this.state.filterusers} placeholder={Localization.usernames_sep}/>
             </div>
             <div className='section'>
               <div className='title'>
-                <h4>Keyword</h4>
+                <h4>{Localization.keyword}</h4>
                 <div className='loader small hidden' id='blackkeywords-loader'></div>
               </div>
-              <Tags onChange={this.onFilterKeysChange} tags={this.state.filterkeys}/>
+              <Tags onChange={this.onFilterKeysChange} tags={this.state.filterkeys} placeholder={Localization.keyword_sep}/>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import LocationBar from '../components/LocationBar'
-
+import Localization from '../localization/Localization'
 /**
  * Geocoder component: connects to Mapbox.com Geocoding API
  * and provides an autocompleting interface for finding locations.
@@ -175,7 +175,7 @@ import LocationBar from '../components/LocationBar'
        className={this.props.inputClass}
        onInput={this.onInput}
        onKeyDown={this.onKeyDown}
-       placeholder={this.props.inputPlaceholder}
+       placeholder={Localization.locations_sep}
        type='text'
        value={this.state.locationString}/>
      var locations = this.state.locations
@@ -190,7 +190,7 @@ import LocationBar from '../components/LocationBar'
             </div>
            )}
            { this.props.inputPosition === 'top' && input }
-           <input type="button" value="Search" className='red' onClick={() => this.search(this.state.locationString)}/>
+           <input type="button" value={Localization.search} className='red' onClick={() => this.search(this.state.locationString)}/>
           </div>
 
          {this.state.results.length > 0 && (

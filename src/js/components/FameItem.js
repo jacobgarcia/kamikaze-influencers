@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import NetworkRequest from '../NetworkRequest'
+import Localization from '../localization/Localization'
 
 class FameItem extends Component {
 
@@ -40,9 +41,9 @@ class FameItem extends Component {
     if (user.instagram.id === instagram_id) {
       button = null
     } else if (this.state.following){
-        button = <input type="button" className='disabled' value="Following"></input>
+        button = <input type="button" className='disabled' value={Localization.following_hall}></input>
     } else {
-        button = <input type="button" value="Follow" onClick={() => this.onFollow(user.instagram.id)}></input>
+        button = <input type="button" value={Localization.follow} onClick={() => this.onFollow(user.instagram.id)}></input>
     }
     return (
       <div className='fame-item'>

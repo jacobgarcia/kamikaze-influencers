@@ -5,6 +5,8 @@ import NetworkRequest from '../NetworkRequest'
 import Footer from '../components/Footer'
 import TimeJS from '../time.js'
 
+import Localization from '../localization/Localization'
+
 const TimeLink = (props) => {
   const { href, rel, method } = props.link
   return (
@@ -30,19 +32,19 @@ const PackageDetails = (props) => {
 const TimeCard = (props) => {
   return (
     <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
-      { props.item.name ? <div className='hall-of-fame-image'/> : undefined }
-      { props.item.name ? <h2>{props.item.name}</h2> : undefined }
-      { props.item.name ? <p>{props.item.description}</p> : undefined }
-      <span className='days'>{props.item.days} { props.item.days > 1 ? 'days ' : 'day '}</span>
+      { props.item.name ? <img src='/'></img> : undefined }
+      { props.item.name ? <h2>{Localization.famous}</h2> : undefined }
+      { props.item.name ? <p>{Localization.faster}</p> : undefined }
+      <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
       <div className='price-wrapper'>
         <span className='price'>${props.item.price}</span>
-        { props.item.days > 1 ? <span className='per-day'>${Math.round((props.item.price/props.item.days)*100)/100} per day</span> : undefined }
+        { props.item.days > 1 ? <span className='per-day'>${Math.round((props.item.price/props.item.days)*100)/100} {Localization.per_day}</span> : undefined }
       </div>
       <div className='buy-now'>
         <input type='button'
           onClick={() => props.purchaseTime(props.item._id)}
           className={`${props.item.type === 1 ? 'red' : 'white'}`}
-          value={`${props.item.type === 1 ? 'Buy Fame' : 'Buy Time'}`}></input>
+          value={`${props.item.type === 1 ? Localization.buy_fame : Localization.buy_time}`}></input>
       </div>
     </div>
   )
@@ -257,8 +259,8 @@ class Time extends Component {
         <div className='content-section'>
           <div className='section'>
             <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
-              <label>Remaining time</label>
-              <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
+              <label></label>
+              <h1>{days===1 ? `${days} ${Localization.day}` : `${days} ${Localization.days}`}</h1>
               <h2>{`${hours}:${minutes}:${seconds}`}</h2>
             </div>
             <div className='fame-items'>
@@ -267,7 +269,7 @@ class Time extends Component {
               )}
             </div>
             <div className='time-items'>
-              <h2>Time packages</h2>
+              <h2>{Localization.timepack}</h2>
               { this.state.timeItems.map((item, index) =>
                 <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
               )}

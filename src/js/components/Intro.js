@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Localization from '../localization/Localization'
 
 class Intro extends Component {
 
@@ -33,32 +34,32 @@ class Intro extends Component {
         return (
           <div className=''>
             <img src="/static/img/time.svg" className=''></img>
-            <h3>Add time</h3>
-            <p>You will need to add time to your account in order to grow your activity.</p>
+            <h3>{Localization.time}</h3>
+            <p>{Localization.add_time}</p>
           </div>
         )
       case 1:
         return (
           <div className=''>
             <img src="/static/img/activity.svg" className=''></img>
-            <h3>Grow your activity</h3>
-            <p>Start using your time liking, following and commenting to increase your followers.</p>
+            <h3>{Localization.grow}</h3>
+            <p>{Localization.grow_exp}</p>
           </div>
         )
       case 2:
         return (
           <div className=''>
             <img src="/static/img/target.svg" className=''></img>
-            <h3>Target your audience</h3>
-            <p>Reach your audience using different types of targeting.</p>
+            <h3>{Localization.target}</h3>
+            <p>{Localization.target_exp}</p>
           </div>
         )
       case 3:
         return (
           <div className=''>
             <div className='hall-of-fame-image intro'></div>
-            <h3>Become famous</h3>
-            <p>Scale the top of the Hall of Fame and start winning new followers much faster.</p>
+            <h3>{Localization.become}</h3>
+            <p>{Localization.become_exp}</p>
           </div>
         )
       default:

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Localization from '../localization/Localization'
 
 class Tags extends Component {
 
@@ -84,7 +85,7 @@ class Tags extends Component {
         <input type="text"
           onChange={this.handleChange}
           onKeyDown={this.keyDown}
-          placeholder='tags,coma,separated'
+          placeholder={this.props.placeholder}
           value={this.state.tagsString}/>
       </div>
     )

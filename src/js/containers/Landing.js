@@ -4,6 +4,8 @@ import Footer from '../components/Footer'
 import Signin from '../components/Signin'
 import NetworkRequest from '../NetworkRequest'
 
+import Localization from '../localization/Localization'
+
 export default class Landing extends Component {
   constructor(props) {
     super(props)
@@ -37,29 +39,29 @@ export default class Landing extends Component {
             Your browser doesn't support video
           </video>
           <div className='content'>
-            <h1>Seguidores reales en poco tiempo</h1>
-            <p>Con un par de clicks comenzarás a recibir una oleada de seguidores reales, listos para interactuar contigo</p>
-            <input type="button" value="Registrarse" onClick={() => this.setState({ showSignin: true })}/>
+            <h1>{Localization.mainheader}</h1>
+            <p>{Localization.subheader}</p>
+            <input type="button" value={Localization.sign} onClick={() => this.setState({ showSignin: true })}/>
           </div>
         </div>
         <div className='content'>
           <div className='aside top'>
             <div className='mini-section easy'>
-              <h3>Fácil de usar</h3>
-              <p>En un par de clicks estarás recibiendo nuevos seguidores sin necesidad de descargar nada.</p>
+              <h3>{Localization.ease}</h3>
+              <p>{Localization.ease_exp}</p>
             </div>
             <div className='mini-section for-all'>
-              <h3>Para todos</h3>
-              <p>Creador de contenido, emprendedor, estudiante. Lo importante es que quieras crecer.</p>
+              <h3>{Localization.everyone}</h3>
+              <p>{Localization.everyone_exp}</p>
             </div>
             <div className='mini-section organic'>
-              <h3>100% Orgánica</h3>
-              <p>Te garantizamos crecer con personas reales. Sin bots ni cuentas falsas.</p>
+              <h3>{Localization.organic}</h3>
+              <p>{Localization.organic_exp}</p>
             </div>
           </div>
           <div className='element center'>
             <div className='element-content'>
-              <h1>La plataforma para crecer tu cuenta de Instagram más completa y fácil de usar para todo tipo de personas</h1>
+              <h1>{Localization.header}</h1>
             </div>
           </div>
           <div className='element'>
@@ -67,14 +69,14 @@ export default class Landing extends Component {
               <div className='image connectivity'></div>
             </div>
             <div className='element-content'>
-              <h2>Incrementa tu alcance</h2>
-              <p>Nosotros te ayudamos a generar una gran actividad en tu cuenta de Instagram para que tu posicionamiento crezca y comiences a obtener cientos de <span>seguidores 100% reales</span> que están interesados en tu contenido e interactúan contigo.</p>
-              <p>Todo de una manera muy sencilla y a un par de clicks. Sólo necesitas adquirir alguno de nuestros paquete des tiempo e invertirlos en tu cuenta de Instagram</p>
+              <h2>{Localization.reach}</h2>
+              <p>{Localization.reach_exp}</p>
+              <p>{Localization.reach_exp2}</p>
             </div>
           </div>
           <div className='element center'>
-            <h2>Tu audiencia específica</h2>
-            <p>Sabemos que necesitas llegar a audiencias concretas por lo que te ofrecemos la mejor segmentación para atraer a las personas correctas en el momento correcto.</p>
+            <h2>{Localization.audience}</h2>
+            <p>{Localization.audience_exp}</p>
           </div>
           <div className='targets-wrapper'>
             <div className='target'>
@@ -82,8 +84,8 @@ export default class Landing extends Component {
                 <div className='image content'></div>
               </div>
               <div className='element-content'>
-                <h2>Contenido</h2>
-                <p>Evita el contenido con el que no desees interactuar y filtra sólo lo que te interesa.</p>
+                <h2>{Localization.content}</h2>
+                <p>{Localization.content_exp}</p>
               </div>
             </div>
             <div className='target'>
@@ -91,8 +93,8 @@ export default class Landing extends Component {
                 <div className='image location'></div>
               </div>
               <div className='element-content'>
-                <h2>Ubicación</h2>
-                <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+                <h2>{Localization.location}</h2>
+                <p>{Localization.location_exp}</p>
               </div>
             </div>
             <div className='target'>
@@ -100,8 +102,8 @@ export default class Landing extends Component {
                 <div className='image exceptions'></div>
               </div>
               <div className='element-content'>
-                <h2>Excepciones</h2>
-                <p>Evita contenido indeseado y filtra sólo lo que te interesa.</p>
+                <h2>{Localization.exceptions}</h2>
+                <p>{Localization.exceptions_exp}</p>
               </div>
             </div>
             <div className='target'>
@@ -109,51 +111,51 @@ export default class Landing extends Component {
                 <div className='image users'></div>
               </div>
               <div className='element-content'>
-                <h2>Usuarios</h2>
-                <p>Negocios locales, áreas específicas, ciudades e incluso países completos. Localiza a tu audiencia.</p>
+                <h2>{Localization.users}</h2>
+                <p>{Localization.users_exp}</p>
               </div>
             </div>
           </div>
         </div>
         <div className='hall-of-fame'>
-          <h1>Tú eres el centro de atención</h1>
-          <h3>Deja que las personas te vean y sigan</h3>
+          <h1>{Localization.attention}</h1>
+          <h3>{Localization.expose}</h3>
           <div className='aside'>
             <div className='image-container'>
               <div className='hall-of-fame-image'></div>
             </div>
             <div className='element-content'>
-              <h1>Salón de la Fama</h1>
-              <p>Haz que te cuenta sea el foco de atención para los demás OWA Influencers.</p>
-              <p>Así obtendrás seguidores de manera más rápida y directa.</p>
+              <h1>{Localization.hall}</h1>
+              <p>{Localization.hall_exp}</p>
+              <p>{Localization.hall_exp2}</p>
             </div>
           </div>
         </div>
         <div className='content'>
           <div className='element center'>
             <div className='element-content'>
-              <h1>Sólo el tiempo necesario</h1>
-              <p>OWA Influencers es sin duda la mejor plataforma para hacer crecer de manera real tu cuenta de Instagram al mejor costo.</p>
-              <p>Mira alguno de los paquetes que tenemos para ti.</p>
+              <h1>{Localization.package_time}</h1>
+              <p>{Localization.time_exp}</p>
+              <p>{Localization.time_exp2}</p>
               <div className='packages'>
                 { this.state.timeItems.map((item, index) =>
                   <div className='timepack' key={index}>
-                    <span className='days'>{item.days} { item.days > 1 ? 'days ' : 'day '}</span>
+                    <span className='days'>{item.days} { item.days > 1 ? Localization.day_s : Localization.day}</span>
                     <div className='price-wrapper'>
                       <span className='price'>${item.price}</span>
-                      { item.days > 1 ? <span className='per-day'>${Math.round((item.price/item.days)*100)/100} per day</span> : undefined }
+                      { item.days > 1 ? <span className='per-day'>${Math.round((item.price/item.days)*100)/100} {Localization.per_day} </span> : undefined }
                     </div>
                   </div>
                 )}
               </div>
-              <p>Todos nuestros paquetes ofrecen tiempo el cual utilizas en la plataforma para hacer crecer tu cuenta y obtener interacción de usuarios reales.</p>
+              <p>{Localization.packages}</p>
             </div>
           </div>
         </div>
         <Footer loggedin={false}>
-          <h1>¿Estás listo para recibir una oleada de seguidores?</h1>
-          <p>Entra ahora y empieza a crecer tu cuenta de Instagram.</p>
-          <input type='button' value='Registrarse' onClick={() => this.setState({ showSignin: true })}/>
+          <h1>{Localization.wave}</h1>
+          <p>{Localization.enter}</p>
+          <input type='button' value={Localization.sign} onClick={() => this.setState({ showSignin: true })}/>
         </Footer>
       </div>
     )
