@@ -4,7 +4,6 @@ const request = require('request')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const PythonShell = require('python-shell')
-const winston = require('winston')
 const router = express.Router()
 
 const User = require(path.resolve('models/User'))
