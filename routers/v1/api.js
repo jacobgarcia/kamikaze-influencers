@@ -29,7 +29,8 @@ console.log = (data, ...args) => {
 
 mongoose.connect(config.database)
 
-const baseUrl = 'https://api.instagram.com/v1'
+// Change in prod
+const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
 .get((req, res) => {
@@ -77,7 +78,7 @@ router.route('/users/authenticate')
         User.findOne({ username }, { password: 0 })
         .exec((error, foundUser) => {
           if (error) {
-            winston.log(error)
+            console.log(error)
             return res.status(500).json({ error })
           }
           if (!foundUser) {
@@ -94,7 +95,7 @@ router.route('/users/authenticate')
             })
             .save((error, newUser) => {
               if (error) {
-                winston.log(error)
+                console.log(error)
                 return res.status(500).json({ error })
               }
 
@@ -114,7 +115,7 @@ router.route('/users/authenticate')
 
             foundUser.save((error, savedUser) => {
               if (error) {
-                winston.log(error)
+                console.log(error)
                 return res.status(500).json({ error })
               }
               // Create and send token
@@ -125,7 +126,7 @@ router.route('/users/authenticate')
           }
         })
       } else {
-        winston.log('Unknown error ocurred on login route', user)
+        console.log('Unknown error ocurred on login route', user)
         res.status(500).json({ error: { message: 'Unknown error ocurred.' }})
       }
 
@@ -150,8 +151,10 @@ router.use((req, res, next) => {
     return res.status(403).json({error: { message: 'Token not provided' } })
   // We can ensure every request is made by authenticated users in our server.
   jwt.verify(token, config.jwt_secret, (error, decoded) => {
-    if (error) //End next requests and send a 401 (unauthorized)}
+    if (error) {//End next requests and send a 401 (unauthorized)}
+      console.log(error)
       return res.status(401).json({error,  message: 'Failed to authenticate token'})
+    }
     // TIP: After here in every request we can access the IG username in req._username
     req._username = decoded.username
 
@@ -166,7 +169,10 @@ router.route('/users/self')
   console.log('Finding ', username)
   User.findOne({ username })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     if (!user) return res.status(404).json({ error: { message: 'User not found' } })
     res.status(200).json({ user })
   })
@@ -179,7 +185,10 @@ router.route('/users/self/following')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.following': following } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -191,7 +200,10 @@ router.route('/users/self/unfollowing')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.unfollowing': unfollowing } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -203,7 +215,10 @@ router.route('/users/self/commenting')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.commenting': commenting } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -215,7 +230,10 @@ router.route('/users/self/liking')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.liking': liking } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -228,7 +246,10 @@ router.route('/users/self/locations')
   // https://docs.mongodb.com/manual/reference/operator/update/set/#set-fields-in-embedded-documents
   User.findOneAndUpdate({ username }, { $set: { 'preferences.locations': locations } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -240,7 +261,10 @@ router.route('/users/self/tags')
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     res.status(200).json({ user })
   })
 })
@@ -254,7 +278,7 @@ router.route('/users/self/filtertags')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filtertags': filtertags } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -269,7 +293,7 @@ router.route('/users/self/filterusers')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filterusers': filterusers } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -284,7 +308,7 @@ router.route('/users/self/filterkeys')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.filterkeys': filterkeys } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -299,7 +323,7 @@ router.route('/users/self/comment')
   User.findOneAndUpdate({ username }, { $set: { 'preferences.comment_text': comment } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })
@@ -316,7 +340,7 @@ router.route('/users/self/follow')
   User.findOne({ fameEnd:{ $gt: Date.now()}, 'instagram.id': user_id})
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
 
@@ -325,7 +349,7 @@ router.route('/users/self/follow')
       User.findOneAndUpdate({ username }, { $push: { toFollow: user_id, fameFollowers: user_id } }, { new: true })
       .exec((error, user) => {
         if (error) {
-          winston.log(error)
+          console.log(error)
           return res.status(500).json({ error })
         }
 
@@ -341,7 +365,7 @@ router.route('/users/self/follow')
 
           user.save((error, savedUser) => {
             if (error) {
-              winston.log(error)
+              console.log(error)
               return res.status(500).json({ error })
             }
           res.status(200).json({ user })
@@ -361,7 +385,7 @@ router.route('/users/self/instagram/id')
   .select('instagram.id -_id')
   .exec((error, instagram) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ instagram })
@@ -375,14 +399,17 @@ router.route('/users/self/famous')
   .select('fameFollowers follows -_id')
   .exec((error, followers) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
+    }
+    if (!followers) {
+      return res.status(404)
     }
     User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
       if (error) {
-        winston.log(error)
+        console.log(error)
         return res.status(500).json({ error })
       }
        res.status(200).json({ famous })
@@ -408,11 +435,105 @@ router.route('/users/self/payments')
     return PayPalService.getPaymentDetails(token, payment.paymentId)
   })
   .then(response => {
+
+    return res.status(200).json({ message: 'Proceed to confirmation '})
+
+  })
+  .catch((error) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+  })
+
+})
+
+router.route('/payments')
+.post((req, res) => {
+
+  const item_id = req.body.item_id
+
+  // Get the package ID from DB and get the cost and time, dont't get it from the user
+  Item.findById(item_id)
+  .exec((error, item) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+
+    const information = {
+      'intent': 'sale',
+      'redirect_urls':{
+        'return_url': redirectUrl,
+        'cancel_url': redirectUrl
+      },
+      'payer':{
+        'payment_method': 'paypal'
+      },
+      'transactions': [
+        {
+          'amount':{
+            'total': item.price,
+            'currency': 'USD'
+          },
+          'custom': item._id,
+          'description': item.description
+        }
+      ]
+    }
+
+    // Sent total and currency
+    PayPalService.getPaymentToken()
+    .then(response => {
+      return response.body.access_token
+    })
+    .then(access_token => {
+      return PayPalService.setPayment(access_token, information)
+    })
+    .then(response => {
+      return res.status(200).json({
+        links: response.body.links,
+        paymentId: response.body.id,
+        transactions: response.body.transactions
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+      return res.status(500).json({ error })
+    })
+
+
+  })
+
+})
+
+router.route('/payments/execute')
+.post((req, res) => {
+
+  const { paymentId, payerId} = req.body
+
+  PayPalService.getPaymentToken()
+  .then(response => {
+    const token = response.body.access_token
+    return PayPalService.executePayment(token, paymentId, payerId)
+  })
+  .then(response => {
+    if (response.status == 200) {
+      return PayPalService.getPaymentToken()
+    } else {
+      return res.status(500)
+    }
+  })
+  .then(response => {
+    const token = response.body.access_token
+    return PayPalService.getPaymentDetails(token, paymentId)
+  })
+  .then(response => {
+
     const { status, body } = response
     const { custom, amount } = body.transactions[0]
     const item_id = custom
 
-    // TODO: convert this to Promises
     new Payment({
       paypal_id: body.id, // The schema will look if the id has been allready added
       item_id,
@@ -432,9 +553,6 @@ router.route('/users/self/payments')
     .save((error, payment) => {
 
       if (error) {
-        if (error.code === 11000) {
-          return res.status(400).json({ error: { message: 'This payment has been already registered.'}})
-        }
         console.log(error)
         return res.status(500).json({ error })
       }
@@ -478,8 +596,7 @@ router.route('/users/self/payments')
             }
           }
 
-          //Set user as a paid one
-          user.paidUser = true
+          user.paidUser = true //Set user as a paid one
 
           user.save((error, savedUser) => {
             if (error) {
@@ -497,70 +614,9 @@ router.route('/users/self/payments')
     })
 
   })
-  .catch((error) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-  })
-
-})
-
-router.route('/payments')
-.post((req, res) => {
-
-  const item_id = req.body.item_id
-
-  // Get the package ID from DB and get the cost and time, dont't get it from the user
-  Item.findById(item_id)
-  .exec((error, item) => {
-    if (error) {
-      winston.log(error)
-      return res.status(500).json({ error })
-    }
-
-    const information = {
-      'intent':'sale',
-      'redirect_urls':{
-        'return_url':"http://localhost:8080/time",
-        'cancel_url':"http://localhost:8080/time"
-      },
-      'payer':{
-        'payment_method': 'paypal'
-      },
-      'transactions': [
-        {
-          'amount':{
-            'total': item.price,
-            'currency': 'USD'
-          },
-          'custom': item._id,
-          'description': item.description
-        }
-      ]
-    }
-
-    // Sent total and currency
-    PayPalService.getPaymentToken()
-    .then((response) => {
-      return response.body.access_token
-    })
-    .then((access_token) => {
-      return PayPalService.setPayment(access_token, information)
-    })
-    .then((response) => {
-      return res.status(200).json({
-        links: response.body.links,
-        paymentId: response.body.id,
-        transactions: response.body.transactions
-      })
-    })
-    .catch((error) => {
-      winston.log(error)
-      return res.status(500).json({ error })
-    })
-
-
+  .catch(error => {
+    console.log('ERROR\n', error)
+    return res.status(error.status || 500).json({ error })
   })
 
 })
@@ -572,7 +628,7 @@ router.route('/automation/self/stats')
   .select('likes follows unfollows comments -_id')
   .exec((error, stats) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ stats })
@@ -592,7 +648,7 @@ router.route('/admin/self/total/users')
   .select('profile_picture username paidUser -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -607,7 +663,7 @@ router.route('/admin/self/last/users')
   .select('profile_picture username paidUser -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -621,7 +677,7 @@ router.route('/admin/self/total/payments')
   .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -636,7 +692,7 @@ router.route('/admin/self/last/payments')
   .select('item_id amount payer username date -_id')
   .exec((error, users) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ users })
@@ -654,7 +710,7 @@ router.route('/locations/translate/:location')
   Token.findOne({ 'dirty': false })
   .exec((error, admin) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       res.status(500).json({ error })
     }
 
@@ -665,7 +721,10 @@ router.route('/locations/translate/:location')
       let locationTags = []
       const coordinates = location.split(",")
       request.get({ url:'https://api.instagram.com/v1/locations/search?lat=' + coordinates[1] + '&lng=' + coordinates[0] + '&access_token=' + admin.access_token }, (error, response) => {
-        if (error) return res.status(500).json({ error })
+        if (error) {
+          console.log(error)
+          return res.status(500).json({ error })
+        }
 
           let places = undefined
 
@@ -678,14 +737,20 @@ router.route('/locations/translate/:location')
             // Mark as dirty
             Token.findOneAndUpdate({ 'access_token': admin.access_token }, { $set: { 'dirty': true } })
             .exec((error, user) => {
-              if (error) return res.status(500).json({ error })
+              if (error) {
+                console.log(error)
+                return res.status(500).json({ error })
+              }
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
               request.get({ url:'http://localhost:8080/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
-                  if (error) return res.status(500).json({ error })
+                  if (error) {
+                    console.log(error)
+                    return res.status(500).json({ error })
+                  }
                   try { // Set a safe json parse
                     body = JSON.parse(response.body)
-                  } catch (error) { res.status(500).json({ error }) }
+                  } catch (error) { console.log(error); res.status(500).json({ error }) }
                   /* Return new response */
                   res.write(body)
                   res.end()
@@ -715,7 +780,10 @@ router.route('/locations/translate/:location')
 router.use((req, res, next) => {
   User.findOne({ username: req._username })
   .exec((error, user) => {
-    if (error) return res.status(500).json({ error })
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     // Check if the user has remaining time
     if (user.timeEnd > Date.now())
       return next()
@@ -731,6 +799,10 @@ router.route('/automation/self/start')
 
   User.findOne({ username })
   .exec((error, user) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
     // Get user username, password and preferences
     const { username, password, preferences } = user
 
@@ -751,7 +823,10 @@ router.route('/automation/self/start')
         let counter = 0
         locations.forEach((location) => {
           request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
-              if (error) return res.status(500).json({ error })
+              if (error) {
+                console.log(error)
+                return res.status(500).json({ error })
+              }
               locationTags.push(response.body)
               counter ++
               if (counter === locations.length) {
@@ -766,7 +841,7 @@ router.route('/automation/self/start')
                     })
                     .end((err) => {
                       if (err) {
-                        winston.log(error, username)
+                        console.log(err, username)
                         throw err
                       }
                       process.env.NODE_ENV === 'development' ? console.log('Finished') : null
@@ -790,7 +865,7 @@ router.route('/automation/self/start')
         })
         .end((err) => {
           if (err) {
-            winston.log(error, username)
+            console.log(error, username)
             throw err
           }
           process.env.NODE_ENV === 'development' ? console.log('Finished') : null
@@ -808,7 +883,7 @@ router.route('/automation/self/stop')
   User.findOneAndUpdate({ username }, { $set: { 'automationActive': false } }, { new: true })
   .exec((error, user) => {
     if (error) {
-      winston.log(error)
+      console.log(error)
       return res.status(500).json({ error })
     }
     res.status(200).json({ user })

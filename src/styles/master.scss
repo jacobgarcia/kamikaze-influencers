@@ -690,6 +690,7 @@ h2 {
   .element {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: 60px 0;
     h1 {
       margin: 10px auto 20px;
@@ -705,8 +706,12 @@ h2 {
         margin: 0 auto;
       }
     }
+    .image-container {
+      margin-bottom: 40px;
+    }
     .element-content, .image-container {
-      width: 50%;
+      flex-shrink: 0;
+      width: 100%;
     }
   }
   .image-container {
@@ -864,6 +869,16 @@ input[type="button"], input[type="submit"] {
   }
   .signin-body {
     max-width: 250px;
+    .notice {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgb(210, 210, 210);
+      max-width: 200px;
+      margin: 0 auto;
+      margin-top: 20px;
+      line-height: 1;
+      text-align: center;
+    }
     input[type="submit"] {
       display: block;
       margin: 0 auto;
@@ -1083,6 +1098,7 @@ input[type="button"], input[type="submit"] {
   h1, p {
     color: #fff;
     text-align: center;
+    margin: 0 auto;
   }
   h1 {
     margin-top: 20px;
@@ -1093,9 +1109,11 @@ input[type="button"], input[type="submit"] {
   }
   .links {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     ul {
       display: flex;
+      flex-wrap: wrap;
       li {
         margin-right: 10px;
       }
@@ -1227,6 +1245,7 @@ input[type="button"], input[type="submit"] {
 }
 
 @media (min-width: 700px) {
+
   .dashboard .hero-dashboard {
     height: 100px;
   }
@@ -1247,6 +1266,15 @@ input[type="button"], input[type="submit"] {
       overflow-y: visible;
       margin-bottom: 400px;
     }
+    .element {
+      .element-content, .image-container {
+        width: 50%;
+      }
+      .image-container {
+        margin-bottom: 0px;
+      }
+    }
+
   }
   .content-section {
     padding-top: 20px;

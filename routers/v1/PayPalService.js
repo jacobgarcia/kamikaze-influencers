@@ -1,6 +1,8 @@
 const path = require('path')
 const request = require('request')
 const config = require(path.resolve('config/config.js'))
+
+// Change in prod
 const paypalUrl = 'https://api.sandbox.paypal.com/v1'
 
 class PayPalService {
@@ -57,6 +59,48 @@ class PayPalService {
             return reject({ status: statusCode || 500, error: error || { message: 'Uknown error'} })
         }
 
+      })
+    })
+  }
+
+  static executePayment(token, paymentId, payer_id) {
+
+    return new Promise((resolve, reject) => {
+      const information = {
+        payer_id
+      }
+
+      const options = {
+        url: `${paypalUrl}/payments/payment/${paymentId}/execute`,
+        method: 'POST',
+        json: true,
+        body: Object.assign(information),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      }
+      console.log({options})
+      request(options, (error, response) => {
+        if (error) {
+          console.log({error})
+          reject({status: 500, error: {error}})
+        }
+
+        // console.log(response)
+        const { statusCode, statusMessage, body } = response
+
+        console.log(statusCode, statusMessage, body.transactions)
+
+        switch (statusCode) {
+          case 200:
+            // TODO Send confirmation to user
+            return resolve({ status: 200, body })
+          case 400:
+            return reject({ status: 400, body: { message: 'Payment already done'} })
+          default:
+            return reject({ status: statusCode || 500, error: error || { message: 'Uknown error'} })
+        }
       })
     })
   }

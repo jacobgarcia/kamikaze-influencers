@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 
 import NetworkRequest from '../NetworkRequest'
 import Footer from '../components/Footer'
 import TimeJS from '../time.js'
-import TimeCard from '../components/TimeCard'
 
 import Localization from '../localization/Localization'
 
@@ -17,11 +16,26 @@ const TimeLink = (props) => {
   )
 }
 
-const MessageCard = (props) => {
-
+const TimeCard = (props) => {
+  return (
+    <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
+      { props.item.name ? <img src='/'></img> : undefined }
+      { props.item.name ? <h2>{Localization.famous}</h2> : undefined }
+      { props.item.name ? <p>{Localization.faster}</p> : undefined }
+      <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
+      <div className='price-wrapper'>
+        <span className='price'>${props.item.price}</span>
+        { props.item.days > 1 ? <span className='per-day'>${Math.round((props.item.price/props.item.days)*100)/100} {Localization.per_day}</span> : undefined }
+      </div>
+      <div className='buy-now'>
+        <input type='button'
+          onClick={() => props.purchaseTime(props.item._id)}
+          className={`${props.item.type === 1 ? 'red' : 'white'}`}
+          value={`${props.item.type === 1 ? Localization.buy_fame : Localization.buy_time}`}></input>
+      </div>
+    </div>
+  )
 }
-
-
 
 class Time extends Component {
 
@@ -34,12 +48,15 @@ class Time extends Component {
       timeItems:[],
       links: [],
       showPayment: false,
+      showConfirm: false,
+      showThanks: false,
       paymentId: undefined,
       transactions: undefined
     }
 
     this.purchaseTime = this.purchaseTime.bind(this)
     this.hidePayment = this.hidePayment.bind(this)
+    this.executePayment = this.executePayment.bind(this)
   }
 
   componentWillUnmount() {
@@ -114,27 +131,47 @@ class Time extends Component {
       token: query.token
     }
 
+    console.log('Will mount')
+
     // Check if we have a payment confirmation
     if (payment.payerId && payment.paymentId && payment.token) {
       // Send payment confirmation
-      NetworkRequest.setPaymentConfimation(payment)
-      .then((response) => {
+      console.log('Confirm')
 
-        //Reload user and time
-        this.setState({
-          remainingTime: TimeJS.secondsTo(response.data.user.timeEnd)
+      this.setState({
+        showConfirm: true
+      })
 
-        })
-        clearInterval(this.interval)
-        this.interval = setInterval(() => this.tick(), 1000)
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-      })
-      .catch((error) => {
-        // TODO: handle error
-        console.log(error)
-      })
     }
+  }
 
+  executePayment() {
+    console.log('Making payment...')
+
+    const payerId =  this.props.location.query.PayerID
+    const paymentId = this.props.location.query.paymentId
+
+    NetworkRequest.setPaymentExecution(paymentId, payerId)
+    .then((response) => {
+
+      browserHistory.push('/time')
+
+      //Reload user and time
+      this.setState({
+        remainingTime: TimeJS.secondsTo(response.data.user.timeEnd),
+        showConfirm: false,
+        showThanks: true
+      })
+
+      clearInterval(this.interval)
+      this.interval = setInterval(() => this.tick(), 1000)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
   }
 
   componentDidMount() {
@@ -147,8 +184,7 @@ class Time extends Component {
       console.log(error)
     }
 
-    // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const remainingTime = TimeJS.secondsTo(user.timeEnd)
+    const remainingTime = TimeJS.secondsTo(user.timeEnd) // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
 
     // Check if we have time, so we dont't tick negative dates
     if (remainingTime > 0) {
@@ -157,17 +193,29 @@ class Time extends Component {
       })
       this.interval = setInterval(() => this.tick(), 1000)
     }
-
   }
 
   render() {
 
     let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
+    const state = this.state
 
     return (
       <div className='time'>
         <div className='hero-dashboard'></div>
-        <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
+          <div className={`hover  ${state.showThanks ? '' : 'hidden'}`} onClick={() => this.setState({ showThanks: false })}>
+            <div className='payment-details'>
+              <h2>Done, thanks :)</h2>
+              <p>Your time was added to your account</p>
+            </div>
+          </div>
+        <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
+          <div className='payment-details'>
+            <h2>Please confirm payment</h2>
+            <input type='button' value='Pagar ahora' onClick={this.executePayment}/>
+          </div>
+        </div>
+        <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
             <h2>Payment Details</h2>
             {
@@ -206,6 +254,12 @@ class Time extends Component {
               { this.state.timeItems.map((item, index) =>
                 <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
               )}
+            </div>
+            <h2>Special follow</h2>
+            <div className='aside'>
+              <h3>Special follow</h3>
+              <p>Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.</p>
+              <a href='mailto:hola@owainfluencers.com'><input type='button' value='Contact us' className='red'/></a>
             </div>
           </div>
         </div>

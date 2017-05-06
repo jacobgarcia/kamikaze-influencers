@@ -136,6 +136,7 @@ class Signin extends Component {
             undefined
           }
           <input type='submit' value={`${this.state.verifyAccount ? Localization.continue : Localization.ok}`} className='red' onClick={this.signinUser}/>
+          <p className='notice'>{Localization.accept}</p>
           </form>
         </div>
       </div>
