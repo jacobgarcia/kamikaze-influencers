@@ -30,7 +30,7 @@ console.log = (data, ...args) => {
 mongoose.connect(config.database)
 
 // Change in prod
-const redirectUrl = "https://owainfluencers.com/time"
+const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
 .get((req, res) => {
@@ -126,7 +126,7 @@ router.route('/users/authenticate')
           }
         })
       } else {
-        winston.log('Unknown error ocurred on login route', user)
+        console.log('Unknown error ocurred on login route', user)
         res.status(500).json({ error: { message: 'Unknown error ocurred.' }})
       }
 
@@ -402,6 +402,9 @@ router.route('/users/self/famous')
       console.log(error)
       return res.status(500).json({ error })
     }
+    if (!followers) {
+      return res.status(404)
+    }
     User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
@@ -432,11 +435,105 @@ router.route('/users/self/payments')
     return PayPalService.getPaymentDetails(token, payment.paymentId)
   })
   .then(response => {
+
+    return res.status(200).json({ message: 'Proceed to confirmation '})
+
+  })
+  .catch((error) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+  })
+
+})
+
+router.route('/payments')
+.post((req, res) => {
+
+  const item_id = req.body.item_id
+
+  // Get the package ID from DB and get the cost and time, dont't get it from the user
+  Item.findById(item_id)
+  .exec((error, item) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+
+    const information = {
+      'intent': 'sale',
+      'redirect_urls':{
+        'return_url': redirectUrl,
+        'cancel_url': redirectUrl
+      },
+      'payer':{
+        'payment_method': 'paypal'
+      },
+      'transactions': [
+        {
+          'amount':{
+            'total': item.price,
+            'currency': 'USD'
+          },
+          'custom': item._id,
+          'description': item.description
+        }
+      ]
+    }
+
+    // Sent total and currency
+    PayPalService.getPaymentToken()
+    .then(response => {
+      return response.body.access_token
+    })
+    .then(access_token => {
+      return PayPalService.setPayment(access_token, information)
+    })
+    .then(response => {
+      return res.status(200).json({
+        links: response.body.links,
+        paymentId: response.body.id,
+        transactions: response.body.transactions
+      })
+    })
+    .catch((error) => {
+      console.log(error)
+      return res.status(500).json({ error })
+    })
+
+
+  })
+
+})
+
+router.route('/payments/execute')
+.post((req, res) => {
+
+  const { paymentId, payerId} = req.body
+
+  PayPalService.getPaymentToken()
+  .then(response => {
+    const token = response.body.access_token
+    return PayPalService.executePayment(token, paymentId, payerId)
+  })
+  .then(response => {
+    if (response.status == 200) {
+      return PayPalService.getPaymentToken()
+    } else {
+      return res.status(500)
+    }
+  })
+  .then(response => {
+    const token = response.body.access_token
+    return PayPalService.getPaymentDetails(token, paymentId)
+  })
+  .then(response => {
+
     const { status, body } = response
     const { custom, amount } = body.transactions[0]
     const item_id = custom
 
-    // TODO: convert this to Promises
     new Payment({
       paypal_id: body.id, // The schema will look if the id has been allready added
       item_id,
@@ -456,9 +553,6 @@ router.route('/users/self/payments')
     .save((error, payment) => {
 
       if (error) {
-        if (error.code === 11000) {
-          return res.status(400).json({ error: { message: 'This payment has been already registered.'}})
-        }
         console.log(error)
         return res.status(500).json({ error })
       }
@@ -502,8 +596,7 @@ router.route('/users/self/payments')
             }
           }
 
-          //Set user as a paid one
-          user.paidUser = true
+          user.paidUser = true //Set user as a paid one
 
           user.save((error, savedUser) => {
             if (error) {
@@ -521,70 +614,9 @@ router.route('/users/self/payments')
     })
 
   })
-  .catch((error) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-  })
-
-})
-
-router.route('/payments')
-.post((req, res) => {
-
-  const item_id = req.body.item_id
-
-  // Get the package ID from DB and get the cost and time, dont't get it from the user
-  Item.findById(item_id)
-  .exec((error, item) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-
-    const information = {
-      'intent':'sale',
-      'redirect_urls':{
-        'return_url': redirectUrl,
-        'cancel_url': redirectUrl
-      },
-      'payer':{
-        'payment_method': 'paypal'
-      },
-      'transactions': [
-        {
-          'amount':{
-            'total': item.price,
-            'currency': 'USD'
-          },
-          'custom': item._id,
-          'description': item.description
-        }
-      ]
-    }
-
-    // Sent total and currency
-    PayPalService.getPaymentToken()
-    .then((response) => {
-      return response.body.access_token
-    })
-    .then((access_token) => {
-      return PayPalService.setPayment(access_token, information)
-    })
-    .then((response) => {
-      return res.status(200).json({
-        links: response.body.links,
-        paymentId: response.body.id,
-        transactions: response.body.transactions
-      })
-    })
-    .catch((error) => {
-      winston.log(error)
-      return res.status(500).json({ error })
-    })
-
-
+  .catch(error => {
+    console.log('ERROR\n', error)
+    return res.status(error.status || 500).json({ error })
   })
 
 })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 
 import NetworkRequest from '../NetworkRequest'
 import Footer from '../components/Footer'
@@ -46,12 +46,15 @@ class Time extends Component {
       timeItems:[],
       links: [],
       showPayment: false,
+      showConfirm: false,
+      showThanks: false,
       paymentId: undefined,
       transactions: undefined
     }
 
     this.purchaseTime = this.purchaseTime.bind(this)
     this.hidePayment = this.hidePayment.bind(this)
+    this.executePayment = this.executePayment.bind(this)
   }
 
   componentWillUnmount() {
@@ -126,27 +129,47 @@ class Time extends Component {
       token: query.token
     }
 
+    console.log('Will mount')
+
     // Check if we have a payment confirmation
     if (payment.payerId && payment.paymentId && payment.token) {
       // Send payment confirmation
-      NetworkRequest.setPaymentConfimation(payment)
-      .then((response) => {
+      console.log('Confirm')
 
-        //Reload user and time
-        this.setState({
-          remainingTime: TimeJS.secondsTo(response.data.user.timeEnd)
+      this.setState({
+        showConfirm: true
+      })
 
-        })
-        clearInterval(this.interval)
-        this.interval = setInterval(() => this.tick(), 1000)
-        localStorage.setItem('user', JSON.stringify(response.data.user))
-      })
-      .catch((error) => {
-        // TODO: handle error
-        console.log(error)
-      })
     }
+  }
 
+  executePayment() {
+    console.log('Making payment...')
+
+    const payerId =  this.props.location.query.PayerID
+    const paymentId = this.props.location.query.paymentId
+
+    NetworkRequest.setPaymentExecution(paymentId, payerId)
+    .then((response) => {
+
+      browserHistory.push('/time')
+
+      //Reload user and time
+      this.setState({
+        remainingTime: TimeJS.secondsTo(response.data.user.timeEnd),
+        showConfirm: false,
+        showThanks: true
+      })
+
+      clearInterval(this.interval)
+      this.interval = setInterval(() => this.tick(), 1000)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+
+    })
+    .catch((error) => {
+      // TODO: handle error
+      console.log(error)
+    })
   }
 
   componentDidMount() {
@@ -159,8 +182,7 @@ class Time extends Component {
       console.log(error)
     }
 
-    // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-    const remainingTime = TimeJS.secondsTo(user.timeEnd)
+    const remainingTime = TimeJS.secondsTo(user.timeEnd) // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
 
     // Check if we have time, so we dont't tick negative dates
     if (remainingTime > 0) {
@@ -169,17 +191,29 @@ class Time extends Component {
       })
       this.interval = setInterval(() => this.tick(), 1000)
     }
-
   }
 
   render() {
 
     let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
+    const state = this.state
 
     return (
       <div className='time'>
         <div className='hero-dashboard'></div>
-        <div className={`hover ${this.state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
+          <div className={`hover  ${state.showThanks ? '' : 'hidden'}`} onClick={() => this.setState({ showThanks: false })}>
+            <div className='payment-details'>
+              <h2>Done, thanks :)</h2>
+              <p>Your time was added to your account</p>
+            </div>
+          </div>
+        <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
+          <div className='payment-details'>
+            <h2>Please confirm payment</h2>
+            <input type='button' value='Pagar ahora' onClick={this.executePayment}/>
+          </div>
+        </div>
+        <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
             <h2>Payment Details</h2>
             {

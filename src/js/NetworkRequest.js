@@ -111,9 +111,14 @@ class NetworkRequest {
     return axios.get(`${window.baseUrl}/users/self/instagram/id`)
   }
 
+  static setPaymentExecution(paymentId, payerId) {
+    return axios.post(`${window.baseUrl}/payments/execute`, { paymentId, payerId })
+  }
+
   static getAutomationStats() {
     return axios.get(`${window.baseUrl}/automation/self/stats`)
   }
+
 
 }
 
