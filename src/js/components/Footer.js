@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from  'react-router'
+import Localization from '../localization/Localization'
 
 const Footer = (props) => {
   return (
@@ -8,12 +9,11 @@ const Footer = (props) => {
       <div className='content-section'>
         <div className='links'>
           <ul>
-            <li><a href='/about'>About</a></li>
-            <li><a href='/contact'>Contact</a></li>
-            <li><a href='/usage'>Usage policy</a></li>
-            <li><a href='/privacy'>Privacy policy</a></li>
+            <li><a href='/about'>{Localization.about}</a></li>
+            <li><a href='/contact'>{Localization.contact}</a></li>
+            <li><a href='/terms'>{Localization.usage}</a></li>
           </ul>
-          {props.loggedin ? <a href='/logout'>Log out</a> : ''}
+          {props.loggedin ? <a href='/logout'>{Localization.logout}</a> : ''}
         </div>
         <div className='social-links'>
           <ul>

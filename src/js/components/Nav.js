@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 
 import Signin from '../components/Signin'
+import Localization from '../localization/Localization'
 
 class Nav extends Component {
 
@@ -44,15 +45,15 @@ class Nav extends Component {
             <span>{this.props.user.username}</span>
           </div>
           <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <div className='time'><Link to='/time'>Add time</Link></div>
+          <div className='time'><Link to='/time'>{Localization.time}</Link></div>
         </nav>
       )
     } else {
       return (
         <nav className='signin-nav'>
           <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <input type="button" value='Entrar' className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
-          <Signin show={this.state.showSignin} id='nav' title='Iniciar Sesión'/>
+          <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
+          <Signin show={this.state.showSignin} id='nav' title={Localization.login}/>
         </nav>
       )
     }

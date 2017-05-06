@@ -6,6 +6,8 @@ import Footer from '../components/Footer'
 import TimeJS from '../time.js'
 import TimeCard from '../components/TimeCard'
 
+import Localization from '../localization/Localization'
+
 const TimeLink = (props) => {
   const { href, rel, method } = props.link
   return (
@@ -190,8 +192,8 @@ class Time extends Component {
         <div className='content-section'>
           <div className='section'>
             <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
-              <label>Remaining time</label>
-              <h1>{days===1 ? `${days} day` : `${days} days`}</h1>
+              <label></label>
+              <h1>{days===1 ? `${days} ${Localization.day}` : `${days} ${Localization.days}`}</h1>
               <h2>{`${hours}:${minutes}:${seconds}`}</h2>
             </div>
             <div className='fame-items'>
@@ -200,7 +202,7 @@ class Time extends Component {
               )}
             </div>
             <div className='time-items'>
-              <h2>Time packages</h2>
+              <h2>{Localization.timepack}</h2>
               { this.state.timeItems.map((item, index) =>
                 <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
               )}

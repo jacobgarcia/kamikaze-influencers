@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import NetworkRequest from '../NetworkRequest'
+import Localization from '../localization/Localization'
 
 class Signin extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class Signin extends Component {
                 spellCheck='false'
                 className={this.state.username && this.state.username !== '' ? 'dirty' : ''}
                 disabled={this.state.usernameDisabled}/>
-              <label htmlFor={`username-${this.props.id}`}>Usuario de Instagram</label>
+              <label htmlFor={`username-${this.props.id}`}>{Localization.ig_user}</label>
             </div>
             : <input type='text'
               name='username'
@@ -120,7 +121,7 @@ class Signin extends Component {
                 name='password'
                 value={this.state.password}
                 className={this.state.password && this.state.password !== '' ? 'dirty' : ''}/>
-              <label htmlFor={`password-${this.props.id}`}>Contraseña de Instagram</label>
+              <label htmlFor={`password-${this.props.id}`}>{Localization.ig_password}</label>
             </div>
             : <input type='password'
               name='password'
@@ -129,12 +130,12 @@ class Signin extends Component {
           }
           {this.state.verifyAccount ?
             <div className='error'>
-              <span>You need to verify you account, please signin into <a href='https://www.instagram.com' target='blank'>Instagram</a></span>
+              <span>{Localization.verify_account} <a href='https://www.instagram.com' target='blank'>{Localization.ig}</a> {Localization.verify_account2}</span>
             </div>
             :
             undefined
           }
-          <input type='submit' value={`${this.state.verifyAccount ? 'Verified, Continue' : 'OK'}`} className='red' onClick={this.signinUser}/>
+          <input type='submit' value={`${this.state.verifyAccount ? Localization.continue : Localization.ok}`} className='red' onClick={this.signinUser}/>
           </form>
         </div>
       </div>
