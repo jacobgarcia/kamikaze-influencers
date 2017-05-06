@@ -30,7 +30,7 @@ console.log = (data, ...args) => {
 mongoose.connect(config.database)
 
 // Change in prod
-const redirectUrl = "http://localhost:8080/time"
+const redirectUrl = "https://owainfluencers/time"
 
 router.route('/items')
 .get((req, res) => {
