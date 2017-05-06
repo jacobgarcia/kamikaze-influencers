@@ -32,7 +32,7 @@ const PackageDetails = (props) => {
 const TimeCard = (props) => {
   return (
     <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
-      { props.item.name ? <img src='/'></img> : undefined }
+      { props.item.name ? <div className='hall-of-fame-image'></div>: undefined }
       { props.item.name ? <h2>{Localization.famous}</h2> : undefined }
       { props.item.name ? <p>{Localization.faster}</p> : undefined }
       <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
@@ -232,13 +232,13 @@ class Time extends Component {
         <div className='hero-dashboard'></div>
           <div className={`hover  ${state.showThanks ? '' : 'hidden'}`} onClick={() => this.setState({ showThanks: false })}>
             <div className='payment-details'>
-              <h2>Thanks 😊</h2>
+              <h2>{Localization.thanksTitle}</h2>
               <p>Time was added to your account</p>
             </div>
           </div>
         <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
           <div className='payment-details'>
-            <h2>Confirmation</h2>
+            <h2>{Localization.confirmationTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]}/> : <div className='loader relative center'></div> }
             <input type='button' className='red' value='Pay now' onClick={this.executePayment}/>
             <img src='/static/img/paypal-button.svg' className='paypal-button' alt='Powered by PayPal'/>
@@ -246,7 +246,7 @@ class Time extends Component {
         </div>
         <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
-            <h2>Package Details</h2>
+            <h2>{Localization.packageDetailsTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]} full/> : <div className='loader relative center'></div> }
             {
                 this.state.links ? this.state.links.map((link, index) =>

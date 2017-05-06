@@ -12,7 +12,7 @@ export default new LocalizedStrings({
    login: 'Sign In',
    time: 'Add Time',
    //landing
-  sign: 'Sign in with Instagram',
+   sign: 'Sign in with Instagram',
    mainheader: 'Real followers in no time',
    subheader: 'Just sign in, customize your experience and you will begin to get real followers, ready to interact with you',
    ease: 'Easy to use',
@@ -47,6 +47,11 @@ export default new LocalizedStrings({
    day_s: 'days',
    per_day: 'per day',
    packages: 'All our packages grows your account and gets you interaction from real users',
+   // TITLES
+   confirmationTitle: 'Confirmation',
+   packageDetailsTitle: 'Package Details',
+   thanksTitle: 'Thanks 😊',
+   ///
    wave: 'Are you ready to get a tons of followers?',
    enter: 'Sign in now and start growing your Instagram account',
    //signin
