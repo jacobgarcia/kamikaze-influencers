@@ -418,36 +418,6 @@ router.route('/users/self/famous')
 
 })
 
-
-router.route('/users/self/payments')
-.post((req, res) => {
-  const username = req._username
-  const payment = req.body.payment
-
-  // TODO: validate payment
-  PayPalService.getPaymentToken()
-  .then((response) => {
-    // Get access PayPal token
-    return response.body.access_token
-  })
-  .then(token => {
-    // Get the payment details
-    return PayPalService.getPaymentDetails(token, payment.paymentId)
-  })
-  .then(response => {
-
-    return res.status(200).json({ message: 'Proceed to confirmation '})
-
-  })
-  .catch((error) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-  })
-
-})
-
 router.route('/payments')
 .post((req, res) => {
 
@@ -505,6 +475,28 @@ router.route('/payments')
 
   })
 
+})
+
+router.route('/payments/:payment_id/transactions')
+.get((req, res) => {
+
+  const paymentId = req.params.payment_id
+
+  PayPalService.getPaymentToken()
+  .then(response => {
+    return response.body.access_token
+  })
+  .then(access_token => {
+    return PayPalService.getPaymentDetails(access_token, paymentId)
+  })
+  .then(response => {
+    const transactions = response.body.transactions
+
+    return res.status(200).json({ transactions })
+  })
+  .catch(error => {
+    return res.status(500).json({ error })
+  })
 })
 
 router.route('/payments/execute')

@@ -9,7 +9,20 @@ const TimeLink = (props) => {
   const { href, rel, method } = props.link
   return (
     <div>
-      <a href={href} className='paypal-button'/>
+      <a href={href}><input type='button' value='Continue' className='red'/></a>
+    </div>
+  )
+}
+
+const PackageDetails = (props) => {
+  const transaction = props.transaction
+  return (
+    <div>
+      { props.full ? <p className='description-element'><span className='bold'>Number of items: </span>1</p> : undefined }
+      <p className='description-element'><span className='bold'>Total: </span>${transaction.amount.total}</p>
+      <p className='description-element'><span className='bold'>Currency: </span>{transaction.amount.currency}</p>
+      <p className='description-element'><span className='bold'>Description: </span>{transaction.description}</p>
+      { props.full ? <p className='description-element'><span className='bold'>Aplication: </span>Inmediate</p> : undefined }
     </div>
   )
 }
@@ -67,6 +80,18 @@ class Time extends Component {
     })
   }
 
+  getPaymentDetails(paymentId) {
+    NetworkRequest.getPayment(paymentId)
+    .then(response => {
+      this.setState({
+        transactions: response.data.transactions
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
   purchaseTime(time_id) {
     this.setState({
       showPayment: true,
@@ -74,6 +99,8 @@ class Time extends Component {
       paymentId: undefined,
       transactions: undefined
     })
+
+    // Get the payment details to display in Pay Now
 
     NetworkRequest.setPayment(time_id)
     .then((response) => {
@@ -139,7 +166,7 @@ class Time extends Component {
       this.setState({
         showConfirm: true
       })
-
+      this.getPaymentDetails(payment.paymentId)
     }
   }
 
@@ -203,36 +230,28 @@ class Time extends Component {
         <div className='hero-dashboard'></div>
           <div className={`hover  ${state.showThanks ? '' : 'hidden'}`} onClick={() => this.setState({ showThanks: false })}>
             <div className='payment-details'>
-              <h2>Done, thanks :)</h2>
-              <p>Your time was added to your account</p>
+              <h2>Thanks 😊</h2>
+              <p>Time was added to your account</p>
             </div>
           </div>
         <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
           <div className='payment-details'>
-            <h2>Please confirm payment</h2>
-            <input type='button' value='Pagar ahora' onClick={this.executePayment}/>
+            <h2>Confirmation</h2>
+            { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]}/> : <div className='loader relative center'></div> }
+            <input type='button' className='red' value='Pay now' onClick={this.executePayment}/>
+            <img src='/static/img/paypal-button.svg' className='paypal-button' alt='Powered by PayPal'/>
           </div>
         </div>
         <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
-            <h2>Payment Details</h2>
-            {
-              this.state.transactions ?
-                <div>
-                  <p className='description-element'><span className='bold'>Number of items: </span>1</p>
-                  <p className='description-element'><span className='bold'>Total: </span>{this.state.transactions[0].amount.total}{this.state.transactions[0].amount.currency}</p>
-                  <p className='description-element'><span className='bold'>Currency: </span>{this.state.transactions[0].amount.currency}</p>
-                  <p className='description-element'><span className='bold'>Description: </span>{this.state.transactions[0].description}</p>
-                  <p className='description-element'><span className='bold'>Aplication: </span>Inmediate</p>
-                </div>
-              :
-              <div className='loader relative center'></div>
-            }
+            <h2>Package Details</h2>
+            { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]} full/> : <div className='loader relative center'></div> }
             {
                 this.state.links ? this.state.links.map((link, index) =>
                   link.rel == 'approval_url' ? <TimeLink link={link} key={index}/> : null
                 ) : null
             }
+            <img src='/static/img/paypal-button.svg' className='paypal-button' alt='Powered by PayPal'/>
           </div>
         </div>
         <div className='content-section'>

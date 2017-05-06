@@ -59,16 +59,12 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/automation/self/stop`)
   }
 
-  static setTime() {
-
-  }
-
   static setPayment(item_id) {
     return axios.post(`${window.baseUrl}/payments`, { item_id })
   }
 
-  static setPaymentConfimation(payment) {
-    return axios.post(`${window.baseUrl}/users/self/payments`, { payment })
+  static getPayment(paymentId) {
+    return axios.get(`${window.baseUrl}/payments/${paymentId}/transactions`)
   }
 
   static setUsernames(usernames) {

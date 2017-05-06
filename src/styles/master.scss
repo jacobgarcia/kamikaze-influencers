@@ -847,9 +847,24 @@ input[type="button"], input[type="submit"] {
     @include owa_boxshadow;
     color: $red;
     background: #fff;
+    &.paypal {
+      display: block;
+      margin: 20px auto 0px;
+      padding-right: 130px;
+      background: url('https://www.paypalobjects.com/webstatic/en_US/i/btn/png/silver-rect-paypal-60px.png') no-repeat 120px center;
+      background-size: 100px;
+      height: 40px;
+    }
   }
 }
 
+img.paypal-button {
+  display: block;
+  margin-top: 20px;
+  margin-left: auto;
+  width: 96px;
+  height: 33px;
+}
 .hover {
   z-index: 103;
   position: fixed;
@@ -887,13 +902,21 @@ input[type="button"], input[type="submit"] {
   }
   .signin-body, .payment-details {
     background: #fff;
-    color: $gray;
-    padding: 15px 20px 30px;
+    color: #9A9A9A;
+    padding: 20px 30px 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
-    max-width: 300px;
     text-align: left;
+    width: 320px;
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input {
+      display: block;
+      margin: 0 auto;
+    }
     .description-element {
       border-bottom: 1px solid $lightGray;
       padding: 5px 2px;
@@ -949,14 +972,6 @@ input[type="button"], input[type="submit"] {
         font-weight: 500;
         transform: scale(0.8) translateX(-15px);
       }
-    }
-    .paypal-button {
-      display: block;
-      height: 30px;
-      width: 153px;
-      background: url('/static/img/icons/paypal-button.png') no-repeat center center;
-      background-size: cover;
-      margin: 20px auto 0;
     }
     .close {
       cursor: pointer;
