@@ -1,7 +1,7 @@
 import LocalizedStrings from 'react-localization'
 
 export default new LocalizedStrings({
- en:{
+ es:{
    // footer
    about: 'About',
    contact: 'Contact',
@@ -110,10 +110,113 @@ export default new LocalizedStrings({
    need: 'Need to follow first',
    need_exp: 'You need to activate this in order to unfollow the new followings'
  },
- it: {
-   how:"Come vuoi il tuo uovo oggi?",
-   boiledEgg:"Uovo sodo",
-   softBoiledEgg:"Uovo alla coque",
-   choice:"Come scegliere l'uovo"
+ en: {
+   // footer
+   about: 'About',
+   contact: 'Contacto',
+   usage: 'Términos y Condiciones',
+   privacy: 'Política de Privacidad',
+   logout: 'Salir',
+   // header
+   login: 'Entrar',
+   time: 'Agregar Tiempo',
+   //landing
+   sign: 'Entrar Con Instagram',
+   mainheader: 'Seguidores reales en muy poco tiempo',
+   subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo',
+   ease: 'Fácil de usar',
+   everyone: 'Para todos',
+   organic: 'Completamente orgánica',
+   ease_exp: 'No pierdas tiempo con configuraciones complicadas. Comenzar toma sólo un par de clics, sin necesidad de descargar nada',
+   everyone_exp: 'Para creadores de contenido, emprendedores, músicos, cualquier persona. Lo importante es que quieras crecer',
+   organic_exp: 'Te garantizamos crecer con personas reales. Sin bots ni cuentas falsas',
+   header: 'La plataforma más poderosa y fácil de usar para crecer tu cuenta de Instagram',
+   reach: 'Crece tu cuenta',
+   reach_exp: 'Muchas personas por ahí están literalmente comprando seguidores. Sin embargo, estos son sólo usuarios falsos que no interactúan con ellos de ninguna manera. OWA Influencers te garantiza obtener seguidores reales de Instagram, los cuáles estarán genuinamente enamorados de tu perfil y de tu contenido.',
+   reach_exp2: 'Déjanos administrar tu cuenta. Sólo necesitas configurar algunas opciones y nosotros nos encargaremos del resto, incluso cuando no estés conectado.',
+   audience: 'Encuentra a tu audiencia',
+   audience_exp: 'No tiene caso que incrementar tus seguidores si te dejarán de seguir al siguiente día. Para comprometer a los usuarios contigo, es necesario que encuentres a las personas que les encanta tu contenido',
+   content: 'Contenido',
+   content_exp: 'A través de hashtags, llega a usuarios con ciertos intereses específicos',
+   location: 'Ubicación',
+   location_exp: 'Encuentra e interactúa con usuarios en base a su ubicación. Negocios locales, áreas específicas, ciudades e incluso estados enteros. Localiza tu audiencia',
+   exceptions: 'Excepciones',
+   exceptions_exp: 'Deja fuera hashtags, usuarios e incluso palabras no deseadas. Interactúa sólo con cuentas que sean relevantes para ti',
+   users: 'Special Follow',
+   users_exp: 'Contáctanos y atrae usuarios específicos con los que deseas interactuar.',
+   attention: 'Tú eres el centro de atención',
+   expose: 'Deja que las personas te vean y te sigan',
+   hall: 'Salón de la Fama',
+   hall_exp: 'Haz que tu cuenta sea el centro de atención para otros usuarios de OWA.',
+   hall_exp2: 'Así obtendrás seguidores de manera más rápida y directa',
+   package_time: 'Sólo el tiempo necesario',
+   time_exp: 'OWA Influencers es sin duda la mejor plataforma para hacer crecer tu cuenta de Instagram a un precio muy económico.',
+   time_exp2: 'Mira algunos de los paquetes que tenemos para ti',
+   day: 'día',
+   day_s: 'días',
+   per_day: 'por día',
+   packages: 'Con todos nuestros paquetes creces tu cuenta y obtienes interacción con usuarios reales',
+   wave: '¿Estás listo para recibir una oleada de seguidores?',
+   enter: 'Entra ahora y comienza a crecer tu cuenta de Instagram',
+   //signin
+   signin: 'Iniciar Sesión',
+   ig_user: 'Usuario de Instagram',
+   ig_password: 'Contraseña de Instagram',
+   verify_account: 'Debes verificar tu cuenta. Por favor inicia sesión en ',
+   ig: 'Instagram',
+   verify_account2: ' y verifica que fuiste tú',
+   continue: 'He verificado, Continuar',
+   accept: 'Al iniciar sesión, aceptas nuestros términos y condiciones',
+   //time card
+   remaining: 'Tiempo Restante',
+   days: 'Días',
+   //hall of fame
+   fame: 'Salón de la Fama',
+   following_hall: 'Siguiendo',
+   follow: 'Seguir',
+   // switches
+   liking: 'Like',
+   following: 'Follow',
+   unfollowing: 'Unfollow',
+   commenting: 'Comentario',
+   add_comment: 'Escribe tu comentario aquí. Si no escribes nada, generaremos algo para ti',
+   //filters
+   filters: 'Filtrar',
+   hashtags: 'Tags',
+   separated: 'Introduce tags, sepáralos con comas',
+   locations: 'Ubicaciones',
+   locations_sep: 'Introduce una ubicación',
+   search: 'Buscar',
+   //exceptions
+   blacklist: 'Excepciones',
+   hashtag: 'Tags',
+   username: 'Nombres de usuario',
+   usernames_sep: 'Introduce nombres de usuario, sepáralos con comas',
+   keyword: 'Palabras clave',
+   keyword_sep: 'Introduce palabras clave, sepáralas con comas',
+   //time
+   famous: 'Fama',
+   faster: 'Pon tu cuenta de Instagram en el Salón de la Fama para incrementar tus seguidores más rápido',
+   buy_fame: 'Comprar Fama',
+   buy_time: 'Comprar Tiempo',
+   timepack: 'Paquetes de Tiempo',
+   //onboarding
+   add_time: 'Tendrás que añadir tiempo a tu cuenta para incrementar tu actividad. Por ahora no te preocupes, te daremos una prueba gratuita',
+   grow: 'Incrementa tu actividad',
+   grow_exp: 'Empieza a usar tu tiempo para dar likes, seguir y comentar para incrementar tus seguidores.',
+   target: 'Dirígete a tu audiencia',
+   target_exp: 'Encuentra a tu audiencia utilizando los tipos de filtración que te damos',
+   become: 'Hazte Famoso',
+   become_exp: 'Sube a lo alto del salón de la fama y consigue nuevos seguidores mucho más rápido',
+   next: 'Siguiente',
+   back: 'Atrás',
+   ok: 'OK',
+   //login again
+   update: 'Actualiza tu contraseña',
+   verify: 'Verifica tu cuenta',
+   restart: 'Reiniciar',
+   //hints
+   need: 'Necesitas seguir primero',
+   need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores'
  }
 })
