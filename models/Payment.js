@@ -16,7 +16,7 @@ const schema = new Schema({
     }
   },
   username: { type: String, ref: 'User', required: true },
-  date: { type: Number, default: Date.now() }
+  date: { type: Number, default: Date.now(), required: true}
 })
 
 module.exports = mongoose.model('Payment', schema)
