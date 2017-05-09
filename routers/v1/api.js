@@ -578,14 +578,6 @@ router.route('/payments/execute')
 
           const now = Date.now()
 
-          // Check if timeEnd has allready passed
-          // 1491790971264
-          if (user.timeEnd < now) {
-            user.timeEnd = now + timeToAdd
-          } else {
-            user.timeEnd = user.timeEnd + timeToAdd
-          }
-
           // Check if the item included hall of fame
           if (item.hallOfFame) {
             // Add Fame End time :)
@@ -593,6 +585,14 @@ router.route('/payments/execute')
               user.fameEnd = now + timeToAdd
             } else {
               user.fameEnd = user.fameEnd + timeToAdd
+            }
+          } else {
+            // Check if timeEnd has allready passed
+            // 1491790971264
+            if (user.timeEnd < now) {
+              user.timeEnd = now + timeToAdd
+            } else {
+              user.timeEnd = user.timeEnd + timeToAdd
             }
           }
 

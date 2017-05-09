@@ -19,9 +19,9 @@ const TimeLink = (props) => {
 const TimeCard = (props) => {
   return (
     <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
-      { props.item.name ? <img src='/'></img> : undefined }
-      { props.item.name ? <h2>{Localization.famous}</h2> : undefined }
-      { props.item.name ? <p>{Localization.faster}</p> : undefined }
+      { props.item.description ? <img src='/'></img> : undefined }
+      { props.item.description ? <h2>{Localization.famous}</h2> : undefined }
+      { props.item.description ? <p>{Localization.faster}</p> : undefined }
       <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
       <div className='price-wrapper'>
         <span className='price'>${props.item.price}</span>
@@ -131,8 +131,6 @@ class Time extends Component {
       paymentId: query.paymentId,
       token: query.token
     }
-
-    console.log('Will mount')
 
     // Check if we have a payment confirmation
     if (payment.payerId && payment.paymentId && payment.token) {
