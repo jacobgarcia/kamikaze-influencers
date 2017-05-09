@@ -23,7 +23,7 @@ class Dashboard extends Component {
     const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
-      hallOfFame: [],
+      hallOfFame: null,
       remainingTime: 0,
       introVisible: newUser,
       // Set state
@@ -458,7 +458,7 @@ class Dashboard extends Component {
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
         <div className='content-section'>
-          <div className='hall-section'>
+          {this.state.hallOfFame ? <div className='hall-section'>
             <h4>{Localization.fame}</h4>
             <div className='hall-of-fame'>
               {this.state.hallOfFame.map((user, index) =>
@@ -469,6 +469,7 @@ class Dashboard extends Component {
               )}
             </div>
           </div>
+          : undefined }
           <div className='main-section'>
             <div className='section center'>
               <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
