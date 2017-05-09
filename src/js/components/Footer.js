@@ -17,8 +17,8 @@ const Footer = (props) => {
         </div>
         <div className='social-links'>
           <ul>
-            <li><Link href="https://www.instagram.com/"><img src="/static/img/icons/instagram.png"></img></Link></li>
-            <li><Link href="https://www.facebook.com/"><img src="/static/img/icons/facebook.png"></img></Link></li>
+            <li><Link href="https://www.instagram.com/owainfluencersco/"><img src="/static/img/icons/instagram.png"></img></Link></li>
+            <li><Link href="https://www.facebook.com/owainfluencers/"><img src="/static/img/icons/facebook.png"></img></Link></li>
           </ul>
         </div>
       </div>
