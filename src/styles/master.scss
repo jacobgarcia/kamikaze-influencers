@@ -638,7 +638,7 @@ h2 {
     .image-container .image {
       width: 150px;
       height: 150px;
-
+      min-width: 150px;
       &.content { background: url('/static/img/icons/content.svg') center center no-repeat; background-size: 150px; }
       &.location { background: url('/static/img/icons/location.svg') center center no-repeat; background-size: 150px; }
       &.exceptions { background: url('/static/img/icons/exceptions.svg') center center no-repeat; background-size: 150px; }
