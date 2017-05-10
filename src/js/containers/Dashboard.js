@@ -23,7 +23,7 @@ class Dashboard extends Component {
     const newUser = notifications.includes('0') || notifications.includes(0)
 
     this.state = {
-      hallOfFame: null,
+      hallOfFame: [],
       remainingTime: 0,
       introVisible: newUser,
       // Set state
@@ -59,7 +59,13 @@ class Dashboard extends Component {
       // handle verify account
       verifyAccount: false,
       //username
-      username: ''
+      username: '',
+      //profile picture
+      profile_picture: '',
+      //famous
+      famous: false,
+      //hall of fame of followings
+      hallOfFollowing: []
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -180,6 +186,13 @@ class Dashboard extends Component {
       this.setState({
         instagram_id: response.data.instagram.instagram.id
       })
+
+      return NetworkRequest.getHallOfFollowing()
+    })
+    .then(response => {
+      this.setState({
+        hallOfFollowing: response.data.famous
+      })
     })
     .catch((error) => {
       // TODO: handle error
@@ -188,10 +201,6 @@ class Dashboard extends Component {
 
     // Get Statistics
     this.onStatsChange()
-
-    // Get the user and eload user preferences from localStorage
-
-
   }
 
 
@@ -212,7 +221,9 @@ class Dashboard extends Component {
         filterusers: user.preferences.filterusers,
         filterkeys: user.preferences.filterkeys,
         comment: user.preferences.comment_text,
-        username: user.username
+        username: user.username,
+        profile_picture: user.profile_picture,
+        famous: user.fameEnd > Date.now()
       })
 
       const remainingTime = Math.floor(user.timeEnd/1000) - Math.floor(Date.now()/1000)
@@ -458,14 +469,28 @@ class Dashboard extends Component {
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
         <div className='content-section'>
-          {this.state.hallOfFame ? <div className='hall-section'>
+          {this.state.hallOfFame.length || this.state.hallOfFollowing.length || this.state.famous ? <div className='hall-section'>
             <h4>{Localization.fame}</h4>
             <div className='hall-of-fame'>
+            {this.state.famous ?
+              <FameItem username={this.state.username}
+                onFollow={this.onFollow}
+                picture={this.state.profile_picture}/>
+            : undefined }
               {this.state.hallOfFame.map((user, index) =>
-                <FameItem user={user}
+                <FameItem username={user.username}
                   onFollow={this.onFollow}
                   key={index}
-                  instagram_id={this.state.instagram_id}/>
+                  instagram_id={user.instagram.id}
+                  picture={user.profile_picture} />
+              )}
+              {this.state.hallOfFollowing.map((user, index) =>
+                <FameItem username={user.username}
+                  onFollow={this.onFollow}
+                  key={index}
+                  instagram_id={user.instagram.id}
+                  picture={user.profile_picture}
+                  following={true}/>
               )}
             </div>
           </div>

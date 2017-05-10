@@ -396,7 +396,7 @@ router.route('/users/self/famous')
 .get((req, res) => {
   const username = req._username
   User.findOne({ username })
-  .select('fameFollowers follows -_id')
+  .select('fameFollowers follows instagram.id -_id')
   .exec((error, followers) => {
     if (error) {
       console.log(error)
@@ -405,7 +405,7 @@ router.route('/users/self/famous')
     if (!followers) {
       return res.status(404)
     }
-    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers).concat(followers.instagram.id)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
       if (error) {
@@ -415,7 +415,31 @@ router.route('/users/self/famous')
        res.status(200).json({ famous })
     })
   })
+})
 
+router.route('/users/self/famous/following')
+.get((req, res) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('fameFollowers follows instagram.id -_id')
+  .exec((error, followers) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    if (!followers) {
+      return res.status(404)
+    }
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$in: (followers.follows).concat(followers.fameFollowers)  } })
+    .select('username profile_picture instagram.id -_id')
+    .exec((error, famous) => {
+      if (error) {
+        console.log(error)
+        return res.status(500).json({ error })
+      }
+       res.status(200).json({ famous })
+    })
+  })
 })
 
 

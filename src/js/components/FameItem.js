@@ -9,7 +9,7 @@ class FameItem extends Component {
     super(props)
 
     this.state = {
-      following: false
+      following: this.props.following || false
     }
   }
 
@@ -34,23 +34,24 @@ class FameItem extends Component {
   }
 
   render() {
-    const user = this.props.user
+    const username = this.props.username
+    const picture = this.props.picture
     const instagram_id = this.props.instagram_id
 
     let button = undefined
-    if (user.instagram.id === instagram_id) {
+    if (!instagram_id) {
       button = null
     } else if (this.state.following){
         button = <input type="button" className='disabled' value={Localization.following_hall}></input>
     } else {
-        button = <input type="button" value={Localization.follow} onClick={() => this.onFollow(user.instagram.id)}></input>
+        button = <input type="button" value={Localization.follow} onClick={() => this.onFollow(instagram_id)}></input>
     }
     return (
       <div className='fame-item'>
         <div className='fame-item-content'>
           <div className='profile'>
-            <div className='profile-picture'><img src={user.profile_picture}></img></div>
-            <a href={'http://www.instagram.com/' + user.username}>{user.username}</a>
+            <div className='profile-picture'><img src={picture}></img></div>
+            <a href={'http://www.instagram.com/' + username}>{username}</a>
           </div>
           {button}
         </div>

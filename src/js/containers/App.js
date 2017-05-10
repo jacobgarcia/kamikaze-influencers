@@ -24,13 +24,14 @@ class App extends Component {
     // Remove cached user
     NetworkRequest.getProfile()
     .then((response) => {
-      const { full_name, _id, profile_picture, username, timeEnd, preferences } = response.data.user
+      const { full_name, _id, profile_picture, username, timeEnd, preferences, fameEnd } = response.data.user
       const user = {
         full_name,
         _id,
         profile_picture,
         username,
         timeEnd,
+        fameEnd,
         preferences
       }
 
