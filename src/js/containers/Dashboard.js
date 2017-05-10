@@ -511,11 +511,6 @@ class Dashboard extends Component {
             <div className='section switching'>
               <div className='switch-section'>
                 <span className={`liking ${this.state.liking ? 'active' : '' }`}>{Localization.liking}</span>
-                <div className='inline-error active'>
-                  <div className='caret left'></div>
-                  <span className='title'>{Localization.need}</span>
-                  <p>{Localization.need_exp}</p>
-                </div>
                 <div className='switch-counter'>
                   <span>{this.state.likes}</span>
                   <Switch id="0" onChange={this.onLikingChange} active={this.state.liking}/>

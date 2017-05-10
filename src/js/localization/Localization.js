@@ -108,7 +108,28 @@ const Localization = new LocalizedStrings({
    restart: 'Reiniciar',
    //hints
    need: 'Necesitas seguir primero',
-   need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores'
+   need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores',
+   //hints section
+   hall_hint: 'Salón de la Fama',
+   hall_hexp: 'Aquí puedes seguir las cuentas que encuentres interesantes. Cada vez que sigas a alguien te agregaremos 5 minutos a tu tiempo restante. ¡Comienza a seguir estas grandiosas cuentas para obtener tiempo gratis! Recuerda que tú puedes ser famoso también. Ve a "Agregar Tiempo" para encontrar más información',
+   like_hint: 'Like',
+   like_hexp: 'Todo el mundo ama obtener un like en alguna foto. ¡Pruébalo! Darás alrededor de 1000 likes/día',
+   follow_hint: 'Follow',
+   follow_hexp: 'Seguir a otras cuentas es la forma más eficiente de crecer tu cuenta. Cuando sigues a otras personas tienes una alta probabilidad de que estas te sigan de vuelta.  Darás aproximadamente 300 follows/día',
+   unfollow_hint: 'Unfollow',
+   unfollow_hexp: 'Comienza por seguir a otros usuarios, cuando estos te siguen de vuelta los dejaremos de seguir y ¡mantendrás los seguidores! Sólo se dejan de seguir a los usuarios seguidos por OWA',
+   comment_hint: 'Comentarios',
+   comment_hexp: 'Se pueden utilizar para impulsar tus ventas y el tráfico, pueded establecer comentarios para ofrecer descuentos o para promover algo. CUIDADO: Debes cambiar este comentario todos los días, si no Instagram podría suspender tu cuenta',
+   hashtags_hint: 'Tags',
+   hashtags_hexp: 'Puedes optar por interactuar únicamente con hashtags específicos con el fin de atraer a un público deseado. No introduzcas nada si quieres usar los hashtags más populares',
+   locations_hint: 'Ubicación',
+   locations_hexp: 'Puedes optar por interactuar únicamente con ubicaciones específicas con el fin de atraer a un público deseado. Ten en cuenta que la especificación de una ubicación poco popular puede disminuir la eficiencia',
+   hashtag_hint: 'Lista Negra de Hashtags',
+   hashtag_hexp: 'Enlista las etiquetas con las que no deseas interactuar por ningún medio',
+   username_hint: 'Lista Negra de Usuarios',
+   username_hexp: 'Enlista usuarios con los que no deseas interactuar por ningún medio',
+   keyword_hint: 'Lista Negra de Palabras Clave',
+   keyword_hexp: 'Este es el tipo de excepción más selectiva. Esto prohibirá cualquier hashtag que contenga la palabra clave especificada. Sé específico con las palabras clave para no prohibir todo el contenido'
  },
  en:{
    // footer
@@ -217,7 +238,28 @@ const Localization = new LocalizedStrings({
    restart: 'Restart',
    //hints
    need: 'Need to follow first',
-   need_exp: 'You need to activate this in order to unfollow the new followings'
+   need_exp: 'You need to activate this in order to unfollow the new followings',
+   //hints section
+   hall_hint: 'Hall Of Fame',
+   hall_hexp: 'Here you can follow accounts you find interesting. Everytime you follow someone we will add 5 minutes to your remaining time. Start following these great accounts to obtain free time! Remember you can be famous too, "Add Time" to find more about it',
+   like_hint: 'Like',
+   like_hexp: 'Everyone loves a like on their photo. Try it out! You will give about 1000 likes/day',
+   follow_hint: 'Follow',
+   follow_hexp: 'Following is a very strong form of Instagram growth, when you follow people they have a very high chance of following back. You will give about 300 follows/day',
+   unfollow_hint: 'Unfollow',
+   unfollow_hexp: 'Begin by following up accounts, when they follow you back we unfollow them afterwards and you keep the followers! You only unfollow users followed by OWA',
+   comment_hint: 'Comment',
+   comment_hexp: 'This can be used drive up sales & traffic, you may set your comments to offer discounts or to promote something. BEWARE: You should change this comment daily, if not Instagram could ban you',
+   hashtags_hint: 'Tags',
+   hashtags_hexp: 'You can choose to interact only with specific hashtags in order to attract a specific audience. Leave empty if you want to use most popular hashtags',
+   locations_hint: 'Location',
+   locations_hexp: 'You can choose to interact only with specific locations in order to attract a specific audience. Keep in mind though that specifying a unpopular location may decrease the efficiency',
+   hashtag_hint: 'Hashtags Blacklist',
+   hashtag_hexp: 'List the tags you do not want to interact by any means',
+   username_hint: 'Username Blacklist',
+   username_hexp: 'List usernames you do not want to interact by any means',
+   keyword_hint: 'Keyword Blacklist',
+   keyword_hexp: 'This is strongest type of exception. This will ban any hashtag containing the specified keyword. Be specific with the keywords so you do not ban all the content'
  }
 })
 
