@@ -14,10 +14,6 @@ from follow_protocol import follow_protocol
 import time
 import json
 
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-print 'Tag List:', (sys.argv[3]).split(",")
-
 # Connect to mongo database
 client = MongoClient()
 db = client.influencers

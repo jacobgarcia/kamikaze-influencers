@@ -93,7 +93,7 @@ class InstaBot:
 
 
     # Log setting.
-    log_file_path = ''
+    log_file_path = 'automation_logs/'
     log_file = 0
 
     # Other.
@@ -867,7 +867,7 @@ class InstaBot:
                 formatter = logging.Formatter('%(asctime)s - %(name)s '
                                               '- %(message)s')
                 self.logger = logging.getLogger(self.user_login)
-                self.hdrl = logging.FileHandler(self.log_full_path, mode='w')
+                self.hdrl = logging.FileHandler(self.log_full_path, mode='a')
                 self.hdrl.setFormatter(formatter)
                 self.logger.setLevel(level=logging.INFO)
                 self.logger.addHandler(self.hdrl)
