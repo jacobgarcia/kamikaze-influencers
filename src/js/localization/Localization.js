@@ -141,7 +141,7 @@ const Localization = new LocalizedStrings({
    location: 'Location',
    location_exp: 'Target and interact with users based on locations. We can target local businesses, specific areas, cities and even entire states. Locate your audience',
    exceptions: 'Exceptions',
-   exceptions_exp: 'Rule out unwanted hastags, users and even keywords. Interact only with accounts that are relevant to you',
+   exceptions_exp: 'Rule out unwanted hashtags, users and even keywords. Interact only with accounts that are relevant to you',
    users: 'Special Follow',
    users_exp: 'Target the followers or the followings of specefic usernames. Contact us with the usernames you wish to target, and we will take care of all the rest',
    attention: 'Become the center of attention',
