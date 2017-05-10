@@ -51,7 +51,6 @@ class FameItem extends Component {
           <div className='profile'>
             <div className='profile-picture'><img src={user.profile_picture}></img></div>
             <a href={'http://www.instagram.com/' + user.username}>{user.username}</a>
-            <span>{user.fullName}</span>
           </div>
           {button}
         </div>
