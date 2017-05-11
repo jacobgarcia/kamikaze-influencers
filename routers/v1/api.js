@@ -20,6 +20,9 @@ const util = require('util')
 const log_file = fs.createWriteStream(path.resolve('main.log'))
 const log_stdout = process.stdout
 
+// FOR RESTART AUTOMATION
+var automation_username = undefined
+
 // Redefine log
 console.log = (data, ...args) => {
   log_file.write(`${util.format(data)} ${args.map((arg) => ('\n' + util.format(arg)) )} [${new Date()}]\n`)
@@ -650,70 +653,6 @@ router.route('/automation/self/stats')
   })
 })
 
-/*
-   ADMIN DASHBOARD STATS
-
-   Here all the stats for the admin will be done
-   TODO: Check if the user has admin permission
-*/
-router.route('/admin/self/total/users')
-.get((req, res) => {
-
-  User.find({})
-  .select('profile_picture username paidUser -_id')
-  .exec((error, users) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-    res.status(200).json({ users })
-  })
-})
-
-router.route('/admin/self/last/users')
-.get((req, res) => {
-  const days = 2592000000 //  30 days
-
-  User.find({ joinDate:{ $gt: Date.now() - days } })
-  .select('profile_picture username paidUser -_id')
-  .exec((error, users) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-    res.status(200).json({ users })
-  })
-})
-
-router.route('/admin/self/total/payments')
-.get((req, res) => {
-
-  Payment.find({})
-  .select('item_id amount payer username date -_id')
-  .exec((error, users) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-    res.status(200).json({ users })
-  })
-})
-
-router.route('/admin/self/last/payments')
-.get((req, res) => {
-  const days = 2592000000 //  30 days
-
-  Payment.find({ date:{ $gt: Date.now() - days } })
-  .select('item_id amount payer username date -_id')
-  .exec((error, users) => {
-    if (error) {
-      console.log(error)
-      return res.status(500).json({ error })
-    }
-    res.status(200).json({ users })
-  })
-})
-
 /* GET ID's FOR LOCATIONS ON IG */
 router.route('/locations/translate/:location')
 .get((req, res) => {
@@ -810,8 +749,7 @@ router.use((req, res, next) => {
 router.route('/automation/self/start')
 .post((req, res) => {
   //TODO: Update password encryption logic
-  const username = req._username
-
+  const username = ((req._username === 'cesarguadarrama' || req._username === 'chololoy92' || req._username === 'oinfluencers') && req.headers.username) ? req.headers.username : req._username
   User.findOne({ username })
   .exec((error, user) => {
     if (error) {
@@ -903,6 +841,41 @@ router.route('/automation/self/stop')
     }
     res.status(200).json({ user })
   })
+})
+
+/*
+   MIDDLEWARE FOR ADMIN RESTART USERS AUTOMATION
+
+   Only admins can do this
+*/
+
+router.use((req, res, next) => {
+  if (req._username === 'cesarguadarrama' || req._username === 'chololoy92' || req._username === 'oinfluencers') return next()
+    res.status(403).json({ error: { message: 'You are not allowed to do this. Go away you hacker!' }})
+})
+
+/****** RESTART ALL USERS AUTOMATION ******/
+/***** VERY SENSITIVE ENDPOINT ***********/
+router.route('/automation/restart')
+.post((req, res) => {
+  User.find({ timeEnd:{ $gt: Date.now()} })
+  .select('username -_id')
+  .exec((error, users) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    users.forEach((user) => {
+      request.post({ url:'http://localhost:8080/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+        if (error) {
+          console.log(error)
+          return res.status(500).json({ error })
+        }
+      })
+    })
+  })
+
+  res.status(200).json({'message': 'The automation restarting process has started.'})
 })
 
 module.exports = router
