@@ -159,8 +159,6 @@ class Time extends Component {
       token: query.token
     }
 
-    console.log('Will mount')
-
     // Check if we have a payment confirmation
     if (payment.payerId && payment.paymentId && payment.token) {
       // Send payment confirmation

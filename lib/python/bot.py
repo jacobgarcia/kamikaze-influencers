@@ -14,10 +14,6 @@ from follow_protocol import follow_protocol
 import time
 import json
 
-print 'Number of arguments:', len(sys.argv), 'arguments.'
-print 'Argument List:', str(sys.argv)
-print 'Tag List:', (sys.argv[3]).split(",")
-
 # Connect to mongo database
 client = MongoClient()
 db = client.influencers
@@ -48,7 +44,7 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                unfollow_per_day= (150 if sys.argv[10] == "true" else 0),
                unfollow_break_min= (15 if sys.argv[10] == "true" else 0),
                unfollow_break_max= (30 if sys.argv[10] == "true" else 0),
-               log_mod=0,
+               log_mod=1, # write log to file ALWAYS
                proxy='',
                # Use unwanted username list to block users which have username contains one of this string
                ## Doesn't have to match entirely example: mozart will be blocked because it contains *art

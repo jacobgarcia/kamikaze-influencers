@@ -395,7 +395,7 @@ router.route('/users/self/famous')
 .get((req, res) => {
   const username = req._username
   User.findOne({ username })
-  .select('fameFollowers follows -_id')
+  .select('fameFollowers follows instagram.id -_id')
   .exec((error, followers) => {
     if (error) {
       console.log(error)
@@ -404,7 +404,7 @@ router.route('/users/self/famous')
     if (!followers) {
       return res.status(404)
     }
-    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers)  } })
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$nin: (followers.follows).concat(followers.fameFollowers).concat(followers.instagram.id)  } })
     .select('username profile_picture instagram.id -_id')
     .exec((error, famous) => {
       if (error) {
@@ -414,7 +414,31 @@ router.route('/users/self/famous')
        res.status(200).json({ famous })
     })
   })
+})
 
+router.route('/users/self/famous/following')
+.get((req, res) => {
+  const username = req._username
+  User.findOne({ username })
+  .select('fameFollowers follows instagram.id -_id')
+  .exec((error, followers) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    if (!followers) {
+      return res.status(404)
+    }
+    User.find({ fameEnd:{ $gt: Date.now()}, 'instagram.id': {$in: (followers.follows).concat(followers.fameFollowers)  } })
+    .select('username profile_picture instagram.id -_id')
+    .exec((error, famous) => {
+      if (error) {
+        console.log(error)
+        return res.status(500).json({ error })
+      }
+       res.status(200).json({ famous })
+    })
+  })
 })
 
 router.route('/payments')
@@ -569,14 +593,6 @@ router.route('/payments/execute')
 
           const now = Date.now()
 
-          // Check if timeEnd has allready passed
-          // 1491790971264
-          if (user.timeEnd < now) {
-            user.timeEnd = now + timeToAdd
-          } else {
-            user.timeEnd = user.timeEnd + timeToAdd
-          }
-
           // Check if the item included hall of fame
           if (item.hallOfFame) {
             // Add Fame End time :)
@@ -584,6 +600,14 @@ router.route('/payments/execute')
               user.fameEnd = now + timeToAdd
             } else {
               user.fameEnd = user.fameEnd + timeToAdd
+            }
+          } else {
+            // Check if timeEnd has allready passed
+            // 1491790971264
+            if (user.timeEnd < now) {
+              user.timeEnd = now + timeToAdd
+            } else {
+              user.timeEnd = user.timeEnd + timeToAdd
             }
           }
 

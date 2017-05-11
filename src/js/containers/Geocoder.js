@@ -247,7 +247,7 @@ import Localization from '../localization/Localization'
      bbox: '',
      types: 'region,place,district,locality',
      onSuggest: function() {},
-     focusOnMount: true
+     focusOnMount: false
 }
 
  export default Geocoder

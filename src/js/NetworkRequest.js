@@ -103,6 +103,10 @@ class NetworkRequest {
     return axios.get(`${window.baseUrl}/users/self/famous`)
   }
 
+  static getHallOfFollowing() {
+    return axios.get(`${window.baseUrl}/users/self/famous/following`)
+  }
+
   static getInstagramId() {
     return axios.get(`${window.baseUrl}/users/self/instagram/id`)
   }

@@ -51,3 +51,6 @@ jspm_packages
 *.pyc
 
 \.DS_Store
+
+# Automation Logs
+automation_logs
