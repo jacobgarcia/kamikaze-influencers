@@ -554,6 +554,7 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='title'>
+                <div className='hint'><span><b>{Localization.hashtags_hint}</b>{Localization.hashtags_hexp}</span></div>
                 <h4>{Localization.hashtags}</h4>
                 <div className='loader small hidden' id='tags-loader'></div>
               </div>
@@ -561,6 +562,7 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='title'>
+                <div className='hint'><span><b>{Localization.locations_hint}</b>{Localization.locations_hexp}</span></div>
                 <h4>{Localization.locations}</h4>
                 <div className='loader small hidden' id='locations-loader'></div>
               </div>
@@ -574,11 +576,13 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='section-title'>
+                <div className='hint'><span><b>{Localization.hashtag_hint}</b>{Localization.hashtag_hexp}</span></div>
                 <h4 className='exceptions'>{Localization.blacklist}</h4>
               </div>
             </div>
             <div className='section'>
               <div className='title'>
+                <div className='hint'><span><b>{Localization.hashtag_hint}</b>{Localization.hashtag_hexp}</span></div>
                 <h4>{Localization.hashtag}</h4>
                 <div className='loader small hidden' id='blackhashtags-loader'></div>
               </div>
@@ -586,6 +590,7 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='title'>
+                <div className='hint'><span><b>{Localization.username_hint}</b>{Localization.username_hexp}</span></div>
                 <h4>{Localization.username}</h4>
                 <div className='loader small hidden' id='blackusers-loader'></div>
               </div>
@@ -593,6 +598,7 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='title'>
+                <div className='hint'><span><b>{Localization.keyword_hint}</b>{Localization.keyword_hexp}</span></div>
                 <h4>{Localization.keyword}</h4>
                 <div className='loader small hidden' id='blackkeywords-loader'></div>
               </div>
