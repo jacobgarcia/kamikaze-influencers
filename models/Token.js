@@ -10,6 +10,7 @@ const schema = new Schema({
     type: String,
     required: true
   },
+  usage: Number,
   dirty: Boolean
 })
 
