@@ -133,7 +133,10 @@ const Localization = new LocalizedStrings({
    //add time
    added: 'Se agregó tiempo a tu cuenta',
    special: 'Special Follow',
-   contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta'
+   contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta',
+   continue_time: 'Continuar',
+   pay: 'Pagar ahora',
+   contactus: 'Contáctanos'
  },
  en:{
    // footer
@@ -272,7 +275,10 @@ const Localization = new LocalizedStrings({
    //add time
    added: 'Time was added to your account',
    special: 'Special Follow',
-   contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.'
+   contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.',
+   continue_time: 'Continue',
+   pay: 'Pay now',
+   contactus: 'Contact us'
  }
 })
 
