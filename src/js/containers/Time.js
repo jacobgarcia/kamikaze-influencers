@@ -32,9 +32,9 @@ const PackageDetails = (props) => {
 const TimeCard = (props) => {
   return (
     <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
-      { props.item.name ? <div className='hall-of-fame-image'></div>: undefined }
-      { props.item.name ? <h2>{Localization.famous}</h2> : undefined }
-      { props.item.name ? <p>{Localization.faster}</p> : undefined }
+      { props.item.description ? <div className='hall-of-fame-image'></div>: undefined }
+      { props.item.description ? <h2>{Localization.famous}</h2> : undefined }
+      { props.item.description ? <p>{Localization.faster}</p> : undefined }
       <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
       <div className='price-wrapper'>
         <span className='price'>${props.item.price}</span>
