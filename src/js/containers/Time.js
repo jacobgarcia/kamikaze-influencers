@@ -11,7 +11,7 @@ const TimeLink = (props) => {
   const { href, rel, method } = props.link
   return (
     <div>
-      <a href={href}><input type='button' value='Continue' className='red'/></a>
+      <a href={href}><input type='button' value={Localization.continue} className='red'/></a>
     </div>
   )
 }
@@ -239,7 +239,7 @@ class Time extends Component {
           <div className='payment-details'>
             <h2>{Localization.confirmationTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]}/> : <div className='loader relative center'></div> }
-            <input type='button' className='red' value='Pay now' onClick={this.executePayment}/>
+            <input type='button' className='red' value={Localization.pay} onClick={this.executePayment}/>
             <img src='/static/img/paypal-button.svg' className='paypal-button' alt='Powered by PayPal'/>
           </div>
         </div>
@@ -277,7 +277,7 @@ class Time extends Component {
             <div className='aside'>
               <h3>{Localization.special}</h3>
               <p>{Localization.contact_us}</p>
-              <a href='mailto:hola@owainfluencers.com'><input type='button' value='Contact us' className='red'/></a>
+              <a href='mailto:hola@owainfluencers.com'><input type='button' value={Localization.contactus} className='red'/></a>
             </div>
           </div>
         </div>
