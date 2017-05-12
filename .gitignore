@@ -46,3 +46,11 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Python compiled files
+*.pyc
+
+\.DS_Store
+
+# Automation Logs
+automation_logs

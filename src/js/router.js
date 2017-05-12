@@ -1,11 +1,41 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
 import Landing from './containers/Landing'
+import App from './containers/App'
+import Dashboard from './containers/Dashboard'
+import Logout from './containers/Logout'
+import Time from './containers/Time'
+import Privacy from './containers/Privacy'
+import Usage from './containers/Usage'
+
+const isAuthenticated = () => {
+  const token = localStorage.getItem('token')
+
+  if (token) {
+    return true
+  }
+  return false
+}
+
+const requireAuth = (nextState, replace) => {
+  if (!isAuthenticated()) {
+    replace({
+      pathname: '/',
+      state: { nextPathname: nextState.location.pathname }
+    })
+  }
+}
 
 const Routes = (
-  <Router>
-    <Route exact path='/' component={Landing}/>
+  <Router history={browserHistory}>
+    <Route path='/' component={App}>
+      <IndexRoute component={ isAuthenticated() ? Dashboard : Landing }/>
+      <Route path='logout' component={Logout}/>
+      <Route path='time' component={Time} onEnter={requireAuth}/>
+      <Route path='privacy' component={Privacy}/>
+      <Route path='usage' component={Usage}/>
+    </Route>
   </Router>
 )
 

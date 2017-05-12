@@ -2,7 +2,7 @@ const webpack = require('webpack')
 
 const config = {
   output: {
-    filename: "bundle.js"
+    filename: 'bundle.min.js'
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -23,7 +23,7 @@ const config = {
          loader: 'babel-loader',
          exclude: [/node_modules/, /__test__/],
          query: {
-           "presets": ["react", "es2015"]
+           'presets': ['react', 'es2015']
          }
        },
        {
@@ -34,4 +34,5 @@ const config = {
   }
 }
 
+process.noDeprecation = true
 module.exports = config

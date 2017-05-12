@@ -5,11 +5,11 @@ const compression = require('compression')
 const path = require('path')
 const app = express()
 
-// const API = require(path.resolve('/routers/v1/api.js'))
+const API = require(path.resolve('routers/v1/api.js'))
 // const config = require(path.resolve('/config/config.js'))
 
 function shouldCompress(req, res) {
-  if (req.headers['x-no-compression']) { return false }
+  if (req.headers['x-no-compression']) return false
   return compression.filter(req, res)
 }
 
@@ -25,12 +25,12 @@ app.use('/dist', express.static(path.resolve('dist')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.use('/v1', API) //Add api routes
+app.use('/v1', API) //Add api routes
 
 app.use('*', (req, res) => {
     res.sendFile(path.resolve('src/index.html'))
 })
 
 app.listen(PORT, () => {
-  console.log(`Influencers server listening on port ${PORT}!`)
+  console.log(`Influencers server listening [${process.env.NODE_ENV}] on port ${PORT}! `)
 })
