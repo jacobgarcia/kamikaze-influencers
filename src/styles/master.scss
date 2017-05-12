@@ -432,7 +432,7 @@ h2 {
     background-size: cover;
     cursor: help;
     position: absolute;
-    &:hover span, &:active span {
+    &:hover span, &:active span, &:focus span {
       display: block;
     }
     span {
