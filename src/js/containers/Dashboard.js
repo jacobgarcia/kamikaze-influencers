@@ -102,6 +102,9 @@ class Dashboard extends Component {
     const remainingTime = Math.floor(newTimeEnd/1000) - Math.floor(Date.now()/1000)
     this.setState({
       remainingTime
+    }, () => {
+      clearInterval(this.interval)
+      this.interval = setInterval(() => this.tick(), 1000)
     })
   }
 

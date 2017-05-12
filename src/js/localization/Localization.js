@@ -129,7 +129,11 @@ const Localization = new LocalizedStrings({
    username_hint: 'Lista Negra de Usuarios',
    username_hexp: 'Enlista usuarios con los que no deseas interactuar por ningún medio',
    keyword_hint: 'Lista Negra de Palabras Clave',
-   keyword_hexp: 'Este es el tipo de excepción más selectiva. Esto prohibirá cualquier hashtag que contenga la palabra clave especificada. Sé específico con las palabras clave para no prohibir todo el contenido'
+   keyword_hexp: 'Este es el tipo de excepción más selectiva. Esto prohibirá cualquier hashtag que contenga la palabra clave especificada. Sé específico con las palabras clave para no prohibir todo el contenido',
+   //add time
+   added: 'Se agregó tiempo a tu cuenta',
+   special: 'Special Follow',
+   contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta'
  },
  en:{
    // footer
@@ -264,7 +268,11 @@ const Localization = new LocalizedStrings({
    username_hint: 'Username Blacklist',
    username_hexp: 'List usernames you do not want to interact by any means',
    keyword_hint: 'Keyword Blacklist',
-   keyword_hexp: 'This is strongest type of exception. This will ban any hashtag containing the specified keyword. Be specific with the keywords so you do not ban all the content'
+   keyword_hexp: 'This is strongest type of exception. This will ban any hashtag containing the specified keyword. Be specific with the keywords so you do not ban all the content',
+   //add time
+   added: 'Time was added to your account',
+   special: 'Special Follow',
+   contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.'
  }
 })
 

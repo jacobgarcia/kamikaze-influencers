@@ -232,7 +232,7 @@ class Time extends Component {
           <div className={`hover  ${state.showThanks ? '' : 'hidden'}`} onClick={() => this.setState({ showThanks: false })}>
             <div className='payment-details'>
               <h2>{Localization.thanksTitle}</h2>
-              <p>Time was added to your account</p>
+              <p>{Localization.added}</p>
             </div>
           </div>
         <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
@@ -273,10 +273,10 @@ class Time extends Component {
                 <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
               )}
             </div>
-            <h2>Special follow</h2>
+            <h2>{Localization.special}</h2>
             <div className='aside'>
-              <h3>Special follow</h3>
-              <p>Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.</p>
+              <h3>{Localization.special}</h3>
+              <p>{Localization.contact_us}</p>
               <a href='mailto:hola@owainfluencers.com'><input type='button' value='Contact us' className='red'/></a>
             </div>
           </div>
