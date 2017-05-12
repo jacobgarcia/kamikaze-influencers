@@ -661,7 +661,9 @@ router.route('/locations/translate/:location')
   if (!location) return res.status(200).json(location)
 
   // Find any valid access_token
-  Token.findOne({ 'dirty': false })
+  Token.find({ 'dirty': false })
+  .sort({usage: 1})
+  .limit(1)
   .exec((error, admin) => {
     if (error) {
       console.log(error)
@@ -674,7 +676,7 @@ router.route('/locations/translate/:location')
       // Get coordinates for specified location
       let locationTags = []
       const coordinates = location.split(",")
-      request.get({ url:'https://api.instagram.com/v1/locations/search?lat=' + coordinates[1] + '&lng=' + coordinates[0] + '&access_token=' + admin.access_token }, (error, response) => {
+      request.get({ url:'https://api.instagram.com/v1/locations/search?lat=' + coordinates[1] + '&lng=' + coordinates[0] + '&access_token=' + admin[0].access_token }, (error, response) => {
         if (error) {
           console.log(error)
           return res.status(500).json({ error })
@@ -689,7 +691,7 @@ router.route('/locations/translate/:location')
           /* Token has expired, mark access_token as dirty and trigger endpoint again */
           if (places.meta.error_type === "OAuthAccessTokenException"){
             // Mark as dirty
-            Token.findOneAndUpdate({ 'access_token': admin.access_token }, { $set: { 'dirty': true } })
+            Token.findOneAndUpdate({ 'access_token': admin[0].access_token }, { $set: { 'dirty': true } })
             .exec((error, user) => {
               if (error) {
                 console.log(error)
@@ -716,8 +718,15 @@ router.route('/locations/translate/:location')
               // Only push if there are no errors in the id by IG
               if(place.id != 0) locationTags.push('l:'.concat(place.id))
             })
-             res.write(locationTags.toString())
-             res.end()
+              Token.findOneAndUpdate({ 'access_token': admin[0].access_token }, {$inc: {usage: 1}})
+              .exec((error, admin) => {
+                if (error) {
+                  console.log(error)
+                  res.status(500).json({ error })
+                }
+               res.write(locationTags.toString())
+               res.end()
+            })
           }
       })
   })
