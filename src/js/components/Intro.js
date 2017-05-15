@@ -74,13 +74,13 @@ class Intro extends Component {
         <div className='container'>
         { this.getSection(this.state.page) }
         <div className='intro-nav'>
-          <div className='control'onClick={() => this.changePage(this.state.page-1)}>{this.state.page === 0 ? '' : 'Back'}</div>
+          <div className='control'onClick={() => this.changePage(this.state.page-1)}>{this.state.page === 0 ? '' : Localization.back}</div>
           <ul className='page-nav'>
             {[0,1,2,3].map((number) =>
               <li onClick={() => this.changePage(number)} key={number} className={this.state.page === number ? 'active' : ''}></li>
             )}
           </ul>
-          <div className='control'onClick={() => this.changePage(this.state.page+1)}>{this.state.page === 3 ? 'OK' : 'Next'}</div>
+          <div className='control'onClick={() => this.changePage(this.state.page+1)}>{this.state.page === 3 ? Localization.ok : Localization.next}</div>
         </div>
 
         </div>
