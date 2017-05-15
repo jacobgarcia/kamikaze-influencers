@@ -1190,6 +1190,7 @@ img.paypal-button {
     ul {
       display: flex;
       justify-content: center;
+      margin-bottom: 20px;
     }
     li {
       width: 25px;
@@ -1331,6 +1332,9 @@ img.paypal-button {
       }
       .image-container {
         margin-bottom: 0px;
+      }
+      .spacing {
+        margin-top: 10px;
       }
     }
 

@@ -14,7 +14,8 @@ const Localization = new LocalizedStrings({
    //landing
    sign: 'Entrar Con Instagram',
    mainheader: 'Seguidores reales en muy poco tiempo',
-   subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo',
+   subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo.',
+   signup_now: '¡Regístate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
    ease: 'Fácil de usar',
    everyone: 'Para todos',
    organic: 'Completamente orgánica',
@@ -136,7 +137,8 @@ const Localization = new LocalizedStrings({
    contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta',
    continue_time: 'Continuar',
    pay: 'Pagar ahora',
-   contactus: 'Contáctanos'
+   contactus: 'Contáctanos',
+   buy_now: 'Comprar Ahora'
  },
  en:{
    // footer
@@ -152,6 +154,7 @@ const Localization = new LocalizedStrings({
    sign: 'Sign in with Instagram',
    mainheader: 'Real followers in no time',
    subheader: 'Just sign in, customize your experience and you will begin to get real followers, ready to interact with you',
+   signup_now: 'Sign up now and you will a get a full day trial completely free! Without credit card, without additional charges. Discover the potential of OWA Influencers.',
    ease: 'Easy to use',
    everyone: 'For everyone',
    organic: 'Completely Organic',
@@ -278,7 +281,8 @@ const Localization = new LocalizedStrings({
    contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.',
    continue_time: 'Continue',
    pay: 'Pay now',
-   contactus: 'Contact us'
+   contactus: 'Contact us',
+   buy_time: 'Buy Now'
  }
 })
 
