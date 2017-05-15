@@ -10,7 +10,7 @@ const Localization = new LocalizedStrings({
    logout: 'Salir',
    // header
    login: 'Entrar',
-   time: 'Agregar Tiempo',
+   time: 'Comprar Seguidores',
    //landing
    sign: 'Entrar Con Instagram',
    mainheader: 'Seguidores reales en muy poco tiempo',
@@ -111,7 +111,7 @@ const Localization = new LocalizedStrings({
    need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores',
    //hints section
    hall_hint: 'Salón de la Fama',
-   hall_hexp: 'Aquí puedes seguir las cuentas que encuentres interesantes. Cada vez que sigas a alguien te agregaremos 5 minutos a tu tiempo restante. ¡Comienza a seguir estas grandiosas cuentas para obtener tiempo gratis! Recuerda que tú puedes ser famoso también. Ve a "Agregar Tiempo" para encontrar más información',
+   hall_hexp: 'Aquí puedes seguir las cuentas que encuentres interesantes. Cada vez que sigas a alguien te agregaremos 5 minutos a tu tiempo restante. ¡Comienza a seguir estas grandiosas cuentas para obtener tiempo gratis! Recuerda que tú puedes ser famoso también. Ve a "Comprar Seguidores" para encontrar más información',
    like_hint: 'Like',
    like_hexp: 'Todo el mundo ama obtener un like en alguna foto. ¡Pruébalo! Darás alrededor de 1000 likes/día',
    follow_hint: 'Follow',
@@ -147,7 +147,7 @@ const Localization = new LocalizedStrings({
    logout: 'Sign out',
    // header
    login: 'Sign In',
-   time: 'Add Time',
+   time: 'Buy Followers',
    //landing
    sign: 'Sign in with Instagram',
    mainheader: 'Real followers in no time',
@@ -253,7 +253,7 @@ const Localization = new LocalizedStrings({
    need_exp: 'You need to activate this in order to unfollow the new followings',
    //hints section
    hall_hint: 'Hall Of Fame',
-   hall_hexp: 'Here you can follow accounts you find interesting. Everytime you follow someone we will add 5 minutes to your remaining time. Start following these great accounts to obtain free time! Remember you can be famous too, "Add Time" to find more about it',
+   hall_hexp: 'Here you can follow accounts you find interesting. Everytime you follow someone we will add 5 minutes to your remaining time. Start following these great accounts to obtain free time! Remember you can be famous too, "Buy Followers" to find more about it',
    like_hint: 'Like',
    like_hexp: 'Everyone loves a like on their photo. Try it out! You will give about 1000 likes/day',
    follow_hint: 'Follow',
