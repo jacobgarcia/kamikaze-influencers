@@ -213,24 +213,24 @@ import Localization from '../localization/Localization'
    }
  }
 
- Geocoder.propTypes = {
-  endpoint: React.PropTypes.string,
-  source: React.PropTypes.string,
-  inputClass: React.PropTypes.string,
-  resultClass: React.PropTypes.string,
-  resultsClass: React.PropTypes.string,
-  inputPosition: React.PropTypes.string,
-  inputPlaceholder: React.PropTypes.string,
-  resultFocusClass: React.PropTypes.string,
-  onSelect: React.PropTypes.func.isRequired,
-  onSuggest: React.PropTypes.func,
-  accessToken: React.PropTypes.string.isRequired,
-  proximity: React.PropTypes.string,
-  bbox: React.PropTypes.string,
-  showLoader: React.PropTypes.bool,
-  focusOnMount: React.PropTypes.bool,
-  types: React.PropTypes.string
-}
+//  Geocoder.propTypes = {
+//   endpoint: React.PropTypes.string,
+//   source: React.PropTypes.string,
+//   inputClass: React.PropTypes.string,
+//   resultClass: React.PropTypes.string,
+//   resultsClass: React.PropTypes.string,
+//   inputPosition: React.PropTypes.string,
+//   inputPlaceholder: React.PropTypes.string,
+//   resultFocusClass: React.PropTypes.string,
+//   onSelect: React.PropTypes.func.isRequired,
+//   onSuggest: React.PropTypes.func,
+//   accessToken: React.PropTypes.string.isRequired,
+//   proximity: React.PropTypes.string,
+//   bbox: React.PropTypes.string,
+//   showLoader: React.PropTypes.bool,
+//   focusOnMount: React.PropTypes.bool,
+//   types: React.PropTypes.string
+// }
 
 
  Geocoder.defaultProps = {

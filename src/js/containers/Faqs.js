@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Footer from '../components/Footer'
+import Localization from '../localization/Localization'
 
-class Privacy extends Component {
+class Faqs extends Component {
 
   constructor(props) {
     super(props)
@@ -15,7 +16,7 @@ class Privacy extends Component {
     return (
       <div className='privacy'>
         <div className='content-section'>
-          <h1>Privacy notice</h1>
+          <h1>{ Localization.faqsTitle }</h1>
           <p></p>
         </div>
         <Footer></Footer>
@@ -25,4 +26,4 @@ class Privacy extends Component {
 
 }
 
-export default Privacy
+export default Faqs

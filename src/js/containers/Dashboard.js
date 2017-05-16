@@ -472,8 +472,9 @@ class Dashboard extends Component {
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
         <div className='content-section'>
-          {this.state.hallOfFame.length || this.state.hallOfFollowing.length || this.state.famous ? <div className='hall-section'>
-            <h4>{Localization.fame}</h4>
+          { this.state.hallOfFame.length || this.state.hallOfFollowing.length || this.state.famous ?
+            <div className='hall-section'>
+            <h4>{Localization.fame} <div className='hint white'><span><b>{Localization.hall}</b>{Localization.hall_exp3}</span></div></h4>
             <div className='hall-of-fame'>
             {this.state.famous ?
               <FameItem username={this.state.username}
@@ -494,7 +495,9 @@ class Dashboard extends Component {
                   instagram_id={user.instagram.id}
                   picture={user.profile_picture}
                   following={true}/>
-              )}
+              )
+            }
+            <span className="free">{ Localization.hall_coa}</span>
             </div>
           </div>
           : undefined }

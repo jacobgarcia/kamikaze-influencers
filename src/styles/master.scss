@@ -191,7 +191,8 @@ a {
   padding-bottom: 10px;
   h4 {
     color: #fff;
-    margin-left: 20px;
+    margin: 0 20px;
+    margin-bottom: 10px;
   }
 }
 
@@ -352,6 +353,72 @@ h2 {
   font-size: 1.4rem;
 }
 
+.hint {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  background-image: url('/static/img/icons/question.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  cursor: help;
+  position: absolute;
+  &.white {
+    background-image: url('/static/img/icons/question-white.png');
+  }
+  &:hover span, &:active span, &:focus span {
+    display: block;
+  }
+  span {
+    @include owa_boxshadow;
+    b {
+      display: block;
+    }
+    z-index: 10;
+    position: relative;
+    padding: 7px 15px;
+    background: $red;
+    color: #fff;
+    weight: 400;
+    width: 200px;
+    display: none;
+    transform: translate(-210px, -7px);
+    line-height: 1;
+    border-radius: 5px;
+    font-size: .9rem;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      display: block;
+      background: $red;
+      right: -5px;
+      top: 7px;
+      transform: rotate(45deg);
+    }
+  }
+.section-title {
+  margin-top: 20px;
+  margin-bottom: 0px;
+  position: relative;
+  }
+  .filters {
+    background: url('/static/img/icons/filter.png') no-repeat left center;
+    background-size: 26px;
+  }
+  .exceptions {
+    background: url('/static/img/icons/exception.png') no-repeat left center;
+    background-size: 26px;
+  }
+  h4 {
+    padding-left: 35px;
+    margin-bottom: 0px;
+  }
+}
+
 .section {
   padding: 10px 20px;
   display: flex;
@@ -422,64 +489,7 @@ h2 {
       }
     }
   }
-  .hint {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    background: url('/static/img/icons/question.png') no-repeat center center;
-    background-size: cover;
-    cursor: help;
-    position: absolute;
-    &:hover span, &:active span {
-      display: block;
-    }
-    span {
-      @include owa_boxshadow;
-      b {
-        display: block;
-      }
-      position: relative;
-      padding: 7px 15px;
-      background: $red;
-      color: #fff;
-      weight: 400;
-      width: 200px;
-      display: none;
-      transform: translate(-210px, -7px);
-      line-height: 1;
-      border-radius: 5px;
-      &::before {
-        content: '';
-        position: absolute;
-        width: 15px;
-        height: 15px;
-        display: block;
-        background: $red;
-        right: -5px;
-        top: 7px;
-        transform: rotate(45deg);
-      }
-    }
-  .section-title {
-    margin-top: 20px;
-    margin-bottom: 0px;
-    position: relative;
-    }
-    .filters {
-      background: url('/static/img/icons/filter.png') no-repeat left center;
-      background-size: 26px;
-    }
-    .exceptions {
-      background: url('/static/img/icons/exception.png') no-repeat left center;
-      background-size: 26px;
-    }
-    h4 {
-      padding-left: 35px;
-      margin-bottom: 0px;
-    }
-  }
+
   .title {
     position: relative;
     margin-bottom: 10px;
@@ -831,37 +841,52 @@ nav {
   z-index: 1;
   background: #fff;
   color: #000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 20px;
   flex-shrink: 0;
-  font-weight: 500;
-  > div {
-    width: 33.3%;
-  }
-  .time {
-    cursor: pointer;
-    text-align: right;
-    color: $red;
-    background: url('/static/img/icons/timer.png') no-repeat right center;
-    background-size: 24px;
-    a {
-      padding-right: 30px;
-      color: $red;
-      display: block;
+  .nav-content {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    font-weight: 500;
+    max-height: 40px;
+    > div {
+      width: 33.3%;
     }
+    .time {
+      cursor: pointer;
+      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      a {
+        background-image: url('/static/img/icons/timer.png');
+        background-size: 24px;
+        background-repeat: no-repeat;
+        background-position: right center;
+        @include owa_boxshadow;
+        display: inline-block;
+        max-height: 24px;
+        overflow-y: hidden;
+        padding: 0 7px;
+        padding-right: 30px;
+        color: #fff;
+        background-color: $red;
+      }
 
-  }
-  .logo {
-    width: 50px;
-    height: 30px;
-    a {
-      display: inline-block;
     }
-    a, img {
+    .logo {
       width: 50px;
       height: 30px;
+      a {
+        display: inline-block;
+      }
+      a, img {
+        width: 50px;
+        height: 30px;
+      }
     }
   }
 }
@@ -1127,12 +1152,13 @@ img.paypal-button {
     display: inline-block;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
-    overflow: hidden;
     background: $gray;
     margin-right: 10px;
     flex-shrink: 0;
+    background: #fff;
     img {
+      overflow: hidden;
+      border-radius: 50%;
       width: 100%;
       height: 100%;
     }
@@ -1243,6 +1269,18 @@ img.paypal-button {
       @include owa_boxshadow;
       .profile {
         min-width: 0;
+        .profile-picture {
+          position: relative;
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url('/static/img/icons/crown.svg') no-repeat center center;
+            transform: rotate(-45deg) translate(-0px, -15px);
+          }
+        }
         a {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1305,17 +1343,20 @@ img.paypal-button {
 }
 
 @media (min-width: 700px) {
-
   .dashboard .hero-dashboard {
     height: 100px;
   }
   nav {
-    .logo {
-      width: 60px;
-      height: 36px;
-      a, img {
+    padding: 5px 0;
+    .nav-content {
+      height: 56px;
+      .logo {
         width: 60px;
         height: 36px;
+        a, img {
+          width: 60px;
+          height: 36px;
+        }
       }
     }
   }
@@ -1343,7 +1384,7 @@ img.paypal-button {
     padding-top: 20px;
     display: flex;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 0 auto 50px;
     .main-section {
       order: 1;
       flex-grow: 1;
@@ -1352,6 +1393,15 @@ img.paypal-button {
     .hall-section {
       order: 2;
       flex-shrink: 0;
+      h4 {
+        position: relative;
+      }
+      .free {
+        margin: 5px 20px;
+        color: rgb(218, 218, 218);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
       .hall-of-fame {
         flex-direction: column;
         overflow-x: auto;
@@ -1359,9 +1409,6 @@ img.paypal-button {
         overflow-y: scroll;
       }
     }
-  }
-  nav {
-    padding: 10px 20px;
   }
   .signin-body {
     padding: 15px 40px;
