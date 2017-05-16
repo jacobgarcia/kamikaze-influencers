@@ -54,9 +54,11 @@ class Nav extends Component {
     } else {
       return (
         <nav className='signin-nav'>
-          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
-          <Signin show={this.state.showSignin} id='nav' title={Localization.login}/>
+          <div className='nav-content'>
+            <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+            <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
+            <Signin show={this.state.showSignin} id='nav' title={Localization.login}/>
+          </div>
         </nav>
       )
     }
