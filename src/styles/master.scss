@@ -963,6 +963,9 @@ img.paypal-button {
       line-height: 1;
       text-align: center;
     }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+    }
     input[type="submit"] {
       display: block;
       margin: 0 auto;
