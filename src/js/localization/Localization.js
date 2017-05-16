@@ -5,7 +5,7 @@ const Localization = new LocalizedStrings({
    // footer
    about: 'About',
    contact: 'Contacto',
-   usage: 'Términos y Condiciones',
+   usage: 'Términos y Privacidad',
    privacy: 'Política de Privacidad',
    logout: 'Salir',
    // header
@@ -41,6 +41,7 @@ const Localization = new LocalizedStrings({
    hall: 'Salón de la Fama',
    hall_exp: 'Haz que tu cuenta sea el centro de atención para otros usuarios de OWA.',
    hall_exp2: 'Así obtendrás seguidores de manera más rápida y directa',
+   hall_exp3: 'Aquí aparecen las cuentas de los influencers más destacados, siguelos y recibe 5 minutos gratis',
    package_time: 'Sólo el tiempo necesario',
    time_exp: 'OWA Influencers es sin duda la mejor plataforma para hacer crecer tu cuenta de Instagram a un precio muy económico.',
    time_exp2: 'Mira algunos de los paquetes que tenemos para ti',
@@ -66,6 +67,7 @@ const Localization = new LocalizedStrings({
    fame: 'Salón de la Fama',
    following_hall: 'Siguiendo',
    follow: 'Seguir',
+   hall_coa: 'Sigue estas cuentas y recibe 5 minutos gratis',
    // switches
    liking: 'Like',
    following: 'Follow',
@@ -138,13 +140,14 @@ const Localization = new LocalizedStrings({
    continue_time: 'Continuar',
    pay: 'Pagar ahora',
    contactus: 'Contáctanos',
-   buy_now: 'Comprar Ahora'
+   buy_now: 'Comprar Ahora',
+   faqsTitle: 'Preguntas frecuentes'
  },
  en:{
    // footer
    about: 'About',
    contact: 'Contact',
-   usage: 'Terms',
+   usage: 'Terms and Privacy',
    privacy: 'Privacy Policy',
    logout: 'Sign out',
    // header
@@ -180,6 +183,7 @@ const Localization = new LocalizedStrings({
    hall: 'Hall of Fame',
    hall_exp: 'Make your account the center of attention for other OWA users.',
    hall_exp2: 'This way you will get real followers more quickly and directly',
+   hall_exp3: 'Here are the highlighted influencers, follow them and get 5 minutes for free',
    package_time: 'Only acquire the time you need',
    time_exp: 'OWA Influencers is with no doubt the best platform to really grow your Instagram account at an affordable cost.',
    time_exp2: 'Here are some of the time packages we have for you',
@@ -210,6 +214,7 @@ const Localization = new LocalizedStrings({
    fame: 'Hall of Fame',
    following_hall: 'Following',
    follow: 'Follow',
+   hall_coa: 'Follow this accounts and get 5 minutes free',
    // switches
    liking: 'Like',
    following: 'Follow',
@@ -282,7 +287,8 @@ const Localization = new LocalizedStrings({
    continue_time: 'Continue',
    pay: 'Pay now',
    contactus: 'Contact us',
-   buy_time: 'Buy Now'
+   buy_time: 'Buy Now',
+   faqsTitle: 'Frequent Asked Questions'
  }
 })
 
