@@ -15,7 +15,7 @@ const Localization = new LocalizedStrings({
    sign: 'Entrar Con Instagram',
    mainheader: 'Seguidores reales en muy poco tiempo',
    subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo.',
-   signup_now: '¡Regístate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
+   signup_now: '¡Regístrate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
    ease: 'Fácil de usar',
    everyone: 'Para todos',
    organic: 'Completamente orgánica',
