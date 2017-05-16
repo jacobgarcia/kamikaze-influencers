@@ -9,8 +9,9 @@ const Footer = (props) => {
       <div className='content-section'>
         <div className='links'>
           <ul>
-            <li><a href='mailto:hola@owainfluencers.com'>{Localization.contact}</a></li>
-            <li><a href='/terms'>{Localization.usage}</a></li>
+            <li><a href="mailto:hola@owainfluencers.com">{Localization.contact}</a></li>
+            <li><Link to="/terms">{Localization.usage}</Link></li>
+            <li><Link to="/faqs">FAQs</Link></li>
           </ul>
           {props.loggedin ? <a href='/logout'>{Localization.logout}</a> : ''}
         </div>
