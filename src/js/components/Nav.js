@@ -40,12 +40,15 @@ class Nav extends Component {
     if (this.props.user && token) {
       return (
         <nav>
-          <div className='profile'>
-            <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
-            <span>{this.props.user.username}</span>
+          <div className='nav-content'>
+            <div className='profile'>
+              <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
+              <span>{this.props.user.username}</span>
+            </div>
+            <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+            <div className='time'><Link to='/time'>{Localization.time}</Link></div>
           </div>
-          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <div className='time'><Link to='/time'>{Localization.time}</Link></div>
+
         </nav>
       )
     } else {
