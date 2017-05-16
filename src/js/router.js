@@ -6,8 +6,9 @@ import App from './containers/App'
 import Dashboard from './containers/Dashboard'
 import Logout from './containers/Logout'
 import Time from './containers/Time'
-import Privacy from './containers/Privacy'
+import Terms from './containers/Terms'
 import Usage from './containers/Usage'
+import Faqs from './containers/Faqs'
 
 const isAuthenticated = () => {
   const token = localStorage.getItem('token')
@@ -33,8 +34,9 @@ const Routes = (
       <IndexRoute component={ isAuthenticated() ? Dashboard : Landing }/>
       <Route path='logout' component={Logout}/>
       <Route path='time' component={Time} onEnter={requireAuth}/>
-      <Route path='privacy' component={Privacy}/>
+      <Route path='terms' component={Terms}/>
       <Route path='usage' component={Usage}/>
+      <Route path='faqs' component={Faqs}/>
     </Route>
   </Router>
 )
