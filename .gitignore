@@ -9,6 +9,8 @@ yarn.lock
 
 **.DS_Store
 
+**.pyc
+
 # Logs
 logs
 *.log
