@@ -579,7 +579,6 @@ class Dashboard extends Component {
             </div>
             <div className='section'>
               <div className='section-title'>
-                <div className='hint'><span><b>{Localization.hashtag_hint}</b>{Localization.hashtag_hexp}</span></div>
                 <h4 className='exceptions'>{Localization.blacklist}</h4>
               </div>
             </div>

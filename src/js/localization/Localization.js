@@ -10,11 +10,12 @@ const Localization = new LocalizedStrings({
    logout: 'Salir',
    // header
    login: 'Entrar',
-   time: 'Agregar Tiempo',
+   time: 'Comprar Seguidores',
    //landing
    sign: 'Entrar Con Instagram',
    mainheader: 'Seguidores reales en muy poco tiempo',
-   subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo',
+   subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo.',
+   signup_now: '¡Regístate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
    ease: 'Fácil de usar',
    everyone: 'Para todos',
    organic: 'Completamente orgánica',
@@ -111,7 +112,7 @@ const Localization = new LocalizedStrings({
    need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores',
    //hints section
    hall_hint: 'Salón de la Fama',
-   hall_hexp: 'Aquí puedes seguir las cuentas que encuentres interesantes. Cada vez que sigas a alguien te agregaremos 5 minutos a tu tiempo restante. ¡Comienza a seguir estas grandiosas cuentas para obtener tiempo gratis! Recuerda que tú puedes ser famoso también. Ve a "Agregar Tiempo" para encontrar más información',
+   hall_hexp: 'Aquí puedes seguir las cuentas que encuentres interesantes. Cada vez que sigas a alguien te agregaremos 5 minutos a tu tiempo restante. ¡Comienza a seguir estas grandiosas cuentas para obtener tiempo gratis! Recuerda que tú puedes ser famoso también. Ve a "Comprar Seguidores" para encontrar más información',
    like_hint: 'Like',
    like_hexp: 'Todo el mundo ama obtener un like en alguna foto. ¡Pruébalo! Darás alrededor de 1000 likes/día',
    follow_hint: 'Follow',
@@ -133,7 +134,11 @@ const Localization = new LocalizedStrings({
    //add time
    added: 'Se agregó tiempo a tu cuenta',
    special: 'Special Follow',
-   contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta'
+   contact_us: 'Contáctanos con un nombre de usuario que te interese y te ayudaremos a conseguir los followers y los followings de esa cuenta',
+   continue_time: 'Continuar',
+   pay: 'Pagar ahora',
+   contactus: 'Contáctanos',
+   buy_now: 'Comprar Ahora'
  },
  en:{
    // footer
@@ -144,11 +149,12 @@ const Localization = new LocalizedStrings({
    logout: 'Sign out',
    // header
    login: 'Sign In',
-   time: 'Add Time',
+   time: 'Buy Followers',
    //landing
    sign: 'Sign in with Instagram',
    mainheader: 'Real followers in no time',
    subheader: 'Just sign in, customize your experience and you will begin to get real followers, ready to interact with you',
+   signup_now: 'Sign up now and you will a get a full day trial completely free! Without credit card, without additional charges. Discover the potential of OWA Influencers.',
    ease: 'Easy to use',
    everyone: 'For everyone',
    organic: 'Completely Organic',
@@ -250,7 +256,7 @@ const Localization = new LocalizedStrings({
    need_exp: 'You need to activate this in order to unfollow the new followings',
    //hints section
    hall_hint: 'Hall Of Fame',
-   hall_hexp: 'Here you can follow accounts you find interesting. Everytime you follow someone we will add 5 minutes to your remaining time. Start following these great accounts to obtain free time! Remember you can be famous too, "Add Time" to find more about it',
+   hall_hexp: 'Here you can follow accounts you find interesting. Everytime you follow someone we will add 5 minutes to your remaining time. Start following these great accounts to obtain free time! Remember you can be famous too, "Buy Followers" to find more about it',
    like_hint: 'Like',
    like_hexp: 'Everyone loves a like on their photo. Try it out! You will give about 1000 likes/day',
    follow_hint: 'Follow',
@@ -272,7 +278,11 @@ const Localization = new LocalizedStrings({
    //add time
    added: 'Time was added to your account',
    special: 'Special Follow',
-   contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.'
+   contact_us: 'Contact us with the username you are interested and we will help you to interact with the followers or followings that surrounds the specific username.',
+   continue_time: 'Continue',
+   pay: 'Pay now',
+   contactus: 'Contact us',
+   buy_time: 'Buy Now'
  }
 })
 

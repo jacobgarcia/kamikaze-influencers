@@ -41,6 +41,7 @@ export default class Landing extends Component {
           <div className='content'>
             <h1>{Localization.mainheader}</h1>
             <p>{Localization.subheader}</p>
+            <p>{Localization.signup_now} </p>
             <input type="button" value={Localization.sign} onClick={() => this.setState({ showSignin: true })}/>
           </div>
         </div>
@@ -148,7 +149,10 @@ export default class Landing extends Component {
                   </div>
                 )}
               </div>
-              <p>{Localization.packages}</p>
+              <input type='button' value={Localization.buy_now} className='red' onClick={() => this.setState({ showSignin: true })}/>
+              <div className='spacing'>
+                <p>{Localization.packages}</p>
+              </div>
             </div>
           </div>
         </div>
