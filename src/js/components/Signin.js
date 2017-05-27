@@ -9,7 +9,7 @@ class Signin extends Component {
 
     this.state = {
       showSignin: props.showSignin || false,
-      username: props.username || '',
+      username: '',
       password: '',
       isLoading: false,
       verifyAccount: props.verifyAccount || false,
