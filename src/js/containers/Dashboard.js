@@ -210,7 +210,22 @@ class Dashboard extends Component {
 
   componentDidMount() {
 
-    this.parseUser(localStorage.getItem('user'))
+    // TODO this is being duplicated as in App we're also getting the profile and setting to localStorage
+    NetworkRequest.getProfile()
+    .then((response) => {
+      const { full_name, _id, profile_picture, username, timeEnd, preferences, fameEnd } = response.data.user
+      const user = {
+        full_name,
+        _id,
+        profile_picture,
+        username,
+        timeEnd,
+        fameEnd,
+        preferences
+      }
+      
+      return user
+    })
     .then(user => {
 
       this.setState({
