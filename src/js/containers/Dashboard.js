@@ -34,6 +34,7 @@ class Dashboard extends Component {
       unfollowing: false,
       showAlertFollow: false,
       comment: '',
+      commentChanged: false,
       // filters
       filtertags: [],
       filterusers: [],
@@ -83,6 +84,7 @@ class Dashboard extends Component {
     this.onFilterTagsChange = this.onFilterTagsChange.bind(this)
     this.onFilterUsersChange = this.onFilterUsersChange.bind(this)
     this.onFilterKeysChange = this.onFilterKeysChange.bind(this)
+    this.updateComment = this.updateComment.bind(this)
   }
 
   tick() {
@@ -96,6 +98,24 @@ class Dashboard extends Component {
         remainingTime: 0
       }))
     }
+  }
+
+  updateComment() {
+    NetworkRequest.updateComment(this.state.comment)
+    .then((response) => {
+      this.setState({
+        changed: true,
+        commentChanged: false
+      })
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        comment: response.data.user.preferences.comment_text
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
   }
 
   onFollow(newTimeEnd) {
@@ -129,19 +149,9 @@ class Dashboard extends Component {
 
   onCommentChange(event) {
     const { value, name } = event.target
-    NetworkRequest.updateComment(value)
-    .then((response) => {
-      this.setState({
-        changed: true
-      })
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-      this.setState({
-        comment: response.data.user.preferences.comment_text
-      })
-    })
-    .catch((error) => {
-      // TODO: catch error
-      console.log(error)
+    this.setState({
+      [name]: value,
+      commentChanged: true
     })
   }
 
@@ -206,10 +216,7 @@ class Dashboard extends Component {
     this.onStatsChange()
   }
 
-
-
   componentDidMount() {
-
     // TODO this is being duplicated as in App we're also getting the profile and setting to localStorage
     NetworkRequest.getProfile()
     .then((response) => {
@@ -223,7 +230,7 @@ class Dashboard extends Component {
         fameEnd,
         preferences
       }
-      
+
       return user
     })
     .then(user => {
@@ -259,14 +266,10 @@ class Dashboard extends Component {
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-
-
     //State to reload the stats every minute or so
     const reloadTime = 60000
     setInterval( () => this.onStatsChange(), reloadTime)
   }
-
-
 
   removeNotification() {
     const notifications = JSON.parse(localStorage.getItem('notifications'))
@@ -565,7 +568,17 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder={Localization.add_comment} onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}/>
+                <input
+                  type="text"
+                  placeholder={Localization.add_comment}
+                  onChange={this.onCommentChange}
+                  name='comment'
+                  value={this.state.comment || ''} />
+                  <input
+                    type="button"
+                    value="OK"
+                    onClick={this.updateComment}
+                    className={`red ${this.state.commentChanged ? '' : 'hidden'}`} />
               </div>
             </div>
             <div className='section'>

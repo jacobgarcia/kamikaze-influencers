@@ -92,6 +92,9 @@ input {
   border: none;
   outline: none;
   font-size: 1rem;
+  &.hidden {
+    display: none;
+  }
 }
 
 input[type="text"], input[type="password"] {
@@ -577,6 +580,14 @@ h2 {
       overflow-y: hidden;
       input[type="text"] {
         width: 100%;
+      }
+      input[type="button"] {
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        &.hidden {
+          display: none;
+        }
       }
       &.hidden {
         max-height: 0px;
