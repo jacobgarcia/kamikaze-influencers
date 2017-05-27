@@ -108,7 +108,7 @@ const Localization = new LocalizedStrings({
    //login again
    update: 'Actualiza tu contraseña',
    verify: 'Verifica tu cuenta',
-   restart: 'Reiniciar',
+   restart: 'Actualizar',
    //hints
    need: 'Necesitas seguir primero',
    need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores',
@@ -255,7 +255,7 @@ const Localization = new LocalizedStrings({
    //login again
    update: 'Update your password',
    verify: 'Verify your account',
-   restart: 'Restart',
+   restart: 'Update',
    //hints
    need: 'Need to follow first',
    need_exp: 'You need to activate this in order to unfollow the new followings',

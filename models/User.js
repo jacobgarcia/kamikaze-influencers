@@ -36,13 +36,14 @@ const schema = new Schema({
     filterusers: [ String ],
     filterkeys: [ String ],
     comment_text: { type: String, default: null},
-    speed: { type: Boolean, default: false }
+    speed: { type: Boolean, default: false },
+    changed: { type: Boolean, default: false }
   },
   fameFollowers: [ String ],
   toFollow: [ String ],
   joinDate: { type: Number, required: true, default: Date.now() }, //Statistics purposes
   paidUser: { type: Boolean, default: false },
-  automationActive: { type: Boolean, default: false },
+  automationActive: { type: Boolean, default: false }
 })
 
 module.exports = mongoose.model('User', schema)

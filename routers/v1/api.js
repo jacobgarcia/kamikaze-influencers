@@ -185,7 +185,7 @@ router.route('/users/self/following')
   const username = req._username
   const following = req.body.following
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.following': following } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.following': following, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -200,7 +200,7 @@ router.route('/users/self/unfollowing')
   const username = req._username
   const unfollowing = req.body.unfollowing
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.unfollowing': unfollowing } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.unfollowing': unfollowing, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -215,7 +215,7 @@ router.route('/users/self/commenting')
   const username = req._username
   const commenting = req.body.commenting
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.commenting': commenting } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.commenting': commenting, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -230,7 +230,7 @@ router.route('/users/self/liking')
   const username = req._username
   const liking = req.body.liking
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.liking': liking } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.liking': liking, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -245,7 +245,7 @@ router.route('/users/self/speed')
   const username = req._username
   const following = req.body.speed
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.speed': speed } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.speed': speed, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -261,7 +261,7 @@ router.route('/users/self/locations')
   const locations = req.body.locations
 
   // https://docs.mongodb.com/manual/reference/operator/update/set/#set-fields-in-embedded-documents
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.locations': locations } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.locations': locations, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -276,7 +276,7 @@ router.route('/users/self/tags')
   const username = req._username
   const tags = req.body.tags
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.tags': tags, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -292,7 +292,7 @@ router.route('/users/self/filtertags')
   const username = req._username
   const filtertags = req.body.filtertags
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.filtertags': filtertags } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filtertags': filtertags, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -307,7 +307,7 @@ router.route('/users/self/filterusers')
   const username = req._username
   const filterusers = req.body.filterusers
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterusers': filterusers } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterusers': filterusers, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -322,7 +322,7 @@ router.route('/users/self/filterkeys')
   const username = req._username
   const filterkeys = req.body.filterkeys
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterkeys': filterkeys } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.filterkeys': filterkeys, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -337,7 +337,7 @@ router.route('/users/self/comment')
   const username = req._username
   const comment = req.body.comment_text
 
-  User.findOneAndUpdate({ username }, { $set: { 'preferences.comment_text': comment } }, { new: true })
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.comment_text': comment, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -637,15 +637,30 @@ router.route('/payments/execute')
               return res.status(500).json({ error })
             }
 
+            // restart automation when buying time
+            if (!item.hallOfFame) {
+              request.post({ url:'https://owainfluencers.com/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+                if (error) {
+                  console.log(error)
+                  return res.status(500).json({ error })
+                }
+
+                request.post({ url:'https://owainfluencers.com/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+                  if (error) {
+                    console.log(error)
+                    return res.status(500).json({ error })
+                  }
+
+                res.status(200).json({ user })
+                })
+              })
+            }
+
             res.status(200).json({ user })
           })
-
         })
-
       })
-
     })
-
   })
   .catch(error => {
     console.log('ERROR\n', error)

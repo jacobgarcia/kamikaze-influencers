@@ -67,6 +67,8 @@ class Dashboard extends Component {
       famous: false,
       //hall of fame of followings
       hallOfFollowing: [],
+      // automation is active
+      automationActive: false
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
@@ -107,6 +109,7 @@ class Dashboard extends Component {
     }, () => {
       clearInterval(this.interval)
       this.interval = setInterval(() => this.tick(), 1000)
+      if (!this.state.automationActive) this.startAutomation()
     })
   }
 
@@ -223,12 +226,14 @@ class Dashboard extends Component {
         commenting: user.preferences.commenting,
         unfollowing: user.preferences.unfollowing,
         speed: user.preferences.speed,
+        changed: user.preferences.changed,
         filtertags: user.preferences.filtertags,
         filterusers: user.preferences.filterusers,
         filterkeys: user.preferences.filterkeys,
         comment: user.preferences.comment_text,
         username: user.username,
         profile_picture: user.profile_picture,
+        automationActive: user.automationActive,
         famous: user.fameEnd > Date.now()
       })
 
@@ -449,7 +454,9 @@ class Dashboard extends Component {
   startAutomation() {
     NetworkRequest.startAutomation()
     .then(response => {
-      console.log(response)
+      this.setState({
+        automationActive: true
+      })
     })
     .catch(error => {
       if (error.response.status === 401){
