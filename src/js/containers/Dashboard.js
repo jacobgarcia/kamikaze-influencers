@@ -32,6 +32,7 @@ class Dashboard extends Component {
       commenting: false,
       following: false,
       unfollowing: false,
+      speed: false,
       showAlertFollow: false,
       comment: '',
       // filters
@@ -65,13 +66,14 @@ class Dashboard extends Component {
       //famous
       famous: false,
       //hall of fame of followings
-      hallOfFollowing: []
+      hallOfFollowing: [],
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
     this.onCommentingChange = this.onCommentingChange.bind(this)
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
+    this.onSpeedChange = this.onSpeedChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
     this.onTagsChange = this.onTagsChange.bind(this)
     this.onLocationsChange = this.onLocationsChange.bind(this)
@@ -220,6 +222,7 @@ class Dashboard extends Component {
         following: user.preferences.following,
         commenting: user.preferences.commenting,
         unfollowing: user.preferences.unfollowing,
+        speed: user.preferences.speed,
         filtertags: user.preferences.filtertags,
         filterusers: user.preferences.filterusers,
         filterkeys: user.preferences.filterkeys,
@@ -426,6 +429,22 @@ class Dashboard extends Component {
     })
 
   }
+
+  onSpeedChange() {
+    NetworkRequest.updateSpeed(!this.state.speed)
+    .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        speed: response.data.user.preferences.speed,
+        changed: true
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
+  }
+
 
   startAutomation() {
     NetworkRequest.startAutomation()
