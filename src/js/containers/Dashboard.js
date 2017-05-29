@@ -436,6 +436,7 @@ class Dashboard extends Component {
   }
 
   onSpeedChange() {
+    if(!this.state.speed) alert(Localization.speed_alert)
     NetworkRequest.updateSpeed(!this.state.speed)
     .then((response) => {
       localStorage.setItem('user', JSON.stringify(response.data.user))
@@ -635,6 +636,20 @@ class Dashboard extends Component {
               </div>
               <Tags onChange={this.onFilterKeysChange} tags={this.state.filterkeys} placeholder={Localization.keyword_sep}/>
             </div>
+            <div className='section'>
+              <div className='speed'>
+                <h4 className='exceptions'>{Localization.speed_mode}</h4>
+                <div className='hint'><span><b>{Localization.speed_title}</b>{Localization.speed_hint}</span></div>
+              </div>
+            </div>
+            <div className='section switching'>
+              <div className='switch-section'>
+                <span className={`speed ${this.state.speed ? 'active' : '' }`}>{Localization.speed}</span>
+                <div className='switch-counter'>
+                  <Switch id="4" onChange={this.onSpeedChange} active={this.state.speed}/>
+                </div>
+              </div>
+          </div>
           </div>
         </div>
         <Footer loggedin={true}></Footer>

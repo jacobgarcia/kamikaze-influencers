@@ -39,7 +39,7 @@ if sys.argv[4] == "true":
 
 ## follows
 follows_day = 0
-if sys.argv[4] == "true":
+if sys.argv[5] == "true":
     if sys.argv[11] == "true":
         follows_day = 600
     else:
@@ -47,7 +47,7 @@ if sys.argv[4] == "true":
 
 ## comments
 comments_day = 0
-if sys.argv[4] == "true":
+if sys.argv[6] == "true":
     if sys.argv[11] == "true":
         comments_day = 120
     else:

@@ -243,7 +243,7 @@ router.route('/users/self/liking')
 router.route('/users/self/speed')
 .put((req, res) => {
   const username = req._username
-  const following = req.body.speed
+  const speed = req.body.speed
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.speed': speed, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
