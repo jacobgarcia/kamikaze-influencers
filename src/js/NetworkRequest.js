@@ -51,6 +51,15 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/follow`, { user_id })
   }
 
+  static updateSpeed(speed) {
+    return axios.put(`${window.baseUrl}/users/self/speed`, { speed })
+  }
+
+  static updateChanged(changed) {
+    return axios.put(`${window.baseUrl}/users/self/changed`, { changed })
+  }
+
+
   static startAutomation() {
     return axios.post(`${window.baseUrl}/automation/self/start`)
   }

@@ -32,6 +32,7 @@ class Dashboard extends Component {
       commenting: false,
       following: false,
       unfollowing: false,
+      speed: false,
       showAlertFollow: false,
       comment: '',
       commentChanged: false,
@@ -66,13 +67,16 @@ class Dashboard extends Component {
       //famous
       famous: false,
       //hall of fame of followings
-      hallOfFollowing: []
+      hallOfFollowing: [],
+      // automation is active
+      automationActive: false
     }
 
     this.onLikingChange = this.onLikingChange.bind(this)
     this.onCommentingChange = this.onCommentingChange.bind(this)
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
+    this.onSpeedChange = this.onSpeedChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
     this.onTagsChange = this.onTagsChange.bind(this)
     this.onLocationsChange = this.onLocationsChange.bind(this)
@@ -125,6 +129,7 @@ class Dashboard extends Component {
     }, () => {
       clearInterval(this.interval)
       this.interval = setInterval(() => this.tick(), 1000)
+      if (!this.state.automationActive) this.startAutomation()
     })
   }
 
@@ -242,12 +247,15 @@ class Dashboard extends Component {
         following: user.preferences.following,
         commenting: user.preferences.commenting,
         unfollowing: user.preferences.unfollowing,
+        speed: user.preferences.speed,
+        changed: user.preferences.changed,
         filtertags: user.preferences.filtertags,
         filterusers: user.preferences.filterusers,
         filterkeys: user.preferences.filterkeys,
         comment: user.preferences.comment_text,
         username: user.username,
         profile_picture: user.profile_picture,
+        automationActive: user.automationActive,
         famous: user.fameEnd > Date.now()
       })
 
@@ -445,10 +453,29 @@ class Dashboard extends Component {
 
   }
 
+  onSpeedChange() {
+    if(!this.state.speed) alert(Localization.speed_alert)
+    NetworkRequest.updateSpeed(!this.state.speed)
+    .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        speed: response.data.user.preferences.speed,
+        changed: true
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
+  }
+
+
   startAutomation() {
     NetworkRequest.startAutomation()
     .then(response => {
-      console.log(response)
+      this.setState({
+        automationActive: true
+      })
     })
     .catch(error => {
       if (error.response.status === 401){
@@ -470,7 +497,10 @@ class Dashboard extends Component {
       this.setState({
         changed: false
       })
-      this.startAutomation()
+      NetworkRequest.updateChanged(false)
+      .then(response => {
+        this.startAutomation()
+      })
     })
     .catch(error => {
       console.log(error)
@@ -637,6 +667,20 @@ class Dashboard extends Component {
               </div>
               <Tags onChange={this.onFilterKeysChange} tags={this.state.filterkeys} placeholder={Localization.keyword_sep}/>
             </div>
+            <div className='section'>
+              <div className='speed'>
+                <h4 className='exceptions'>{Localization.speed_mode}</h4>
+                <div className='hint'><span><b>{Localization.speed_title}</b>{Localization.speed_hint}</span></div>
+              </div>
+            </div>
+            <div className='section switching'>
+              <div className='switch-section'>
+                <span className={`speed ${this.state.speed ? 'active' : '' }`}>{Localization.speed}</span>
+                <div className='switch-counter'>
+                  <Switch id="4" onChange={this.onSpeedChange} active={this.state.speed}/>
+                </div>
+              </div>
+          </div>
           </div>
         </div>
         <Footer loggedin={true}></Footer>

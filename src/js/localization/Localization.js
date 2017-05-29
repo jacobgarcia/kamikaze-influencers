@@ -15,7 +15,7 @@ const Localization = new LocalizedStrings({
    sign: 'Entrar Con Instagram',
    mainheader: 'Seguidores reales en muy poco tiempo',
    subheader: 'Sólo tienes que iniciar sesión y personalizar tu experiencia. Empezarás a tener seguidores reales en muy poco tiempo, listos para interactuar contigo.',
-   signup_now: '¡Regístate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
+   signup_now: '¡Regístrate ahora y te daremos 1 día de prueba totalmente gratis! Sin tarjeta de crédito, sin cargos. Descubre el poder de OWA Influencers.',
    ease: 'Fácil de usar',
    everyone: 'Para todos',
    organic: 'Completamente orgánica',
@@ -108,7 +108,7 @@ const Localization = new LocalizedStrings({
    //login again
    update: 'Actualiza tu contraseña',
    verify: 'Verifica tu cuenta',
-   restart: 'Reiniciar',
+   restart: 'Actualizar',
    //hints
    need: 'Necesitas seguir primero',
    need_exp: 'Necesitas activar esto para dejar de seguir a tus nuevos seguidores',
@@ -141,7 +141,12 @@ const Localization = new LocalizedStrings({
    pay: 'Pagar ahora',
    contactus: 'Contáctanos',
    buy_now: 'Comprar Ahora',
-   faqsTitle: 'Preguntas frecuentes'
+   faqsTitle: 'Preguntas frecuentes',
+   speed_mode: 'Modo Velocidad',
+   speed: 'Velocidad',
+   speed_title: 'Incrementa la Actividad',
+   speed_hint: 'ADVERTENCIA: Evita generar actividad en tu cuenta manualmente, el sistema lo hace por ti, si lo haces podrias conseguir una suspension temporal o definitiva de tu cuenta de Instagram',
+   speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO'
  },
  en:{
    // footer
@@ -255,7 +260,7 @@ const Localization = new LocalizedStrings({
    //login again
    update: 'Update your password',
    verify: 'Verify your account',
-   restart: 'Restart',
+   restart: 'Update',
    //hints
    need: 'Need to follow first',
    need_exp: 'You need to activate this in order to unfollow the new followings',
@@ -288,7 +293,12 @@ const Localization = new LocalizedStrings({
    pay: 'Pay now',
    contactus: 'Contact us',
    buy_time: 'Buy Now',
-   faqsTitle: 'Frequent Asked Questions'
+   faqsTitle: 'Frequent Asked Questions',
+   speed_mode: 'Speed Mode',
+   speed: 'Speed',
+   speed_title: 'Speed Up Your Activity',
+   speed_hint: 'WARNING: Avoid generating activity in your account manually, the system does it for you, if you do you could get a temporary or definitive ban of your Instagram account',
+   speed_alert: 'USE THIS SETTING AT YOUR OWN RISK'
  }
 })
 
