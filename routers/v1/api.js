@@ -332,6 +332,21 @@ router.route('/users/self/filterkeys')
   })
 })
 
+router.route('/users/self/changed')
+.put((req, res) => {
+  const username = req._username
+  const changed = req.body.changed
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.changed': changed } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
+})
+
 router.route('/users/self/comment')
 .put((req, res) => {
   const username = req._username
@@ -795,6 +810,7 @@ router.route('/automation/self/start')
       console.log(error)
       return res.status(500).json({ error })
     }
+
     // Get user username, password and preferences
     const { username, password, preferences } = user
 

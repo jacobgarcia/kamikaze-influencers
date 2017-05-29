@@ -479,7 +479,10 @@ class Dashboard extends Component {
       this.setState({
         changed: false
       })
-      this.startAutomation()
+      NetworkRequest.updateChanged(false)
+      .then(response => {
+        this.startAutomation()
+      })
     })
     .catch(error => {
       console.log(error)
