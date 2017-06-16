@@ -255,24 +255,31 @@ class Time extends Component {
             <img src='/static/img/paypal-button.svg' className='paypal-button' alt='Powered by PayPal'/>
           </div>
         </div>
-        <div className='content-section'>
+        <div className='content-section buy-section'>
           <div className='section'>
             <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
               <label></label>
               <h1>{days===1 ? `${days} ${Localization.day}` : `${days} ${Localization.days}`}</h1>
               <h2>{`${hours}:${minutes}:${seconds}`}</h2>
             </div>
-            <div className='fame-items'>
-              { this.state.fameItems.map((item, index) =>
-                <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
-              )}
-            </div>
             <div className='time-items'>
               <h2>{Localization.timepack}</h2>
+              <p>{Localization.time_description}</p>
               { this.state.timeItems.map((item, index) =>
                 <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
               )}
             </div>
+
+            <div className='fame-items'>
+              <h2>{Localization.fame_pack}</h2>
+              <p>{Localization.fame_description}</p>
+              <div className="items-container">
+                { this.state.fameItems.map((item, index) =>
+                  <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
+                )}
+              </div>
+            </div>
+
             <h2>{Localization.special}</h2>
             <div className='aside'>
               <h3>{Localization.special}</h3>
@@ -286,7 +293,6 @@ class Time extends Component {
       </div>
     )
   }
-
 }
 
 export default Time
