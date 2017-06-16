@@ -29,17 +29,41 @@ if user_array != empty_arr:
     for k in user_array:
         user_dict[k] = ''
 
+## likes
+likes_day = 0
+if sys.argv[4] == "true":
+    if sys.argv[11] == "true":
+        likes_day = 1800
+    else:
+        likes_day = 1000
+
+## follows
+follows_day = 0
+if sys.argv[5] == "true":
+    if sys.argv[11] == "true":
+        follows_day = 600
+    else:
+        follows_day = 300
+
+## comments
+comments_day = 0
+if sys.argv[6] == "true":
+    if sys.argv[11] == "true":
+        comments_day = 120
+    else:
+        comments_day = 50
+
 # The limit for liking is equal to 1000, for following is 300 and for comments is 50. Else IG could ban the account specified
 ## The tags must be splitted since all of them come in a single String
 ### Uses ternary operator to enable or disable feature based on boolean labels
 bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
-               like_per_day= (1000 if sys.argv[4] == "true" else 0),
-               comments_per_day= (50 if sys.argv[6] == "true" else 0),
+               like_per_day= likes_day,
+               comments_per_day= comments_day,
                tag_list=((sys.argv[3]).split(",") if sys.argv[3] != '' else ['love', 'instagood','photooftheday','beautiful','tbt','happy','cute','fashion','followme','me','follow','like4like','picoftheday','selfie','summer']),
                tag_blacklist=(sys.argv[7]).split(","),
                user_blacklist=user_dict,
                max_like_for_one_tag=50,
-               follow_per_day=(300 if sys.argv[5] == "true" else 0),
+               follow_per_day= follows_day,
                follow_time=1*60,
                unfollow_per_day= (150 if sys.argv[10] == "true" else 0),
                unfollow_break_min= (15 if sys.argv[10] == "true" else 0),

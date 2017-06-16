@@ -512,6 +512,19 @@ h2 {
       margin-right: 10px;
     }
   }
+  .speed {
+    position: relative;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: $red;
+    }
+  }
   .tags {
     display: flex;
     align-items: center;
@@ -622,6 +635,10 @@ h2 {
       }
       &.following {
         background: url('/static/img/icons/follow.png') no-repeat left center;
+        background-size: contain;
+      }
+      &.speed {
+        background: url('/static/img/icons/speed.png') no-repeat left center;
         background-size: contain;
       }
     }

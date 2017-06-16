@@ -35,7 +35,9 @@ const schema = new Schema({
     filtertags: [ String ],
     filterusers: [ String ],
     filterkeys: [ String ],
-    comment_text: { type: String, default: null}
+    comment_text: { type: String, default: null},
+    speed: { type: Boolean, default: false },
+    changed: { type: Boolean, default: false }
   },
   fameFollowers: [ String ],
   toFollow: [ String ],
