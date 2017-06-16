@@ -430,6 +430,12 @@ h2 {
   .fame-items {
     min-height: 400px;
   }
+  .items-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
   .time-items {
     min-height: 300px;
     h2 {
@@ -1348,12 +1354,7 @@ img.paypal-button {
 }
 
 @media (min-width: 900px) {
-  .fame-items {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    max-height: 550px;
-  }
+
 }
 
 @media (min-width: 700px) {
@@ -1393,6 +1394,15 @@ img.paypal-button {
       }
     }
 
+  }
+  .content-section.buy-section {
+    h2 {
+      margin-top: 50px;
+    }
+    p {
+      color: rgb(84, 84, 84);
+      font-weight: 500;
+    }
   }
   .content-section {
     padding-top: 20px;
