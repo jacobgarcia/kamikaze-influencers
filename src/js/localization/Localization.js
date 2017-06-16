@@ -141,7 +141,9 @@ const Localization = new LocalizedStrings({
    pay: 'Pagar ahora',
    contactus: 'Contáctanos',
    buy_now: 'Comprar Ahora',
-   faqsTitle: 'Preguntas frecuentes'
+   faqsTitle: 'Preguntas frecuentes',
+   time_description: 'Paquetes de tiempo te ayudarán a crecer tu cuenta de Instagram automatizándola y así ganar seguidores totalmente orgánicos.',
+   fame_description: 'Estos paquetes te ayudarán a aparecer en la pantalla de otros OWA Influencers, y muy pronto dentro de nuestras apps.'
  },
  en:{
    // footer
@@ -288,7 +290,9 @@ const Localization = new LocalizedStrings({
    pay: 'Pay now',
    contactus: 'Contact us',
    buy_time: 'Buy Now',
-   faqsTitle: 'Frequent Asked Questions'
+   faqsTitle: 'Frequent Asked Questions',
+   time_description: 'Time packages will help you automate your instagram account, and gain organic users.',
+   fame_description: 'This fame packages will make you appear on the main screen on other OWA Influencers, and soon also in our apps.'
  }
 })
 
