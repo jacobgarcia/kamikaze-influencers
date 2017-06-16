@@ -142,16 +142,14 @@ const Localization = new LocalizedStrings({
    contactus: 'Contáctanos',
    buy_now: 'Comprar Ahora',
    faqsTitle: 'Preguntas frecuentes',
-<<<<<<< HEAD
    time_description: 'Paquetes de tiempo te ayudarán a crecer tu cuenta de Instagram automatizándola y así ganar seguidores totalmente orgánicos.',
-   fame_description: 'Estos paquetes te ayudarán a aparecer en la pantalla de otros OWA Influencers, y muy pronto dentro de nuestras apps.'
-=======
+   fame_description: 'Estos paquetes te ayudarán a aparecer en la pantalla de otros OWA Influencers, y muy pronto dentro de nuestras apps.',
    speed_mode: 'Modo Velocidad',
    speed: 'Velocidad',
+   fame_pack: 'Paquetes de fama',
    speed_title: 'Incrementa la Actividad',
    speed_hint: 'ADVERTENCIA: Evita generar actividad en tu cuenta manualmente, el sistema lo hace por ti, si lo haces podrias conseguir una suspension temporal o definitiva de tu cuenta de Instagram',
    speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO'
->>>>>>> 7f1457d9a82597f84b0f1e577bf76b20aca1df09
  },
  en:{
    // footer
@@ -298,17 +296,15 @@ const Localization = new LocalizedStrings({
    pay: 'Pay now',
    contactus: 'Contact us',
    buy_time: 'Buy Now',
+   fame_pack: 'Fame packages',
    faqsTitle: 'Frequent Asked Questions',
-<<<<<<< HEAD
    time_description: 'Time packages will help you automate your instagram account, and gain organic users.',
-   fame_description: 'This fame packages will make you appear on the main screen on other OWA Influencers, and soon also in our apps.'
-=======
+   fame_description: 'This fame packages will make you appear on the main screen on other OWA Influencers, and soon also in our apps.',
    speed_mode: 'Speed Mode',
    speed: 'Speed',
    speed_title: 'Speed Up Your Activity',
    speed_hint: 'WARNING: Avoid generating activity in your account manually, the system does it for you, if you do you could get a temporary or definitive ban of your Instagram account',
    speed_alert: 'USE THIS SETTING AT YOUR OWN RISK'
->>>>>>> 7f1457d9a82597f84b0f1e577bf76b20aca1df09
  }
 })
 
