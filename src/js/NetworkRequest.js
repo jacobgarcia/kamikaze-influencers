@@ -59,7 +59,6 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/changed`, { changed })
   }
 
-
   static startAutomation() {
     return axios.post(`${window.baseUrl}/automation/self/start`)
   }
