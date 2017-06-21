@@ -149,7 +149,8 @@ const Localization = new LocalizedStrings({
    fame_pack: 'Paquetes de fama',
    speed_title: 'Incrementa la Actividad',
    speed_hint: 'ADVERTENCIA: Evita generar actividad en tu cuenta manualmente, el sistema lo hace por ti, si lo haces podrias conseguir una suspension temporal o definitiva de tu cuenta de Instagram',
-   speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO'
+   speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO',
+   clientSupport: 'Atención a cliente'
  },
  en:{
    // footer
@@ -304,7 +305,8 @@ const Localization = new LocalizedStrings({
    speed: 'Speed',
    speed_title: 'Speed Up Your Activity',
    speed_hint: 'WARNING: Avoid generating activity in your account manually, the system does it for you, if you do you could get a temporary or definitive ban of your Instagram account',
-   speed_alert: 'USE THIS SETTING AT YOUR OWN RISK'
+   speed_alert: 'USE THIS SETTING AT YOUR OWN RISK',
+   clientSupport: 'Client support'
  }
 })
 
