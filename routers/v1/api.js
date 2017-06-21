@@ -654,7 +654,7 @@ router.route('/payments/execute')
 
             // restart automation when buying time
             if (!item.hallOfFame) {
-              request.post({ url:'https://owainfluencers.com/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+              request.put({ url:'https://owainfluencers.com/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
                 if (error) {
                   console.log(error)
                   return res.status(500).json({ error })
