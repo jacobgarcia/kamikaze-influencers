@@ -9,8 +9,7 @@ const Footer = (props) => {
       <div className='content-section'>
         <div className='contact'>
           <p className='title'>{Localization.clientSupport}</p>
-          <p>MEX: +52 (722) 00 00 000</p>
-          <p>USA: +52 (722) 00 00 000</p>
+          <p>MEX: +52 (55) 4320 1975</p>
         </div>
         <div className='links'>
           <ul>
