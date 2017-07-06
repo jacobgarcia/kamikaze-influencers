@@ -58,7 +58,7 @@ class InstaBot:
     # If instagram ban you - query return 400 error.
     error_400 = 0
     # If you have 3 400 error in row - looks like you banned.
-    error_400_to_ban = 3
+    error_400_to_ban = 5000
     # If InstaBot think you are banned - going to sleep.
     ban_sleep_time = 2 * 60 * 60
 
