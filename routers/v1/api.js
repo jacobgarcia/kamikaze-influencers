@@ -255,6 +255,21 @@ router.route('/users/self/speed')
   })
 })
 
+router.route('/users/self/commentback')
+.put((req, res) => {
+  const username = req._username
+  const comment_back = req.body.comment_back
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.commentForComment': comment_back, 'preferences.changed': true } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
+})
+
 router.route('/users/self/locations')
 .put((req, res) => {
   const username = req._username
@@ -826,7 +841,7 @@ router.route('/automation/self/start')
     const { filtertags, filterusers, filterkeys } = preferences
 
     // Get speed preference
-    const { speed } = preferences
+    const { speed, commentForComment } = preferences
 
       // Translate locations into IG codes. Each for every location. Just in case there are locations
       if (locations.length > 0) {
@@ -841,7 +856,7 @@ router.route('/automation/self/start')
               locationTags.push(response.body)
               counter ++
               if (counter === locations.length) {
-                    new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed ]})
+                    new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
                     .on('message', (message) => {
                         // Print all the output from the bot
                         process.env.NODE_ENV === 'development' ? console.log(message) : null
@@ -864,7 +879,7 @@ router.route('/automation/self/start')
         })
       }
       else {         //else just start the bot
-        new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed]})
+        new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
         .on('message', (message) => {
           // Print all the output from the bot
           process.env.NODE_ENV === 'development' ? console.log(message) : null
