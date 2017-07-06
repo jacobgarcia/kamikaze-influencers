@@ -32,7 +32,7 @@ console.log = (data, ...args) => {
 mongoose.connect(config.database)
 
 // Change in prod
-const redirectUrl = "https://owainfluencers.com/time"
+const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
 .get((req, res) => {
@@ -246,6 +246,21 @@ router.route('/users/self/speed')
   const speed = req.body.speed
 
   User.findOneAndUpdate({ username }, { $set: { 'preferences.speed': speed, 'preferences.changed': true } }, { new: true })
+  .exec((error, user) => {
+    if (error) {
+      console.log(error)
+      return res.status(500).json({ error })
+    }
+    res.status(200).json({ user })
+  })
+})
+
+router.route('/users/self/commentback')
+.put((req, res) => {
+  const username = req._username
+  const comment_back = req.body.comment_back
+
+  User.findOneAndUpdate({ username }, { $set: { 'preferences.commentForComment': comment_back, 'preferences.changed': true } }, { new: true })
   .exec((error, user) => {
     if (error) {
       console.log(error)
@@ -654,13 +669,13 @@ router.route('/payments/execute')
 
             // restart automation when buying time
             if (!item.hallOfFame) {
-              request.put({ url:'https://owainfluencers.com/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+              request.put({ url:'http://localhost:8080/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
                 if (error) {
                   console.log(error)
                   return res.status(500).json({ error })
                 }
 
-                request.post({ url:'https://owainfluencers.com/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+                request.post({ url:'http://localhost:8080/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
                   if (error) {
                     console.log(error)
                     return res.status(500).json({ error })
@@ -744,7 +759,7 @@ router.route('/locations/translate/:location')
               }
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
-              request.get({ url:'https://owainfluencers.com/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
+              request.get({ url:'http://localhost:8080/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
                   if (error) {
                     console.log(error)
                     return res.status(500).json({ error })
@@ -826,14 +841,14 @@ router.route('/automation/self/start')
     const { filtertags, filterusers, filterkeys } = preferences
 
     // Get speed preference
-    const { speed } = preferences
+    const { speed, commentForComment } = preferences
 
       // Translate locations into IG codes. Each for every location. Just in case there are locations
       if (locations.length > 0) {
         let locationTags = []
         let counter = 0
         locations.forEach((location) => {
-          request.get({ url:'https://owainfluencers.com/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
+          request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
               if (error) {
                 console.log(error)
                 return res.status(500).json({ error })
@@ -841,7 +856,7 @@ router.route('/automation/self/start')
               locationTags.push(response.body)
               counter ++
               if (counter === locations.length) {
-                    new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed ]})
+                    new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
                     .on('message', (message) => {
                         // Print all the output from the bot
                         process.env.NODE_ENV === 'development' ? console.log(message) : null
@@ -864,7 +879,7 @@ router.route('/automation/self/start')
         })
       }
       else {         //else just start the bot
-        new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed]})
+        new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
         .on('message', (message) => {
           // Print all the output from the bot
           process.env.NODE_ENV === 'development' ? console.log(message) : null
@@ -924,7 +939,7 @@ router.route('/automation/restart')
       return res.status(500).json({ error })
     }
     users.forEach((user) => {
-      request.post({ url:'https://owainfluencers.com/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+      request.post({ url:'http://localhost:8080/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
         if (error) {
           console.log(error)
           return res.status(500).json({ error })
