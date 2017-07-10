@@ -683,6 +683,10 @@ h2 {
         background: url('/static/img/icons/speed.png') no-repeat left center;
         background-size: contain;
       }
+      &.reply {
+        background: url('/static/img/icons/reply.png') no-repeat left center;
+        background-size: contain;
+      }
     }
   }
   &.center {

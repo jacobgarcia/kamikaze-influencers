@@ -33,6 +33,7 @@ class Dashboard extends Component {
       following: false,
       unfollowing: false,
       speed: false,
+      commentForComment: false,
       showAlertFollow: false,
       comment: '',
       commentChanged: false,
@@ -77,6 +78,7 @@ class Dashboard extends Component {
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
     this.onSpeedChange = this.onSpeedChange.bind(this)
+    this.onCommentForCommentChange = this.onCommentForCommentChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
     this.onTagsChange = this.onTagsChange.bind(this)
     this.onLocationsChange = this.onLocationsChange.bind(this)
@@ -248,6 +250,7 @@ class Dashboard extends Component {
         commenting: user.preferences.commenting,
         unfollowing: user.preferences.unfollowing,
         speed: user.preferences.speed,
+        commentForComment: user.preferences.commentForComment,
         changed: user.preferences.changed,
         filtertags: user.preferences.filtertags,
         filterusers: user.preferences.filterusers,
@@ -469,6 +472,22 @@ class Dashboard extends Component {
     })
   }
 
+  onCommentForCommentChange() {
+    NetworkRequest.updateCommentForComment(!this.state.commentForComment)
+    .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        commentForComment: response.data.user.preferences.commentForComment,
+        changed: true
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
+  }
+
+
 
   startAutomation() {
     NetworkRequest.startAutomation()
@@ -680,6 +699,20 @@ class Dashboard extends Component {
                   <Switch id="4" onChange={this.onSpeedChange} active={this.state.speed}/>
                 </div>
               </div>
+          </div>
+          <div className='section'>
+            <div className='speed'>
+              <h4 className='exceptions'>{Localization.c4c}</h4>
+              <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
+            </div>
+          </div>
+          <div className='section switching'>
+            <div className='switch-section'>
+              <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
+              <div className='switch-counter'>
+                <Switch id="5" onChange={this.onCommentForCommentChange} active={this.state.commentForComment}/>
+              </div>
+            </div>
           </div>
           </div>
         </div>
