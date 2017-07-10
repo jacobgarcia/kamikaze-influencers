@@ -237,6 +237,7 @@ class Time extends Component {
           </div>
         <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
           <div className='payment-details'>
+            <span className="close" onClick={() => this.setState({ showThanks: false })}></span>
             <h2>{Localization.confirmationTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]}/> : <div className='loader relative center'></div> }
             <input type='button' className='red' value={Localization.pay} onClick={this.executePayment}/>
@@ -245,6 +246,7 @@ class Time extends Component {
         </div>
         <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
+            <span className="close" onClick={() => this.setState({ showThanks: false })}></span>
             <h2>{Localization.packageDetailsTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]} full/> : <div className='loader relative center'></div> }
             {
@@ -265,9 +267,11 @@ class Time extends Component {
             <div className='time-items'>
               <h2>{Localization.timepack}</h2>
               <p>{Localization.time_description}</p>
-              { this.state.timeItems.map((item, index) =>
-                <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
-              )}
+              <div className='time-items-container'>
+                { this.state.timeItems.map((item, index) =>
+                  <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
+                )}
+              </div>
             </div>
 
             <div className='fame-items'>
@@ -281,8 +285,8 @@ class Time extends Component {
             </div>
 
             <h2>{Localization.special}</h2>
-            <div className='aside'>
-              <h3>{Localization.special}</h3>
+            <div className="aside special-follow">
+              <h2 className="red">{Localization.special}</h2>
               <p>{Localization.contact_us}</p>
               <a href='mailto:hola@owainfluencers.com'><input type='button' value={Localization.contactus} className='red'/></a>
             </div>

@@ -239,6 +239,9 @@ a {
   width: 100%;
   text-align: center;
   background: #fff;
+  span:first-child {
+    line-height: 1;
+  }
   .price-wrapper {
     display: flex;
     flex-direction: column;
@@ -254,7 +257,17 @@ a {
   }
   &.mini {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    > div {
+      span {
+        line-height: 1;
+      }
+      margin: 0 10px;
+    }
+    .buy-now {
+      margin: 0 auto;
+    }
   }
   &.main {
     padding: 15px 40px 30px;
@@ -354,6 +367,10 @@ h2 {
   color: $purplish-red;
   text-transform: uppercase;
   font-size: 1.4rem;
+  &.red {
+    margin-top: 0 !important;
+    color: $red;
+  }
 }
 
 .hint {
@@ -422,19 +439,44 @@ h2 {
   }
 }
 
+.buy-section {
+  h2 {
+    margin-top: 30px;
+  }
+}
 .section {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .fame-items {
     min-height: 400px;
   }
   .items-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     align-items: flex-end;
+  }
+  .special-follow {
+    p {
+      margin: 15px 0;
+    }
+    h2 {
+      text-align: center;
+    }
+    a, input {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .time-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    .time-card {
+      margin: 0 auto;
+    }
   }
   .time-items {
     min-height: 300px;
@@ -848,7 +890,7 @@ h2 {
     }
     p {
       max-width: 500px;
-      margin: 20px 0 30px;
+      margin: 20px auto 30px;
     }
     input {
       padding: 7px 15px;
@@ -1373,15 +1415,25 @@ img.paypal-button {
   }
 }
 
-@media (min-width: 580px) {
-  .mini-section {
-    margin: 0 10px;
-
+@media (max-width: 600px) {
+  nav .nav-content .time a {
+    max-width: 100px;
+  }
+  .time-card.mini {
+    flex-wrap: wrap;
+  }
+  .section .items-container {
+    margin: 0 auto;
   }
 }
 
-@media (min-width: 900px) {
-
+@media (min-width: 580px) {
+  .mini-section {
+    margin: 0 10px;
+  }
+  .time-card.mini .buy-now {
+    margin-top: 10px;
+  }
 }
 
 @media (min-width: 700px) {
@@ -1463,5 +1515,12 @@ img.paypal-button {
   }
   .signin-body {
     padding: 15px 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .section .items-container {
+    max-height: 600px;
+    margin: 0;
   }
 }
