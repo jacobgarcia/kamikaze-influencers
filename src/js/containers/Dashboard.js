@@ -526,6 +526,12 @@ class Dashboard extends Component {
     })
   }
 
+  // <div className='section'>
+  //   <div className='speed'>
+  //     <h4 className='exceptions'>{Localization.c4c}</h4>
+  //     <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
+  //   </div>
+  // </div>
   // <div className='section switching'>
   //   <div className='switch-section'>
   //     <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
@@ -708,12 +714,6 @@ class Dashboard extends Component {
                   <Switch id="4" onChange={this.onSpeedChange} active={this.state.speed}/>
                 </div>
               </div>
-          </div>
-          <div className='section'>
-            <div className='speed'>
-              <h4 className='exceptions'>{Localization.c4c}</h4>
-              <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
-            </div>
           </div>
           </div>
         </div>
