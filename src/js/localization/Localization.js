@@ -58,7 +58,7 @@ const Localization = new LocalizedStrings({
    verify_account: 'Debes verificar tu cuenta. Por favor inicia sesión en ',
    ig: 'Instagram',
    verify_account2: ' y verifica que fuiste tú',
-   continue: 'He verificado, Continuar',
+   continue: 'He verificado',
    accept: 'Al iniciar sesión, aceptas nuestros términos y condiciones',
    //time card
    remaining: 'Tiempo Restante',
