@@ -526,6 +526,15 @@ class Dashboard extends Component {
     })
   }
 
+  // <div className='section switching'>
+  //   <div className='switch-section'>
+  //     <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
+  //     <div className='switch-counter'>
+  //       <Switch id="5" onChange={this.onCommentForCommentChange} active={this.state.commentForComment}/>
+  //     </div>
+  //   </div>
+  // </div>
+
   render() {
 
     let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
@@ -704,14 +713,6 @@ class Dashboard extends Component {
             <div className='speed'>
               <h4 className='exceptions'>{Localization.c4c}</h4>
               <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
-            </div>
-          </div>
-          <div className='section switching'>
-            <div className='switch-section'>
-              <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
-              <div className='switch-counter'>
-                <Switch id="5" onChange={this.onCommentForCommentChange} active={this.state.commentForComment}/>
-              </div>
             </div>
           </div>
           </div>
