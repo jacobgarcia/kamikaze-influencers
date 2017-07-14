@@ -60,6 +60,7 @@ const Localization = new LocalizedStrings({
    verify_account2: ' y verifica que fuiste tú',
    continue: 'He verificado',
    accept: 'Al iniciar sesión, aceptas nuestros términos y condiciones',
+   wrongCredentials: 'Intenta de nuevo, usuario o contraseña incorrectos.',
    //time card
    remaining: 'Tiempo Restante',
    days: 'Días',
@@ -220,6 +221,7 @@ const Localization = new LocalizedStrings({
    verify_account2: ' and verify it was you',
    continue: 'Verified, Continue',
    accept: 'By signing in, you agree to our terms of service',
+   wrongCredentials: 'Try again, wrong user or password.',
    //time card
    remaining: 'Remaining Time',
    days: 'Days',
@@ -301,10 +303,10 @@ const Localization = new LocalizedStrings({
    pay: 'Pay now',
    contactus: 'Contact us',
    buy_time: 'Buy Now',
-   fame_pack: 'Fame packages',
+   fame_pack: 'Time + Fame packages',
    faqsTitle: 'Frequent Asked Questions',
    time_description: 'Time packages will help you grow your Instagram account by automating your activity. This way you can gain totally organic Instagram fans. Acquire these packages if you want to have more automation time.',
-   fame_description: 'Fame packages will allow you to appear in the dashboard of other OWA Influencers, and very soon within our other applications. These packages do not give you time for automation.',
+   fame_description: 'Time + Fame packages will allow you to appear in the dashboard of other OWA Influencers, and very soon within our other applications. These packages do not give you time for automation.',
    speed_mode: 'Speed Mode',
    speed: 'Speed',
    speed_title: 'Speed Up Your Activity',
