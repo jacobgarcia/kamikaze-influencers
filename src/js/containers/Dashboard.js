@@ -5,7 +5,6 @@ import Intro from '../components/Intro'
 import NetworkRequest from '../NetworkRequest'
 import FameItem from '../components/FameItem'
 import Footer from '../components/Footer'
-import PayPalButton from '../components/PayPalButton'
 import Switch from '../components/Switch'
 import TimeJS from '../time'
 import Tags from '../components/Tags'
@@ -579,8 +578,8 @@ class Dashboard extends Component {
                   following={true}/>
               )
             }
-            <span className="free">{ Localization.hall_coa}</span>
             </div>
+            <span className="free">{ Localization.hall_coa}</span>
           </div>
           : undefined }
           <div className='main-section'>
