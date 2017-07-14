@@ -1019,6 +1019,16 @@ input[type="button"], input[type="submit"] {
   }
 }
 
+.privacy {
+  h2 {
+    margin-top: 40px;
+  }
+  h3 {
+    color: $red;
+    margin-top: 20px;
+  }
+}
+
 img.paypal-button {
   display: block;
   margin-top: 20px;
