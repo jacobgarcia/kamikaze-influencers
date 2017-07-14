@@ -33,25 +33,22 @@ if user_array != empty_arr:
 likes_day = 0
 if sys.argv[4] == "true":
     if sys.argv[11] == "true":
-        likes_day = 1800
-    else:
         likes_day = 1000
+    else:
+        likes_day = 800
 
 ## follows
 follows_day = 0
 if sys.argv[5] == "true":
     if sys.argv[11] == "true":
-        follows_day = 600
+        follows_day = 400
     else:
         follows_day = 300
 
 ## comments
-print sys.argv[12]
 comments_day = 0
-if sys.argv[6] == "true" or sys.argv[12] == "true":
+if sys.argv[6] == "true":
     if sys.argv[11] == "true":
-        comments_day = 120
-    elif sys.argv[12] == "true":
         comments_day = 80
     else:
         comments_day = 50
@@ -77,8 +74,7 @@ bot = InstaBot(login=sys.argv[1], password=sys.argv[2],
                ## Doesn't have to match entirely example: mozart will be blocked because it contains *art
                ### freefollowers will be blocked because it contains free
                unwanted_username_list=(sys.argv[9]).split(","),
-               unfollow_whitelist=['example_user_1','example_user_2'],
-               comment_back=sys.argv[12])
+               unfollow_whitelist=['example_user_1','example_user_2'])
 
 end_time = json.loads(json.dumps(users.find_one({"username":sys.argv[1]}, {"timeEnd":1, "_id":0})))
 current_time = int(datetime.datetime.now().strftime("%s")) * 1000
