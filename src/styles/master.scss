@@ -260,7 +260,7 @@ a {
   &.mini {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     > div {
       margin: 0 20px;
       span {
@@ -268,7 +268,8 @@ a {
       }
     }
     .buy-now {
-      margin: 0 auto;
+      margin: 0;
+      margin-right: 10px;
     }
   }
   &.main {
@@ -342,7 +343,7 @@ a {
     color: $red;
     font-size: 1.4rem;
     font-weight: 500;
-    width: 43px;
+    width: 44px;
     flex-shrink: 0;
     display: block;
   }
@@ -460,7 +461,7 @@ h2 {
   }
   .items-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;
   }
@@ -478,7 +479,7 @@ h2 {
   }
   .time-items-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     .time-card {
       box-shadow: none;
@@ -578,6 +579,10 @@ h2 {
     align-items: center;
     border-bottom: 2px solid $gray;
     flex-wrap: wrap;
+    transition: 0.5s border-bottom-color;
+    &.active {
+      border-bottom: 2px solid $red;
+    }
     input[type="button"] {
       max-width: 100px;
     }
@@ -1133,6 +1138,7 @@ img.paypal-button {
       }
     }
     .close {
+      margin-left: auto;
       cursor: pointer;
       width: 26px;
       height: 26px;
@@ -1349,6 +1355,13 @@ img.paypal-button {
   }
 }
 
+span.free {
+  margin: 5px 20px;
+  color: rgba(#fff,0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 .hall-of-fame {
   display: flex;
   overflow-x: scroll;
@@ -1436,14 +1449,28 @@ img.paypal-button {
   .section .items-container {
     margin: 0 auto;
   }
+  .time-card {
+    margin: inherit auto;
+    padding: 25px 15px;
+  }
+  .time-card.mini>div {
+    margin: 0 10px
+  }
 }
 
-@media (min-width: 580px) {
+@media (max-width: 350px) {
+  .time-card.mini .buy-now {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 400px) {
   .mini-section {
     margin: 0 10px;
   }
-  .time-card.mini .buy-now {
-    margin-top: 10px;
+  input[type="button"].red {
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
 }
 
@@ -1507,14 +1534,11 @@ img.paypal-button {
     .hall-section {
       order: 2;
       flex-shrink: 0;
+      span.free {
+        color: $purplish-red;
+      }
       h4 {
         position: relative;
-      }
-      .free {
-        margin: 5px 20px;
-        color: $purplish-red;
-        font-size: 0.9rem;
-        font-weight: 500;
       }
       .hall-of-fame {
         flex-direction: column;
