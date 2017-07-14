@@ -142,11 +142,19 @@ const Localization = new LocalizedStrings({
    contactus: 'Contáctanos',
    buy_now: 'Comprar Ahora',
    faqsTitle: 'Preguntas frecuentes',
+   time_description: 'Los paquetes de tiempo te ayudarán a crecer tu cuenta de Instagram automatizando tu actividad. De esta manera podrás ganar seguidores de Instagram totalmente orgánicos. Adquiere estos paquetes si lo que quieres es tener más tiempo de automatización.',
+   fame_description: 'Los paquetes de tiempo + fama te permitirán a aparecer en el dashboard de otros OWA Influencers, y muy pronto dentro de nuestras otras aplicaciones. Estos paquetes no te otorgan tiempo para la automatización.',
    speed_mode: 'Modo Velocidad',
    speed: 'Velocidad',
+   fame_pack: 'Paquetes tiempo + fama',
    speed_title: 'Incrementa la Actividad',
    speed_hint: 'ADVERTENCIA: Evita generar actividad en tu cuenta manualmente, el sistema lo hace por ti, si lo haces podrias conseguir una suspension temporal o definitiva de tu cuenta de Instagram',
-   speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO'
+   speed_alert: 'USA ESTA OPCIÓN BAJO TU PROPIO RIESGO',
+   clientSupport: 'Atención a cliente',
+   c4c_mode: 'Comentarios',
+   c4c: 'Comentarios de Regreso',
+   c4c_title: 'Interactúa con usuarios que buscan comentarte',
+   c4c_hint: 'Encuentra a cuentas de Instagran que quieren recibir comentarios y dar comentarios a tus medios. Este modo aumentará en gran medida los comentarios que recibes de regreso'
  },
  en:{
    // footer
@@ -243,7 +251,7 @@ const Localization = new LocalizedStrings({
    //time
    famous: 'Fame',
    faster: 'Put your Instagram account in the Hall of Fame to increase your followers faster',
-   buy_fame: 'Buy fame',
+   buy_fame: 'Buy time + fame',
    buy_time: 'Buy time',
    timepack: 'Time Packages',
    //onboarding
@@ -293,12 +301,20 @@ const Localization = new LocalizedStrings({
    pay: 'Pay now',
    contactus: 'Contact us',
    buy_time: 'Buy Now',
+   fame_pack: 'Fame packages',
    faqsTitle: 'Frequent Asked Questions',
+   time_description: 'Time packages will help you grow your Instagram account by automating your activity. This way you can gain totally organic Instagram fans. Acquire these packages if you want to have more automation time.',
+   fame_description: 'Fame packages will allow you to appear in the dashboard of other OWA Influencers, and very soon within our other applications. These packages do not give you time for automation.',
    speed_mode: 'Speed Mode',
    speed: 'Speed',
    speed_title: 'Speed Up Your Activity',
    speed_hint: 'WARNING: Avoid generating activity in your account manually, the system does it for you, if you do you could get a temporary or definitive ban of your Instagram account',
-   speed_alert: 'USE THIS SETTING AT YOUR OWN RISK'
+   speed_alert: 'USE THIS SETTING AT YOUR OWN RISK',
+   clientSupport: 'Client support',
+   c4c_mode: 'Commenting Back',
+   c4c: 'Comments',
+   c4c_title: 'Interact with users looking to chat',
+   c4c_hint: 'Reach Instagram users that want to receive comments and give comments to your media. This setting will greatly increase the comments you receive back'
  }
 })
 

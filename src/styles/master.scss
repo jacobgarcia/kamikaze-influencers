@@ -92,6 +92,9 @@ input {
   border: none;
   outline: none;
   font-size: 1rem;
+  &.hidden {
+    display: none;
+  }
 }
 
 input[type="text"], input[type="password"] {
@@ -236,10 +239,14 @@ a {
   width: 100%;
   text-align: center;
   background: #fff;
-  align-items: center;
+  span:first-child {
+    line-height: 1;
+  }
   .price-wrapper {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    width: 68px;
     span { line-height: 1.2; }
     span.per-day {
       font-size: 0.8rem;
@@ -252,7 +259,17 @@ a {
   }
   &.mini {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    > div {
+      margin: 0 20px;
+      span {
+        line-height: 1;
+      }
+    }
+    .buy-now {
+      margin: 0 auto;
+    }
   }
   &.main {
     padding: 15px 40px 30px;
@@ -325,6 +342,9 @@ a {
     color: $red;
     font-size: 1.4rem;
     font-weight: 500;
+    width: 43px;
+    flex-shrink: 0;
+    display: block;
   }
   .price {
     color: $red;
@@ -352,6 +372,10 @@ h2 {
   color: $purplish-red;
   text-transform: uppercase;
   font-size: 1.4rem;
+  &.red {
+    margin-top: 0 !important;
+    color: $red;
+  }
 }
 
 .hint {
@@ -420,13 +444,45 @@ h2 {
   }
 }
 
+.buy-section {
+  h2 {
+    margin-top: 30px;
+  }
+}
 .section {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .fame-items {
     min-height: 400px;
+  }
+  .items-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .special-follow {
+    p {
+      margin: 15px 0;
+    }
+    h2 {
+      text-align: center;
+    }
+    a, input {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .time-items-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    .time-card {
+      box-shadow: none;
+    }
   }
   .time-items {
     min-height: 300px;
@@ -592,6 +648,14 @@ h2 {
       input[type="text"] {
         width: 100%;
       }
+      input[type="button"] {
+        margin-top: 10px;
+        display: block;
+        margin-left: auto;
+        &.hidden {
+          display: none;
+        }
+      }
       &.hidden {
         max-height: 0px;
       }
@@ -623,6 +687,10 @@ h2 {
       }
       &.speed {
         background: url('/static/img/icons/speed.png') no-repeat left center;
+        background-size: contain;
+      }
+      &.reply {
+        background: url('/static/img/icons/reply.png') no-repeat left center;
         background-size: contain;
       }
     }
@@ -736,6 +804,7 @@ h2 {
         font-weight: 500;
       }
       .price-wrapper {
+        width: 70px;
         margin-left: 15px;
         display: flex;
         flex-direction: column;
@@ -832,7 +901,7 @@ h2 {
     }
     p {
       max-width: 500px;
-      margin: 20px 0 30px;
+      margin: 20px auto 30px;
     }
     input {
       padding: 7px 15px;
@@ -980,6 +1049,9 @@ img.paypal-button {
       margin-top: 20px;
       line-height: 1;
       text-align: center;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
     }
     input[type="submit"] {
       display: block;
@@ -1192,6 +1264,15 @@ img.paypal-button {
   font-size: 1.1rem;
   font-weight: 500;
   text-align: center;
+  .contact {
+    padding: 20px 0;
+    p {
+      text-align: left;
+    }
+  }
+  .title {
+    font-weight: 600;
+  }
   a {
     color: #fff;
     &:hover {
@@ -1209,6 +1290,7 @@ img.paypal-button {
   }
   .content-section {
     flex-direction: column;
+    padding-bottom: 10px;
   }
   .links {
     display: flex;
@@ -1344,19 +1426,24 @@ img.paypal-button {
   }
 }
 
-@media (min-width: 580px) {
-  .mini-section {
-    margin: 0 10px;
-
+@media (max-width: 600px) {
+  nav .nav-content .time a {
+    max-width: 100px;
+  }
+  .time-card.mini {
+    flex-wrap: wrap;
+  }
+  .section .items-container {
+    margin: 0 auto;
   }
 }
 
-@media (min-width: 900px) {
-  .fame-items {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    max-height: 550px;
+@media (min-width: 580px) {
+  .mini-section {
+    margin: 0 10px;
+  }
+  .time-card.mini .buy-now {
+    margin-top: 10px;
   }
 }
 
@@ -1398,6 +1485,15 @@ img.paypal-button {
     }
 
   }
+  .content-section.buy-section {
+    h2 {
+      margin-top: 50px;
+    }
+    p {
+      color: rgb(84, 84, 84);
+      font-weight: 500;
+    }
+  }
   .content-section {
     padding-top: 20px;
     display: flex;
@@ -1416,7 +1512,7 @@ img.paypal-button {
       }
       .free {
         margin: 5px 20px;
-        color: rgb(218, 218, 218);
+        color: $purplish-red;
         font-size: 0.9rem;
         font-weight: 500;
       }
@@ -1430,5 +1526,12 @@ img.paypal-button {
   }
   .signin-body {
     padding: 15px 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .section .items-container {
+    max-height: 600px;
+    margin: 0;
   }
 }

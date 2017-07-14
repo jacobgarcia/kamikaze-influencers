@@ -9,7 +9,7 @@ class Signin extends Component {
 
     this.state = {
       showSignin: props.showSignin || false,
-      username: props.username || '',
+      username: '',
       password: '',
       isLoading: false,
       verifyAccount: props.verifyAccount || false,
@@ -26,7 +26,6 @@ class Signin extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       showSignin: nextProps.show,
-      username: nextProps.username,
       usernameDisabled: nextProps.disabled,
       verifyAccount: nextProps.verifyAccount,
       isModule: nextProps.isModule

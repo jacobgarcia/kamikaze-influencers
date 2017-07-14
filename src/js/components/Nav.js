@@ -16,7 +16,7 @@ class Nav extends Component {
       password: ''
     }
 
-    this.redirect_uri = `http://localhost:8080/authenticate`
+    this.redirect_uri = `https://owainfluencers.com/authenticate`
     this.client_id = '4133eeeafdea4e15b6447df3bef09a9c'
 
   }
@@ -54,9 +54,11 @@ class Nav extends Component {
     } else {
       return (
         <nav className='signin-nav'>
-          <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
-          <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
           <Signin show={this.state.showSignin} id='nav' title={Localization.login}/>
+          <div className='nav-content'>
+            <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+            <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
+          </div>
         </nav>
       )
     }

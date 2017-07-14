@@ -19,8 +19,12 @@ var PORT = process.env.PORT || 8080
 
 app.use(helmet())
 
-app.use('/static', express.static(path.resolve('static')))
-app.use('/dist', express.static(path.resolve('dist')))
+app.use('/static', express.static(path.resolve('static'), {
+  maxAge: 1296000000
+}))
+app.use('/dist', express.static(path.resolve('dist'), {
+  maxAge: 648000000
+}))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))

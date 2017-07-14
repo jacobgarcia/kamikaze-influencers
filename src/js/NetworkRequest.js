@@ -55,10 +55,14 @@ class NetworkRequest {
     return axios.put(`${window.baseUrl}/users/self/speed`, { speed })
   }
 
+  static updateCommentForComment(comment_back) {
+    return axios.put(`${window.baseUrl}/users/self/commentback`, { comment_back })
+  }
+
+
   static updateChanged(changed) {
     return axios.put(`${window.baseUrl}/users/self/changed`, { changed })
   }
-
 
   static startAutomation() {
     return axios.post(`${window.baseUrl}/automation/self/start`)

@@ -7,6 +7,10 @@ const Footer = (props) => {
     <div className='footer'>
       {props.children}
       <div className='content-section'>
+        <div className='contact'>
+          <p className='title'>{Localization.clientSupport}</p>
+          <p>MEX: +52 (55) 4320 1975</p>
+        </div>
         <div className='links'>
           <ul>
             <li><a href="mailto:hola@owainfluencers.com">{Localization.contact}</a></li>
@@ -17,8 +21,9 @@ const Footer = (props) => {
         </div>
         <div className='social-links'>
           <ul>
-            <li><Link href="https://www.instagram.com/owainfluencersco/"><img src="/static/img/icons/instagram.png"></img></Link></li>
-            <li><Link href="https://www.facebook.com/owainfluencers/"><img src="/static/img/icons/facebook.png"></img></Link></li>
+            <li><a target="_blank" href="https://www.instagram.com/owainfluencersco/"><img src="/static/img/icons/instagram.png"></img></a></li>
+            <li><a target="_blank" href="https://www.facebook.com/owainfluencers/"><img src="/static/img/icons/facebook.png"></img></a></li>
+            <li><a target="_blank" href="https://www.youtube.com/channel/UCknonV_3l_vJCLuyjKp5Lmg"><img src="/static/img/icons/youtube.png"></img></a></li>
           </ul>
           <span>Copyright © OWA Influencers</span>
         </div>

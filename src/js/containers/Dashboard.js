@@ -33,8 +33,10 @@ class Dashboard extends Component {
       following: false,
       unfollowing: false,
       speed: false,
+      commentForComment: false,
       showAlertFollow: false,
       comment: '',
+      commentChanged: false,
       // filters
       filtertags: [],
       filterusers: [],
@@ -76,6 +78,7 @@ class Dashboard extends Component {
     this.onFollowingChange = this.onFollowingChange.bind(this)
     this.onUnfollowingChange = this.onUnfollowingChange.bind(this)
     this.onSpeedChange = this.onSpeedChange.bind(this)
+    this.onCommentForCommentChange = this.onCommentForCommentChange.bind(this)
     this.removeNotification = this.removeNotification.bind(this)
     this.onTagsChange = this.onTagsChange.bind(this)
     this.onLocationsChange = this.onLocationsChange.bind(this)
@@ -87,6 +90,7 @@ class Dashboard extends Component {
     this.onFilterTagsChange = this.onFilterTagsChange.bind(this)
     this.onFilterUsersChange = this.onFilterUsersChange.bind(this)
     this.onFilterKeysChange = this.onFilterKeysChange.bind(this)
+    this.updateComment = this.updateComment.bind(this)
   }
 
   tick() {
@@ -100,6 +104,24 @@ class Dashboard extends Component {
         remainingTime: 0
       }))
     }
+  }
+
+  updateComment() {
+    NetworkRequest.updateComment(this.state.comment)
+    .then((response) => {
+      this.setState({
+        changed: true,
+        commentChanged: false
+      })
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        comment: response.data.user.preferences.comment_text
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
   }
 
   onFollow(newTimeEnd) {
@@ -134,19 +156,9 @@ class Dashboard extends Component {
 
   onCommentChange(event) {
     const { value, name } = event.target
-    NetworkRequest.updateComment(value)
-    .then((response) => {
-      this.setState({
-        changed: true
-      })
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-      this.setState({
-        comment: response.data.user.preferences.comment_text
-      })
-    })
-    .catch((error) => {
-      // TODO: catch error
-      console.log(error)
+    this.setState({
+      [name]: value,
+      commentChanged: true
     })
   }
 
@@ -211,11 +223,23 @@ class Dashboard extends Component {
     this.onStatsChange()
   }
 
-
-
   componentDidMount() {
+    // TODO this is being duplicated as in App we're also getting the profile and setting to localStorage
+    NetworkRequest.getProfile()
+    .then((response) => {
+      const { full_name, _id, profile_picture, username, timeEnd, preferences, fameEnd } = response.data.user
+      const user = {
+        full_name,
+        _id,
+        profile_picture,
+        username,
+        timeEnd,
+        fameEnd,
+        preferences
+      }
 
-    this.parseUser(localStorage.getItem('user'))
+      return user
+    })
     .then(user => {
 
       this.setState({
@@ -226,6 +250,7 @@ class Dashboard extends Component {
         commenting: user.preferences.commenting,
         unfollowing: user.preferences.unfollowing,
         speed: user.preferences.speed,
+        commentForComment: user.preferences.commentForComment,
         changed: user.preferences.changed,
         filtertags: user.preferences.filtertags,
         filterusers: user.preferences.filterusers,
@@ -252,14 +277,10 @@ class Dashboard extends Component {
     })
 
     // Conver ISO date to the number of milliseconds since January 1, 1970, 00:00:00
-
-
     //State to reload the stats every minute or so
     const reloadTime = 60000
     setInterval( () => this.onStatsChange(), reloadTime)
   }
-
-
 
   removeNotification() {
     const notifications = JSON.parse(localStorage.getItem('notifications'))
@@ -451,6 +472,22 @@ class Dashboard extends Component {
     })
   }
 
+  onCommentForCommentChange() {
+    NetworkRequest.updateCommentForComment(!this.state.commentForComment)
+    .then((response) => {
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      this.setState({
+        commentForComment: response.data.user.preferences.commentForComment,
+        changed: true
+      })
+    })
+    .catch((error) => {
+      // TODO: catch error
+      console.log(error)
+    })
+  }
+
+
 
   startAutomation() {
     NetworkRequest.startAutomation()
@@ -488,6 +525,21 @@ class Dashboard extends Component {
       console.log(error)
     })
   }
+
+  // <div className='section'>
+  //   <div className='speed'>
+  //     <h4 className='exceptions'>{Localization.c4c}</h4>
+  //     <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
+  //   </div>
+  // </div>
+  // <div className='section switching'>
+  //   <div className='switch-section'>
+  //     <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
+  //     <div className='switch-counter'>
+  //       <Switch id="5" onChange={this.onCommentForCommentChange} active={this.state.commentForComment}/>
+  //     </div>
+  //   </div>
+  // </div>
 
   render() {
 
@@ -580,7 +632,17 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className={`commenting-field ${this.state.commenting ? '' : 'hidden' }`}>
-                <input type="text" placeholder={Localization.add_comment} onChange={this.onCommentChange} name='comment' value={this.state.comment || ''}/>
+                <input
+                  type="text"
+                  placeholder={Localization.add_comment}
+                  onChange={this.onCommentChange}
+                  name='comment'
+                  value={this.state.comment || ''} />
+                  <input
+                    type="button"
+                    value="OK"
+                    onClick={this.updateComment}
+                    className={`red ${this.state.commentChanged ? '' : 'hidden'}`} />
               </div>
             </div>
             <div className='section'>

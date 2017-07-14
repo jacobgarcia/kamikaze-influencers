@@ -44,7 +44,8 @@ class App extends Component {
 
     })
     .catch((error) => {
-      // TODO: handle error
+      // ENHACEMENT handle better this error
+      localStorage.removeItem('token')
       console.log(error)
     })
 
