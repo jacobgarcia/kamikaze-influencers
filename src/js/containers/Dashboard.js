@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 
 import Intro from '../components/Intro'
 import NetworkRequest from '../NetworkRequest'
-import FameItem from '../components/FameItem'
 import Footer from '../components/Footer'
 import Switch from '../components/Switch'
 import TimeJS from '../time'
@@ -11,6 +10,7 @@ import Tags from '../components/Tags'
 import Geocoder from './Geocoder'
 import Signin from '../components/Signin'
 import Localization from '../localization/Localization'
+import HallOfFame from '../components/HallOfFame'
 
 class Dashboard extends Component {
 
@@ -486,8 +486,6 @@ class Dashboard extends Component {
     })
   }
 
-
-
   startAutomation() {
     NetworkRequest.startAutomation()
     .then(response => {
@@ -525,21 +523,6 @@ class Dashboard extends Component {
     })
   }
 
-  // <div className='section'>
-  //   <div className='speed'>
-  //     <h4 className='exceptions'>{Localization.c4c}</h4>
-  //     <div className='hint'><span><b>{Localization.c4c_title}</b>{Localization.c4c_hint}</span></div>
-  //   </div>
-  // </div>
-  // <div className='section switching'>
-  //   <div className='switch-section'>
-  //     <span className={`reply ${this.state.commentForComment ? 'active' : '' }`}>{Localization.c4c_mode}</span>
-  //     <div className='switch-counter'>
-  //       <Switch id="5" onChange={this.onCommentForCommentChange} active={this.state.commentForComment}/>
-  //     </div>
-  //   </div>
-  // </div>
-
   render() {
 
     let { days, hours, minutes, seconds } = TimeJS.getComponents(this.state.remainingTime)
@@ -547,48 +530,48 @@ class Dashboard extends Component {
     return (
       <div className='dashboard'>
         <div className='hero-dashboard'></div>
-        <Signin show={this.state.showSignin} id='dashboard' title={Localization.update} username={this.state.username} disabled={true}/>
-        <Signin show={this.state.verifyAccount} id='dashboard' title={Localization.verify} username={this.state.username} verifyAccount={this.state.verifyAccount} isModule={true}/>
+        <Signin
+          show={this.state.showSignin}
+          id='dashboard' title={Localization.update}
+          username={this.state.username}
+          disabled={true}/>
+        <Signin
+          show={this.state.verifyAccount}
+          id='dashboard' title={Localization.verify}
+          username={this.state.username}
+          verifyAccount={this.state.verifyAccount}
+          isModule={true}/>
         <Intro
           visible={this.state.introVisible}
           onEnd={this.removeNotification}/>
         <div className='content-section'>
-          { this.state.hallOfFame.length || this.state.hallOfFollowing.length || this.state.famous ?
-            <div className='hall-section'>
-            <h4>{Localization.fame} <div className='hint white'><span><b>{Localization.hall}</b>{Localization.hall_exp3}</span></div></h4>
-            <div className='hall-of-fame'>
-            {this.state.famous ?
-              <FameItem username={this.state.username}
+          {
+            this.state.hallOfFame.length || this.state.hallOfFollowing.length || this.state.famous
+            ? <HallOfFame
+                famous={this.state.famous}
+                username={this.state.username}
+                profilePicture={this.state.profile_picture}
                 onFollow={this.onFollow}
-                picture={this.state.profile_picture}/>
-            : undefined }
-              {this.state.hallOfFame.map((user, index) =>
-                <FameItem username={user.username}
-                  onFollow={this.onFollow}
-                  key={index}
-                  instagram_id={user.instagram.id}
-                  picture={user.profile_picture} />
-              )}
-              {this.state.hallOfFollowing.map((user, index) =>
-                <FameItem username={user.username}
-                  onFollow={this.onFollow}
-                  key={index}
-                  instagram_id={user.instagram.id}
-                  picture={user.profile_picture}
-                  following={true}/>
-              )
-            }
-            </div>
-            <span className="free">{ Localization.hall_coa}</span>
-          </div>
-          : undefined }
+                hallOfFollowing={this.state.hallOfFollowing}
+                hallOfFame={this.state.hallOfFame}
+              />
+            : undefined
+          }
           <div className='main-section'>
             <div className='section center'>
               <div className={`time-card main ${this.state.remainingTime > 0 ? 'working' : 'stoped'}`}>
                 <div className='label-wrapper'>
                   <label>{Localization.remaining}</label>
                   { this.state.changed
-                    ? <label onClick={this.restartAutomation} className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? Localization.restart : 'Start'}</label>
+                    ? <div className="restart-wrapper">
+                        <label
+                          onClick={this.restartAutomation}
+                          className={`button ${this.state.working ? 'restart' : ''}`}>{this.state.working ? Localization.restart : 'Start'}</label>
+                        <div className="warning">
+                          <h6>Update</h6>
+                          <p>Please update to apply changes</p>
+                        </div>
+                      </div>
                     : <label></label> }
                 </div>
                 <h1>{ days===1 ? `${days} ${Localization.day}` : `${days} ${Localization.days}`}</h1>
@@ -668,8 +651,7 @@ class Dashboard extends Component {
                  onSelect={this.onSelect}
                  showLoader={true}
                  onChange={this.onLocationsChange}
-                 locations={this.state.locations}
-                />
+                 locations={this.state.locations} />
             </div>
             <div className='section'>
               <div className='section-title'>
