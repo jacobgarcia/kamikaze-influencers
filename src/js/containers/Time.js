@@ -272,7 +272,7 @@ class Time extends Component {
             </div>
 
             <div className='fame-items'>
-              <h2>{Localization.fame_pack}</h2>
+              <h2>{Localization.timepack} + <span className="fame-span">{Localization.famous}</span></h2>
               <p>{Localization.fame_description}</p>
               <div className="items-container">
                 { this.state.fameItems.map((item, index) =>
