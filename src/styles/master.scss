@@ -5,6 +5,7 @@ $red: #D90754;
 $purple: #972874;
 $purplish-red: #5D1145;
 $text-color: rgb(47, 47, 47);
+$golden: #FAD16E;
 
 @import "./switch.scss";
 
@@ -189,6 +190,51 @@ a {
   }
 }
 
+.restart-wrapper {
+  position: relative;
+}
+.fame-span {
+  background: $golden;
+  padding: 2px 6px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+  border-radius: 4px;
+  &::before {
+    margin-left: 15px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    content: '';
+    background: url('/static/img/icons/crown.svg') no-repeat center left;
+    background-size: contain;
+    left: 100%;
+    top: 0;
+  }
+}
+.warning {
+  @include owa_boxshadow;
+  background: #FE0F4B;
+  text-align: left;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  width: 180px;
+  left: 0px;
+  top: 25px;
+  h6 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  p {
+    font-size: 0.9rem;
+    color: #fff !important;
+    line-height: normal;
+    font-weight: 500;
+  }
+}
+
 .hall-section {
   padding: 20px 0;
   padding-bottom: 10px;
@@ -196,6 +242,9 @@ a {
     color: #fff;
     margin: 0 20px;
     margin-bottom: 10px;
+  }
+  .hall-of-fame-title {
+    position: relative;
   }
 }
 
@@ -239,9 +288,14 @@ a {
   width: 100%;
   text-align: center;
   background: #fff;
+  span:first-child {
+    line-height: 1;
+  }
   .price-wrapper {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    width: 68px;
     span { line-height: 1.2; }
     span.per-day {
       font-size: 0.8rem;
@@ -254,7 +308,18 @@ a {
   }
   &.mini {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: space-around;
+    > div {
+      margin: 0 20px;
+      span {
+        line-height: 1;
+      }
+    }
+    .buy-now {
+      margin: 0;
+      margin-right: 10px;
+    }
   }
   &.main {
     padding: 15px 40px 30px;
@@ -327,6 +392,9 @@ a {
     color: $red;
     font-size: 1.4rem;
     font-weight: 500;
+    width: 44px;
+    flex-shrink: 0;
+    display: block;
   }
   .price {
     color: $red;
@@ -354,6 +422,10 @@ h2 {
   color: $purplish-red;
   text-transform: uppercase;
   font-size: 1.4rem;
+  &.red {
+    margin-top: 0 !important;
+    color: $red;
+  }
 }
 
 .hint {
@@ -422,11 +494,17 @@ h2 {
   }
 }
 
+.buy-section {
+  h2 {
+    margin-top: 30px;
+  }
+}
 .section {
   padding: 10px 20px;
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .fame-items {
     min-height: 400px;
   }
@@ -435,6 +513,26 @@ h2 {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;
+  }
+  .special-follow {
+    p {
+      margin: 15px 0;
+    }
+    h2 {
+      text-align: center;
+    }
+    a, input {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .time-items-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .time-card {
+      box-shadow: none;
+    }
   }
   .time-items {
     min-height: 300px;
@@ -530,6 +628,10 @@ h2 {
     align-items: center;
     border-bottom: 2px solid $gray;
     flex-wrap: wrap;
+    transition: 0.5s border-bottom-color;
+    &.active {
+      border-bottom: 2px solid $red;
+    }
     input[type="button"] {
       max-width: 100px;
     }
@@ -756,6 +858,7 @@ h2 {
         font-weight: 500;
       }
       .price-wrapper {
+        width: 70px;
         margin-left: 15px;
         display: flex;
         flex-direction: column;
@@ -852,7 +955,7 @@ h2 {
     }
     p {
       max-width: 500px;
-      margin: 20px 0 30px;
+      margin: 20px auto 30px;
     }
     input {
       padding: 7px 15px;
@@ -962,6 +1065,16 @@ input[type="button"], input[type="submit"] {
       background-size: 100px;
       height: 40px;
     }
+  }
+}
+
+.privacy {
+  h2 {
+    margin-top: 40px;
+  }
+  h3 {
+    color: $red;
+    margin-top: 20px;
   }
 }
 
@@ -1084,6 +1197,7 @@ img.paypal-button {
       }
     }
     .close {
+      margin-left: auto;
       cursor: pointer;
       width: 26px;
       height: 26px;
@@ -1300,6 +1414,13 @@ img.paypal-button {
   }
 }
 
+span.free {
+  margin: 5px 20px;
+  color: rgba(#fff,0.8);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 .hall-of-fame {
   display: flex;
   overflow-x: scroll;
@@ -1377,15 +1498,39 @@ img.paypal-button {
   }
 }
 
-@media (min-width: 580px) {
-  .mini-section {
-    margin: 0 10px;
-
+@media (max-width: 600px) {
+  nav .nav-content .time a {
+    max-width: 100px;
+  }
+  .time-card.mini {
+    flex-wrap: wrap;
+  }
+  .section .items-container {
+    margin: 0 auto;
+  }
+  .time-card {
+    margin: inherit auto;
+    padding: 25px 15px;
+  }
+  .time-card.mini>div {
+    margin: 0 10px
   }
 }
 
-@media (min-width: 900px) {
+@media (max-width: 350px) {
+  .time-card.mini .buy-now {
+    margin-top: 20px;
+  }
+}
 
+@media (max-width: 400px) {
+  .mini-section {
+    margin: 0 10px;
+  }
+  input[type="button"].red {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
 }
 
 @media (min-width: 700px) {
@@ -1427,7 +1572,7 @@ img.paypal-button {
 
   }
   .content-section.buy-section {
-    h2 {
+    .fame-items h2, .time-items h2 {
       margin-top: 50px;
     }
     p {
@@ -1448,14 +1593,11 @@ img.paypal-button {
     .hall-section {
       order: 2;
       flex-shrink: 0;
+      span.free {
+        color: $purplish-red;
+      }
       h4 {
         position: relative;
-      }
-      .free {
-        margin: 5px 20px;
-        color: $purplish-red;
-        font-size: 0.9rem;
-        font-weight: 500;
       }
       .hall-of-fame {
         flex-direction: column;
@@ -1467,5 +1609,12 @@ img.paypal-button {
   }
   .signin-body {
     padding: 15px 40px;
+  }
+}
+
+@media (min-width: 900px) {
+  .section .items-container {
+    max-height: 600px;
+    margin: 0;
   }
 }

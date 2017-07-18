@@ -12,6 +12,7 @@ class Signin extends Component {
       username: '',
       password: '',
       isLoading: false,
+      wrongCredentials: false,
       verifyAccount: props.verifyAccount || false,
       usernameDisabled: props.disabled || false,
       isModule: props.isModule || false
@@ -44,14 +45,18 @@ class Signin extends Component {
     const name = target.name
 
     this.setState({
-      [name]: value
+      [name]: value,
+      wrongCredentials: false
     })
 
   }
 
   signinUser() {
 
-    this.setState({ isLoading: true })
+    this.setState({
+      isLoading: true,
+      wrongCredentials: false,
+    })
 
     const user = {
       username: this.state.username,
@@ -71,9 +76,8 @@ class Signin extends Component {
 
       if (status === 418) {
         this.setState({ verifyAccount: true })
-      }
-      if (status === 401) {
-        window.alert('Wrong user or password')
+      } else if (status === 401) {
+        this.setState({ wrongCredentials: true })
       }
     })
   }
@@ -126,6 +130,13 @@ class Signin extends Component {
               value={this.state.password}
               hidden/>
           }
+          { this.state.wrongCredentials ?
+            <div className='error'>
+              <span>{Localization.wrongCredentials}</span>
+            </div>
+            :
+            undefined
+          }
           {this.state.verifyAccount ?
             <div className='error'>
               <span>{Localization.verify_account} <a href='https://www.instagram.com' target='blank'>{Localization.ig}</a> {Localization.verify_account2}</span>
@@ -133,7 +144,9 @@ class Signin extends Component {
             :
             undefined
           }
-          <input type='submit' value={`${this.state.verifyAccount ? Localization.continue : Localization.ok}`} className='red' onClick={this.signinUser}/>
+          <input type='submit'
+            value={`${this.state.verifyAccount ? Localization.continue : Localization.ok}`}
+            className='red' />
           <p className='notice'>{Localization.accept}</p>
           </form>
         </div>

@@ -8,7 +8,8 @@ class Tags extends Component {
 
     this.state = {
       tags: this.props.tags || [],
-      tagsString: ''
+      tagsString: '',
+      active: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -75,7 +76,7 @@ class Tags extends Component {
 
   render() {
     return (
-      <div className='tags'>
+      <div className={`tags ${this.state.active ? 'active' : ''}`}>
         {this.state.tags.map((tag, index) =>
           <div className='tag' key={`tag-${index}`}>
             <span key={index} className='delete' onClick={() => this.deleteTag(index)}></span>
@@ -83,6 +84,8 @@ class Tags extends Component {
             </div>
         )}
         <input type="text"
+          onBlur={() => this.setState({ active: false }) }
+          onFocus={() => this.setState({ active: true }) }
           onChange={this.handleChange}
           onKeyDown={this.keyDown}
           placeholder={this.props.placeholder}

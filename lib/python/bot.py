@@ -33,15 +33,15 @@ if user_array != empty_arr:
 likes_day = 0
 if sys.argv[4] == "true":
     if sys.argv[11] == "true":
-        likes_day = 1800
-    else:
         likes_day = 1000
+    else:
+        likes_day = 800
 
 ## follows
 follows_day = 0
 if sys.argv[5] == "true":
     if sys.argv[11] == "true":
-        follows_day = 600
+        follows_day = 400
     else:
         follows_day = 300
 
@@ -49,7 +49,7 @@ if sys.argv[5] == "true":
 comments_day = 0
 if sys.argv[6] == "true":
     if sys.argv[11] == "true":
-        comments_day = 120
+        comments_day = 80
     else:
         comments_day = 50
 

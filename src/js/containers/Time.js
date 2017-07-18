@@ -31,10 +31,7 @@ const PackageDetails = (props) => {
 
 const TimeCard = (props) => {
   return (
-    <div className={`time-card ${props.item.name ? '' : 'mini'} ${props.item.type === 1 ? 'fame' : 'default'}`}>
-      { props.item.description ? <div className='hall-of-fame-image'></div>: undefined }
-      { props.item.description ? <h2>{Localization.famous}</h2> : undefined }
-      { props.item.description ? <p>{Localization.faster}</p> : undefined }
+    <div className={`time-card mini`}>
       <span className='days'>{props.item.days} { props.item.days > 1 ? Localization.day_s : Localization.day}</span>
       <div className='price-wrapper'>
         <span className='price'>${props.item.price}</span>
@@ -237,6 +234,7 @@ class Time extends Component {
           </div>
         <div className={`hover  ${state.showConfirm ? '' : 'hidden'}`}>
           <div className='payment-details'>
+            <span className="close" onClick={() => this.setState({ showThanks: false })}></span>
             <h2>{Localization.confirmationTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]}/> : <div className='loader relative center'></div> }
             <input type='button' className='red' value={Localization.pay} onClick={this.executePayment}/>
@@ -245,6 +243,7 @@ class Time extends Component {
         </div>
         <div className={`hover ${state.showPayment ? '' : 'hidden'}`} onClick={this.hidePayment}>
           <div className='payment-details'>
+            <span className="close" onClick={() => this.setState({ showThanks: false })}></span>
             <h2>{Localization.packageDetailsTitle}</h2>
             { this.state.transactions ? <PackageDetails transaction={this.state.transactions[0]} full/> : <div className='loader relative center'></div> }
             {
@@ -265,13 +264,15 @@ class Time extends Component {
             <div className='time-items'>
               <h2>{Localization.timepack}</h2>
               <p>{Localization.time_description}</p>
-              { this.state.timeItems.map((item, index) =>
-                <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
-              )}
+              <div className='time-items-container'>
+                { this.state.timeItems.map((item, index) =>
+                  <TimeCard item={item} key={index} purchaseTime={this.purchaseTime}/>
+                )}
+              </div>
             </div>
 
             <div className='fame-items'>
-              <h2>{Localization.fame_pack}</h2>
+              <h2>{Localization.timepack} + <span className="fame-span">{Localization.famous}</span></h2>
               <p>{Localization.fame_description}</p>
               <div className="items-container">
                 { this.state.fameItems.map((item, index) =>
@@ -281,8 +282,8 @@ class Time extends Component {
             </div>
 
             <h2>{Localization.special}</h2>
-            <div className='aside'>
-              <h3>{Localization.special}</h3>
+            <div className="aside special-follow">
+              <h2 className="red">{Localization.special}</h2>
               <p>{Localization.contact_us}</p>
               <a href='mailto:hola@owainfluencers.com'><input type='button' value={Localization.contactus} className='red'/></a>
             </div>
