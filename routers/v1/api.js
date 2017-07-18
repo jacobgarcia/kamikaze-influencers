@@ -32,7 +32,7 @@ console.log = (data, ...args) => {
 mongoose.connect(config.database)
 
 // Change in prod
-const redirectUrl = "https://owainfluencers.com/time"
+const redirectUrl = "http://localhost:8080/time"
 
 router.route('/items')
 .get((req, res) => {
@@ -669,13 +669,13 @@ router.route('/payments/execute')
 
             // restart automation when buying time
             if (!item.hallOfFame) {
-              request.put({ url:'https://owainfluencers.com/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+              request.put({ url:'http://localhost:8080/v1/automation/self/stop/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
                 if (error) {
                   console.log(error)
                   return res.status(500).json({ error })
                 }
 
-                request.post({ url:'https://owainfluencers.com/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+                request.post({ url:'http://localhost:8080/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
                   if (error) {
                     console.log(error)
                     return res.status(500).json({ error })
@@ -759,7 +759,7 @@ router.route('/locations/translate/:location')
               }
               //TODO: Update get route to global OWA domain
               //Trigger endpoint again 'till finding a valid access_token
-              request.get({ url:'https://owainfluencers.com/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
+              request.get({ url:'http://localhost:8080/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
                   if (error) {
                     console.log(error)
                     return res.status(500).json({ error })
@@ -848,7 +848,7 @@ router.route('/automation/self/start')
         let locationTags = []
         let counter = 0
         locations.forEach((location) => {
-          request.get({ url:'https://owainfluencers.com/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
+          request.get({ url:'http://localhost:8080/v1/locations/translate/' + location.coordinates, headers:{ 'Content-Type': 'application/json', 'authorization': req.headers.authorization }, body: JSON.stringify(location)}, (error, response) => {
               if (error) {
                 console.log(error)
                 return res.status(500).json({ error })
@@ -939,7 +939,7 @@ router.route('/automation/restart')
       return res.status(500).json({ error })
     }
     users.forEach((user) => {
-      request.post({ url:'https://owainfluencers.com/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
+      request.post({ url:'http://localhost:8080/v1/automation/self/start/', headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization, 'username': user.username }}, (error, response) => {
         if (error) {
           console.log(error)
           return res.status(500).json({ error })
