@@ -58,7 +58,7 @@ class InstaBot:
     # If instagram ban you - query return 400 error.
     error_400 = 0
     # If you have 3 400 error in row - looks like you banned.
-    error_400_to_ban = 5000
+    error_400_to_ban = 3
     # If InstaBot think you are banned - going to sleep.
     ban_sleep_time = 2 * 60 * 60
 
@@ -104,7 +104,7 @@ class InstaBot:
     login_status = False
 
     # For new_auto_mod
-    next_iteration = {"Like": 0, "Follow": 0, "Unfollow": 0, "Comments": 0, "CommentBacks": 0}
+    next_iteration = {"Like": 0, "Follow": 0, "Unfollow": 0, "Comments": 0}
 
     # Connect to mongo database
     client = MongoClient()
@@ -128,8 +128,7 @@ class InstaBot:
                  user_blacklist={},
                  tag_blacklist=[],
                  unwanted_username_list=[],
-                 unfollow_whitelist=[],
-                 comment_back='false'):
+                 unfollow_whitelist=[]):
 
         self.bot_start = datetime.datetime.now()
         self.unfollow_break_min = unfollow_break_min
@@ -167,9 +166,6 @@ class InstaBot:
         # Auto mod seting:
         # Default list of tag.
         self.tag_list = tag_list
-        # Commenting Back Tag List
-        self.comment_back_list = ['c4c', 'comment4comment']
-        self.comment_back = comment_back
         # Get random tag, from tag_list, and like (1 to n) times.
         self.max_like_for_one_tag = max_like_for_one_tag
         # log_mod 0 to console, 1 to file
@@ -189,7 +185,6 @@ class InstaBot:
         self.user_password = password
         self.bot_mode = 0
         self.media_by_tag = []
-        self.media_by_tag_comment_back = []
         self.media_on_feed = []
         self.media_by_user = []
         self.unwanted_username_list = unwanted_username_list
@@ -199,8 +194,8 @@ class InstaBot:
         self.write_log(log_string)
         self.login()
         self.populate_user_blacklist()
-        #signal.signal(signal.SIGTERM, self.cleanup)
-        #atexit.register(self.cleanup)
+        signal.signal(signal.SIGTERM, self.cleanup)
+        atexit.register(self.cleanup)
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
@@ -334,45 +329,6 @@ class InstaBot:
                                                  [media_type]['media']['nodes'])
                 except:
                     self.media_by_tag = []
-                    self.write_log("Except on get_media!")
-            else:
-                return 0
-
-    def get_media_id_by_tag_comment_back(self, tag):
-        """ Get media ID set, by your hashtag """
-
-        if (self.login_status):
-            log_string = "Get media id by tag: %s" % (tag)
-            self.write_log(log_string)
-            if self.login_status == 1:
-                if tag.startswith('l:'):
-                    tag = tag.replace('l:','')
-                    url_tag = '%s%s%s' % (self.url_location, tag, '/')
-                    current_page = 'LocationsPage'
-                    media_type = 'location'
-                else:
-                    url_tag = '%s%s%s' % (self.url_tag, tag, '/')
-                    current_page = 'TagPage'
-                    media_type = 'tag'
-                try:
-                    r = self.s.get(url_tag)
-                    text = r.text
-
-                    finder_text_start = ('<script type="text/javascript">'
-                                         'window._sharedData = ')
-                    finder_text_start_len = len(finder_text_start) - 1
-                    finder_text_end = ';</script>'
-
-                    all_data_start = text.find(finder_text_start)
-                    all_data_end = text.find(finder_text_end, all_data_start + 1)
-                    json_str = text[(all_data_start + finder_text_start_len + 1) \
-                        : all_data_end]
-                    all_data = json.loads(json_str)
-
-                    self.media_by_tag_comment_back = list(all_data['entry_data'][current_page][0] \
-                                                 [media_type]['media']['nodes'])
-                except:
-                    self.media_by_tag_comment_back = []
                     self.write_log("Except on get_media!")
             else:
                 return 0
@@ -612,10 +568,7 @@ class InstaBot:
 
             # ------------------- Get media_id -------------------
             if len(self.media_by_tag) == 0:
-                if self.comment_back == "true":
-                    self.get_media_id_by_tag(random.choice(self.comment_back_list))
-                else:
-                    self.get_media_id_by_tag(random.choice(self.tag_list))
+                self.get_media_id_by_tag(random.choice(self.tag_list))
                 self.this_tag_like_count = 0
                 self.max_tag_like_count = random.randint(1, self.max_like_for_one_tag)
             # ------------------- Like -------------------
@@ -624,14 +577,8 @@ class InstaBot:
             self.new_auto_mod_follow()
             # ------------------- Unfollow -------------------
             self.new_auto_mod_unfollow()
-
-            # ------------------- Comments -------------------
-            if self.comment_back == "true":
-                self.new_auto_mod_comment_back()
-            else:
-                # ------------------- Comment -------------------
-                self.new_auto_mod_comments()
-
+            # ------------------- Comment -------------------
+            self.new_auto_mod_comments()
             # Bot iteration in 1 sec
 
             ## The user has still time
@@ -689,28 +636,6 @@ class InstaBot:
             if (self.bot_mode == 1) :
                 unfollow_protocol(self)
 
-    def new_auto_mod_comment_back(self):
-        # ------------------- Get media_id -------------------
-        # if len(self.media_by_tag_comment_back) == 0:
-        #     self.get_media_id_by_tag_comment_back(random.choice(self.comment_back))
-        if time.time() > self.next_iteration["Comments"] and self.comments_per_day != 0 \
-                and len(self.media_by_tag) > 0 \
-                and self.check_exisiting_comment(self.media_by_tag[0]['code']) == False:
-                comment_text = "Awesome Picture"
-                log_string = "Trying to comment (as comment back): %s" % (self.media_by_tag[0]['id'])
-                self.write_log(log_string)
-                print 'first comment'
-                #self.commenting[self.media_by_tag[0]['code']] = self.commenting[self.media_by_tag[0]['code']] + 1
-                if self.comment(self.media_by_tag[0]['id'], comment_text) != False:
-                    print 'second comment'
-                    comment_text = "Please comment out my content"
-                    log_string = "Trying to comment (as second comment back): %s" % (self.media_by_tag[0]['id'])
-                    self.write_log(log_string)
-                    #self.commenting[self.media_by_tag[0]['code']] = self.commenting[self.media_by_tag[0]['code']] + 1
-                    if self.comment(self.media_by_tag[0]['id'], comment_text) != False:
-                        self.next_iteration["Comments"] = time.time() + \
-                        self.add_time(self.comments_delay)
-
     def new_auto_mod_comments(self):
         if time.time() > self.next_iteration["Comments"] and self.comments_per_day != 0 \
                 and len(self.media_by_tag) > 0 \
@@ -759,41 +684,18 @@ class InstaBot:
         url_check = self.url_media_detail % (media_code)
         check_comment = self.s.get(url_check)
         all_data = json.loads(check_comment.text)
-
         if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
-            self.write_log("Keep calm - It's your own media ;)")
-            del self.media_by_tag[0]
-            return True
-
+                self.write_log("Keep calm - It's your own media ;)")
+                # Del media to don't loop on it
+                del self.media_by_tag[0]
+                return True
         comment_list = list(all_data['graphql']['shortcode_media']['edge_media_to_comment']['edges'])
         for d in comment_list:
             if d['node']['owner']['id'] == self.user_id:
                 self.write_log("Keep calm - Media already commented ;)")
+                # Del media to don't loop on it
                 del self.media_by_tag[0]
                 return True
-
-        return False
-
-
-    def check_exisiting_comment_back(self, media_code):
-        if media_code not in self.commenting:
-            self.commenting[media_code] = 0
-        url_check = self.url_media_detail % (media_code)
-        check_comment = self.s.get(url_check)
-        all_data = json.loads(check_comment.text)
-        if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
-                # Del media to don't loop on it
-                self.write_log("Keep calm - It's your own media ;)")
-                del self.media_by_tag[0]
-                return True
-        comment_list = list(all_data['graphql']['shortcode_media']['edge_media_to_comment']['edges'])
-        for d in comment_list:
-            if d['node']['owner']['id'] == self.user_id:
-                # Del media to don't loop on it
-                if self.commenting[media_code] >= 2:
-                    self.write_log("Keep calm - Media already commented ;)")
-                    del self.media_by_tag[0]
-                    return True
         return False
 
     def auto_unfollow(self):
