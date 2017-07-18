@@ -1215,6 +1215,15 @@ img.paypal-button {
   font-size: 1.1rem;
   font-weight: 500;
   text-align: center;
+  .contact {
+    padding: 20px 0;
+    p {
+      text-align: left;
+    }
+  }
+  .title {
+    font-weight: 600;
+  }
   a {
     color: #fff;
     &:hover {
@@ -1232,6 +1241,7 @@ img.paypal-button {
   }
   .content-section {
     flex-direction: column;
+    padding-bottom: 10px;
   }
   .links {
     display: flex;

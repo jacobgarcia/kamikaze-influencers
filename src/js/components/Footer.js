@@ -7,6 +7,10 @@ const Footer = (props) => {
     <div className='footer'>
       {props.children}
       <div className='content-section'>
+        <div className='contact'>
+          <p className='title'>{Localization.clientSupport}</p>
+          <p>MEX: +52 (55) 4320 1975</p>
+        </div>
         <div className='links'>
           <ul>
             <li><a href="mailto:hola@owainfluencers.com">{Localization.contact}</a></li>
