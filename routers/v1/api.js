@@ -643,11 +643,17 @@ router.route('/payments/execute')
 
           // Check if the item included hall of fame
           if (item.hallOfFame) {
-            // Add Fame End time :)
+            // Add Fame End time
             if (user.fameEnd < now) {
               user.fameEnd = now + timeToAdd
             } else {
               user.fameEnd = user.fameEnd + timeToAdd
+            }
+            //and Time End :)
+            if (user.timeEnd < now) {
+              user.timeEnd = now + timeToAdd
+            } else {
+              user.timeEnd = user.timeEnd + timeToAdd
             }
           } else {
             // Check if timeEnd has allready passed
