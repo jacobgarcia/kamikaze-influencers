@@ -620,6 +620,7 @@ class InstaBot:
                                              time.time()])
                 self.next_iteration["Follow"] = time.time() + \
                                                 self.add_time(self.follow_delay)
+                del self.media_by_tag[0]
 
     def new_auto_mod_unfollow(self):
         if time.time() > self.next_iteration["Unfollow"] and \
