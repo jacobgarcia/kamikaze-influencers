@@ -194,8 +194,8 @@ class InstaBot:
         self.write_log(log_string)
         self.login()
         self.populate_user_blacklist()
-        #signal.signal(signal.SIGTERM, self.cleanup)
-        #atexit.register(self.cleanup)
+        signal.signal(signal.SIGTERM, self.cleanup)
+        atexit.register(self.check_cleanup)
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
@@ -293,6 +293,21 @@ class InstaBot:
         if (self.login_status):
             self.logout()
         exit(0)
+
+    def check_cleanup(self, *_):
+        # This function will check if the bot finished prematurely. If that's the case the new_auto_mod will be triggered again
+        self.write_log('Something bizarre happened...')
+        end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
+        current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+
+        isActive = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"automationActive":1, "_id":0})))
+
+        # This means the bot ended prematurely
+        if (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
+            self.new_auto_mod() # Start the process again
+        else:
+            # This means a restart or a successful logout
+            self.cleanup()
 
     def get_media_id_by_tag(self, tag):
         """ Get media ID set, by your hashtag """
