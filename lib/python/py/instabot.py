@@ -195,7 +195,7 @@ class InstaBot:
         self.login()
         self.populate_user_blacklist()
         signal.signal(signal.SIGTERM, self.cleanup)
-        atexit.register(self.cleanup)
+        atexit.register(self.check_cleanup)
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
@@ -293,6 +293,21 @@ class InstaBot:
         if (self.login_status):
             self.logout()
         exit(0)
+
+    def check_cleanup(self, *_):
+        # This function will check if the bot finished prematurely. If that's the case the new_auto_mod will be triggered again
+        self.write_log('Something bizarre happened...')
+        end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
+        current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+
+        isActive = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"automationActive":1, "_id":0})))
+
+        # This means the bot ended prematurely
+        if (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
+            self.new_auto_mod() # Start the process again
+        else:
+            # This means a restart or a successful logout
+            self.cleanup()
 
     def get_media_id_by_tag(self, tag):
         """ Get media ID set, by your hashtag """
@@ -698,6 +713,33 @@ class InstaBot:
                 del self.media_by_tag[0]
                 return True
         return False
+
+        def check_exisiting_comment(self, media_code):
+            url_check = self.url_media_detail % (media_code)
+            check_comment = self.s.get(url_check)
+
+            if not check_comment.text:
+                self.write_log("Failed to get comment info - not leaving comment")
+                # There was a problem getting comment info, assume comment exists to avoid duplicates
+                return True
+            try:
+                all_data = json.loads(check_comment.text)
+                if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
+                    self.write_log("Keep calm - It's your own media ;)")
+                    del self.media_by_tag[0]
+                    return True
+
+                comment_list = list(all_data['graphql']['shortcode_media']['edge_media_to_comment']['edges'])
+                for d in comment_list:
+                    if d['user']['id'] == self.user_id:
+                        self.write_log("Keep calm - Media already commented ;)")
+                        del self.media_by_tag[0]
+                        return True
+            except:
+                self.write_log("Exception parsing comments json - not leaving comment")
+                return True
+
+            return False
 
     def auto_unfollow(self):
         chooser = 1
