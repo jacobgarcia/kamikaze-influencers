@@ -823,6 +823,7 @@ router.use((req, res, next) => {
 /* AUTOMATION INSTAGRAM PROCESS */
 router.route('/automation/self/start')
 .post((req, res) => {
+
   //TODO: Update password encryption logic
   const username = ((req._username === 'cesarguadarrama' || req._username === 'chololoy92' || req._username === 'oinfluencers') && req.headers.username) ? req.headers.username : req._username
   User.findOne({ username })
@@ -835,7 +836,7 @@ router.route('/automation/self/start')
     // Get user username, password and preferences
     const { username, password, preferences } = user
 
-    process.env.NODE_ENV === 'development' ? console.log('Starting automation for username ' +  username) : null
+   console.log('Starting automation for username ' +  username)
 
     // Get tags, locations and usernames array
     const { tags, locations } = preferences
@@ -865,7 +866,7 @@ router.route('/automation/self/start')
                     new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
                     .on('message', (message) => {
                         // Print all the output from the bot
-                        process.env.NODE_ENV === 'development' ? console.log(message) : null
+                      console.log(message)
 
                         if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
                         if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
@@ -876,7 +877,7 @@ router.route('/automation/self/start')
                         console.log(err, username)
                         throw err
                       }
-                      process.env.NODE_ENV === 'development' ? console.log('Finished') : null
+                    console.log('Finished')
 
                     })
 
@@ -888,7 +889,7 @@ router.route('/automation/self/start')
         new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
         .on('message', (message) => {
           // Print all the output from the bot
-          process.env.NODE_ENV === 'development' ? console.log(message) : null
+          console.log(message)
 
           if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
           if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
@@ -900,7 +901,7 @@ router.route('/automation/self/start')
             console.log(error, username)
             throw err
           }
-          process.env.NODE_ENV === 'development' ? console.log('Finished') : null
+          console.log('Finished')
 
         })
       }
