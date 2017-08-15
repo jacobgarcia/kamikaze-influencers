@@ -889,7 +889,7 @@ router.route('/automation/self/start')
         new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
         .on('message', (message) => {
           // Print all the output from the bot
-          console.log(message)
+          console.log("The message is " + message)
 
           if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
           if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
