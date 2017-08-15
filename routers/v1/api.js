@@ -906,6 +906,7 @@ router.route('/automation/self/start')
           console.log('Finished')
 
         })
+        console.log("Some kind of error?")
       }
 
     })
