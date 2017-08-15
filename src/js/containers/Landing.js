@@ -39,7 +39,7 @@ export default class Landing extends Component {
             Your browser doesn't support video
           </video>
           <div className='content'>
-            <h1>{Localization.mainheader}</h1>
+            <h1>TEST</h1>
             <p>{Localization.subheader}</p>
             <p>{Localization.signup_now} </p>
             <input type="button" value={Localization.sign} onClick={() => this.setState({ showSignin: true })}/>
