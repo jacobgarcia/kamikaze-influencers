@@ -168,7 +168,6 @@ router.use((req, res, next) => {
 router.route('/users/self')
 .get((req, res) => {
   const username = req._username
-  console.log('Finding ', username)
   User.findOne({ username })
   .exec((error, user) => {
     if (error) {
@@ -850,8 +849,10 @@ router.route('/automation/self/start')
     // Get speed preference
     const { speed, commentForComment } = preferences
 
+    console.log("Last message?")
       // Translate locations into IG codes. Each for every location. Just in case there are locations
       if (locations.length > 0) {
+        console.log("Not here");
         let locationTags = []
         let counter = 0
         locations.forEach((location) => {
@@ -866,7 +867,7 @@ router.route('/automation/self/start')
                     new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, locationTags ? tags.concat(locationTags) : tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
                     .on('message', (message) => {
                         // Print all the output from the bot
-                      console.log(message)
+                      console.log("The message is " + message)
 
                         if (message === 'login_success') return res.status(200).json({'message': 'The automation has started.'})
                         if (message === 'credentials_error') return res.status(401).json({error: {'message': 'Credentials has changed. Login again.'}})
@@ -886,6 +887,7 @@ router.route('/automation/self/start')
         })
       }
       else {         //else just start the bot
+        console.log("Must be here");
         new PythonShell('/lib/python/bot.py', { pythonOptions: ['-u'], args: [ username, password, tags, liking, following, commenting, filtertags, filterusers, filterkeys, unfollowing, speed, commentForComment]})
         .on('message', (message) => {
           // Print all the output from the bot
