@@ -304,6 +304,7 @@ class InstaBot:
 
         # This means the bot ended prematurely
         if (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
+            self.write_log('Restarting the bot...')
             self.new_auto_mod() # Start the process again
         else:
             # This means a restart or a successful logout
