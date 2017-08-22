@@ -195,7 +195,7 @@ class InstaBot:
         self.login()
         self.populate_user_blacklist()
         signal.signal(signal.SIGTERM, self.cleanup)
-        atexit.register(self.check_cleanup)
+        atexit.register(self.cleanup)
 
     def populate_user_blacklist(self):
         for user in self.user_blacklist:
@@ -700,26 +700,19 @@ class InstaBot:
     def check_exisiting_comment(self, media_code):
         url_check = self.url_media_detail % (media_code)
         check_comment = self.s.get(url_check)
-        if not check_comment.text:
-            self.write_log("Failed to get comment info - not leaving comment")
-            # There was a problem getting comment info, assume comment exists to avoid duplicates
-            return True
-        try:
-            all_data = json.loads(check_comment.text)
-            if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
+        all_data = json.loads(check_comment.text)
+        if all_data['graphql']['shortcode_media']['owner']['id'] == self.user_id:
                 self.write_log("Keep calm - It's your own media ;)")
+                # Del media to don't loop on it
                 del self.media_by_tag[0]
                 return True
-
-            comment_list = list(all_data['graphql']['shortcode_media']['edge_media_to_comment']['edges'])
-            for d in comment_list:
-                if d['node']['owner']['id'] == self.user_id:
-                    self.write_log("Keep calm - Media already commented ;)")
-                    del self.media_by_tag[0]
-                    return True
-        except:
-            self.write_log("Exception parsing comments json - not leaving comment")
-            return True
+        comment_list = list(all_data['graphql']['shortcode_media']['edge_media_to_comment']['edges'])
+        for d in comment_list:
+            if d['node']['owner']['id'] == self.user_id:
+                self.write_log("Keep calm - Media already commented ;)")
+                # Del media to don't loop on it
+                del self.media_by_tag[0]
+                return True
         return False
 
     def auto_unfollow(self):
