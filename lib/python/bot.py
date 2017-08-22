@@ -106,6 +106,7 @@ while (current_time < int(end_time['timeEnd']) and isActive['automationActive'])
     #time.sleep(30)
 
     if mode == 0 :
+        print "Creating bot for " + sys.argv[1]
         bot.new_auto_mod()
 
     elif mode == 1 :
