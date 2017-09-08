@@ -13,7 +13,7 @@ const Footer = (props) => {
         </div>
         <div className='links'>
           <ul>
-            <li><a href="mailto:hola@owainfluencers.com">{Localization.contact}</a></li>
+            <li><a href="mailto:hola@kamikazefollowers.com">{Localization.contact}</a></li>
             <li><Link to="/terms">{Localization.usage}</Link></li>
             <li><Link to="/faqs">FAQs</Link></li>
           </ul>
