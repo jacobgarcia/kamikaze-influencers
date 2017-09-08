@@ -46,7 +46,7 @@ router.route('/items')
   })
 })
 
-/* LOGIN INTO OWA AND VALIDATE IF THE USER IS VALID ON IG */
+/* LOGIN INTO KAMIKAZE AND VALIDATE IF THE USER IS VALID ON IG */
 // TODO: Protect vs brute force attack
 router.route('/users/authenticate')
 .post((req, res) => {
@@ -763,7 +763,7 @@ router.route('/locations/translate/:location')
                 console.log(error)
                 return res.status(500).json({ error })
               }
-              //TODO: Update get route to global OWA domain
+              //TODO: Update get route to global Kamikaze domain
               //Trigger endpoint again 'till finding a valid access_token
               request.get({ url:'https://kamikazefollowers.com/v1/locations/translate/' + location, headers:{ 'Content-Type': 'application/x-www-form-urlencoded', 'authorization': req.headers.authorization }}, (error, response) => {
                   if (error) {

@@ -25,7 +25,7 @@ const Footer = (props) => {
             <li><a target="_blank" href="https://www.facebook.com/owainfluencers/"><img src="/static/img/icons/facebook.png"></img></a></li>
             <li><a target="_blank" href="https://www.youtube.com/channel/UCknonV_3l_vJCLuyjKp5Lmg"><img src="/static/img/icons/youtube.png"></img></a></li>
           </ul>
-          <span>Copyright © OWA Influencers</span>
+          <span>Copyright © Kamikaze Followers</span>
         </div>
       </div>
     </div>
