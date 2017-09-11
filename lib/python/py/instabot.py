@@ -328,7 +328,10 @@ class InstaBot:
                     media_type = 'tag'
                 try:
                     r = self.s.get(url_tag)
+                    self.write_log(r) # RESPONSE. Must be 200 to be correct
+
                     text = r.text
+                    #self.write_log(text) # ALL THE HTML FROM THE PAGE. Must be 200 to be correct
 
                     finder_text_start = ('<script type="text/javascript">'
                                          'window._sharedData = ')
