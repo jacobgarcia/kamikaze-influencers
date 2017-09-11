@@ -45,7 +45,7 @@ class Nav extends Component {
               <div className='profile-picture'><img src={ this.props.user.profile_picture }></img></div>
               <span>{this.props.user.username}</span>
             </div>
-            <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+            <div className='logo'><Link to='/'><img src="./static/img/kamikaze.png"></img></Link></div>
             <div className='time'><Link to='/time'>{Localization.time}</Link></div>
           </div>
 
@@ -56,7 +56,7 @@ class Nav extends Component {
         <nav className='signin-nav'>
           <Signin show={this.state.showSignin} id='nav' title={Localization.login}/>
           <div className='nav-content'>
-            <div className='logo'><Link to='/'><img src="./static/img/owa.svg"></img></Link></div>
+            <div className='logo'><Link to='/'><img src="./static/img/kamikaze.png"></img></Link></div>
             <input type="button" value={Localization.login} className='signin-button' onClick={() => this.setState({ showSignin: true })}></input>
           </div>
         </nav>
