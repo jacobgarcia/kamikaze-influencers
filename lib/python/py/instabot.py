@@ -328,6 +328,7 @@ class InstaBot:
                     media_type = 'tag'
                 try:
                     r = self.s.get(url_tag)
+                    self.write_log(url_tag) # URL. This must be viewable through a browser
                     self.write_log(r) # RESPONSE. Must be 200 to be correct
 
                     text = r.text
