@@ -56,4 +56,4 @@ gulp test
 ```
 
 ## License
-&copy; OWA Influencers, Coma México
+&copy; Kamikaze Followers, Coma México

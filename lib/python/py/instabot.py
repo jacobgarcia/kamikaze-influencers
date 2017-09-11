@@ -294,6 +294,22 @@ class InstaBot:
             self.logout()
         exit(0)
 
+    def check_cleanup(self, *_):
+        # This function will check if the bot finished prematurely. If that's the case the new_auto_mod will be triggered again
+        self.write_log('Something bizarre happened...')
+        end_time = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"timeEnd":1, "_id":0})))
+        current_time = int(datetime.datetime.now().strftime("%s")) * 1000
+
+        isActive = json.loads(json.dumps(self.users.find_one({"username":self.user_login}, {"automationActive":1, "_id":0})))
+
+        # This means the bot ended prematurely
+        if (current_time < int(end_time['timeEnd']) and isActive['automationActive']):
+            self.write_log('Restarting the bot...')
+            self.new_auto_mod() # Start the process again
+        else:
+            # This means a restart or a successful logout
+            self.cleanup()
+
     def get_media_id_by_tag(self, tag):
         """ Get media ID set, by your hashtag """
 
@@ -312,7 +328,11 @@ class InstaBot:
                     media_type = 'tag'
                 try:
                     r = self.s.get(url_tag)
+                    self.write_log(url_tag) # URL. This must be viewable through a browser
+                    self.write_log(r) # RESPONSE. Must be 200 to be correct
+
                     text = r.text
+                    #self.write_log(text) # ALL THE HTML FROM THE PAGE. Must be 200 to be correct
 
                     finder_text_start = ('<script type="text/javascript">'
                                          'window._sharedData = ')

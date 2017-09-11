@@ -16,7 +16,7 @@ class Nav extends Component {
       password: ''
     }
 
-    this.redirect_uri = `http://localhost:8080/authenticate`
+    this.redirect_uri = `https://kamikazefollowers.com/authenticate`
     this.client_id = '4133eeeafdea4e15b6447df3bef09a9c'
 
   }

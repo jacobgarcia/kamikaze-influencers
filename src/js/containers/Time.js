@@ -285,7 +285,7 @@ class Time extends Component {
             <div className="aside special-follow">
               <h2 className="red">{Localization.special}</h2>
               <p>{Localization.contact_us}</p>
-              <a href='mailto:hola@owainfluencers.com'><input type='button' value={Localization.contactus} className='red'/></a>
+              <a href='mailto:hola@kamikazefollowers.com'><input type='button' value={Localization.contactus} className='red'/></a>
             </div>
           </div>
         </div>

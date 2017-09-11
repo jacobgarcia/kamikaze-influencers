@@ -48,8 +48,8 @@ class Tags extends Component {
 
     if (tagsText.includes(',')) {
       let tag = tagsText.slice(0, -1).toLowerCase()
-      // Parse the tag without the #
-      tag = tag.replace('#','')
+      tag = tag.replace('#','') // Parse the tag without the #
+      tag = tag.replace(/\s/g, ''); // Parse the tag without spaces
       this.addTag(tag)
     }
   }
