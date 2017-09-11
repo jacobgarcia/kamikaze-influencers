@@ -62,7 +62,7 @@ class Tags extends Component {
 
   keyDown(event) {
 
-    if (event.keyCode == 13) {
+    if (event.keyCode == 13 && this.state.tagsString.length === 0) {
       const tag = event.target.value.toLowerCase()
       this.addTag(tag)
     }

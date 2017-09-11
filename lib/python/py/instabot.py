@@ -588,7 +588,7 @@ class InstaBot:
 
             # ------------------- Get media_id -------------------
             if len(self.media_by_tag) == 0:
-                self.get_media_id_by_tag(random.choice(self.tag_list))
+                self.get_media_id_by_tag((random.choice(self.tag_list)).strip())
                 self.this_tag_like_count = 0
                 self.max_tag_like_count = random.randint(1, self.max_like_for_one_tag)
             # ------------------- Like -------------------
